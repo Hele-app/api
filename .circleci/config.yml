@@ -48,9 +48,6 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
       - run:
-          name: get dependencies
-          command: cp -r ~/project/node_modules ~/my_api
-      - run:
           name: functional tests
           command: npm test
   lint_test:
@@ -63,9 +60,6 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
-      - run:
-          name: get dependencies
-          command: cp -r ~/project/node_modules ~/my_api
       - run:
           name: get dev dependencies
           command: npm install --dev
