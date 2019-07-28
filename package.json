@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
+    "pretest": "cp .env.example .env",
     "test": "node ace test"
   },
   "keywords": [
