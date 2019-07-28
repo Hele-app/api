@@ -1,0 +1,103 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    working_directory: ~/projet-hele-api
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:10
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run:
+          name: install dependencies
+          command: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      # # run tests!
+      # - run: npm test
+
+  unit_and_functional_test:
+    working_directory: ~/projet-hele-api
+    docker:
+      - image: circleci/node:10
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: get dependencies
+          command: cp -r ~/project/node_modules ~/my_api
+      - run:
+          name: functional tests
+          command: npm test
+  lint_test:
+    working_directory: ~/projet-hele-api
+    docker:
+      - image: circleci/node:10
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: get dependencies
+          command: cp -r ~/project/node_modules ~/my_api
+      - run:
+          name: get dev dependencies
+          command: npm install --dev
+      - run:
+          name: lint tests
+          command: node ./node_modules/.bin/eslint app/
+
+  deploy:
+    machine:
+      enabled: true
+    steps:
+      - checkout
+      - run:
+          name: deploy to ec2
+          command: ./deploy.sh
+
+
+workflows:
+  version: 2
+  build_test_and_deploy:
+    jobs:
+      - build
+      - unit_and_functional_test:
+          requires:
+            - build
+      - lint_test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - unit_and_functional_test
+            - lint_test
+          filters:
+            branches:
+              only: master
