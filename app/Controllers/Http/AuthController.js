@@ -6,7 +6,8 @@ const { validateAll } = use('Validator')
 class AuthController {
   async register({request, auth, response}) {
     const validation = await validateAll(request.all(), {
-      phone: ['required', 'unique:users,phone', 'regex:^((\+)33|0)[6-7](\d{2}){4}$'],
+      phone: ['required', 'unique:users,phone',
+              'regex:^((\+)33|0)[6-7](\d{2}){4}$'],
       username: 'required|unique:users,username',
       age: 'required|integer|above:10',
       region: 'required'
@@ -48,7 +49,6 @@ class AuthController {
 
     let query = User.query().where('active', true)
 
-    let uid = request.input('username', request.input('phone', request.input('email')));
     if (request.input('phone', false) !== false) {
       // remove dots or spaces in phone number
       query.where('phone', request.input('phone').replace(/[.| ]/g, ''))
