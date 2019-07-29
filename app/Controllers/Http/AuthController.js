@@ -5,9 +5,9 @@ const { validateAll } = use('Validator')
 
 class AuthController {
   async register({request, auth, response}) {
+
     const validation = await validateAll(request.all(), {
-      phone: ['required', 'unique:users,phone',
-              'regex:^((\+)33|0)[6-7](\d{2}){4}$'],
+      phone: 'required|regex:^0[6-7][0-9]{8}$|unique:users,phone',
       username: 'required|unique:users,username',
       age: 'required|integer|above:10',
       region: 'required'
@@ -20,13 +20,13 @@ class AuthController {
     const password = (
       Math.random().toString(36).substring(2, 15) +
       Math.random().toString(36).substring(2, 15)
-    ).substring(0, 10);
+    ).substring(0, 10)
 
     let user = new User()
     user.phone = request.input('phone')
     user.username = request.input('username')
     user.region = request.input('region')
-    user.birthyear = new Date().getFullYear() - request.input('age');
+    user.birthyear = new Date().getFullYear() - request.input('age')
     user.password = password
 
     await user.save()
