@@ -17,7 +17,7 @@ class UserSchema extends Schema {
       table.string('profession', 100)
       table.string('city', 100)
       table.string('phone_pro', 20)
-      table.bool('active')defaultTo(true).index()
+      table.bool('active').defaultTo(true).index()
       table.datetime('last_login').defaultTo(this.fn.now())
       table.timestamps()
     })
