@@ -39,7 +39,7 @@ class ExceptionHandler extends BaseExceptionHandler {
    * @return {void}
    */
   async report (error, { request }) {
-    Logger.error(error.message, {
+    Logger.error(JSON.stringify(error.message), {
       url: request.originalUrl(),
       method: request.method()
     })
