@@ -13,6 +13,7 @@ test('phone required', async ({ assert, client }) => {
     age: "12",
     region: "Ile-de-France"
   }).end()
+  console.log(response.body)
   response.assertStatus(400)
   response.assertJSONSubset({
     message: [{
@@ -20,7 +21,6 @@ test('phone required', async ({ assert, client }) => {
       field: "phone"
     }]
   })
-  console.log(response.body)
 })
 
 test('phone not well formatted - too few numbers', async ({ assert, client}) => {
