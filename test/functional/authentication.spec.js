@@ -20,6 +20,7 @@ test('phone required', async ({ assert, client }) => {
       field: "phone"
     }]
   })
+  console.log(response.body)
 })
 
 test('phone not well formatted - too few numbers', async ({ assert, client}) => {
