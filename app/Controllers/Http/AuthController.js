@@ -2,19 +2,20 @@
 
 const User = use('App/Models/User')
 const { validateAll } = use('Validator')
+const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
 
 class AuthController {
   async register({request, auth, response}) {
 
     const validation = await validateAll(request.all(), {
-      phone: 'required|regex:^0[6-7][0-9]{8}$|unique:users,phone',
-      username: 'required|unique:users,username',
+      phone: 'required|unique:users|regex:^0[6-7](\\d{2}){4}$',
+      username: 'required|unique:users',
       age: 'required|integer|above:10',
       region: 'required'
     })
 
     if (validation.fails()) {
-      response.status(400).json(validation.messages())
+      throw new ValidationException(validation.messages(), 400)
     }
 
     const password = (
@@ -44,7 +45,7 @@ class AuthController {
     })
 
     if (validation.fails()) {
-      response.status(400).json(validation.messages())
+      throw new ValidationException(validation.messages(), 400)
     }
 
     let query = User.query().where('active', true)
