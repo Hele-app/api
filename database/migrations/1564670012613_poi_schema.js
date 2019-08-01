@@ -17,6 +17,7 @@ class PoiSchema extends Schema {
       table.string('latitude').notNullable()
       table.string('longitude').notNullable()
       table.timestamps()
+   
     })
   }
 
