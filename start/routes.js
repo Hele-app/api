@@ -34,3 +34,9 @@ Route.group(() => {
   Route.get('/chat/:id', 'ChatController.show')
 }).prefix('/v1')
 .middleware('auth')
+
+
+Route.get('/poi', 'PoiController.home')
+Route.get('/poi/delete/:id', 'PoiController.delete')
+Route.get('/poi/edit/:id', 'PoiController.edit')
+Route.post('/poi/create','PoiController.create').validator('CreatePoi')

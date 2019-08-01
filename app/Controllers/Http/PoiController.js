@@ -1,42 +1,34 @@
 'use strict'
 
-const User = use('App/Models/Poi')
-const { validateAll } = use('validator')
-const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
+const Poi= use('App/Models/Poi')
 
 
 class PoiController {
-    async Create({request, poi, response}) {
 
-        const validation = await validateAll(request.all(), {
-          
-            name: 'required',
-            phone: 'required|regex:^0[6-7](\\d{2}){4}$',
-            adress: 'required',
-            code_postal: 'required|number',
-            latitude: 'required',
-            longitude: 'required'
+    async home({response}) {
+        const pois = await Poi.all();
+        return response.json(pois)
+    }
 
-          })
+    async create({request, response , pois}) {
 
-          if (validation.fails()) {
-              throw new ValidationException(validation.message(),400)
-          }
+        const poi= request.all();
 
-        let poi = new poi()
-        poi.name = request.input(name)
-        poi.adress = request.input(adress)
-        poi.code_postal = request.input(code_postal)
-        poi.phone = request.input(phone)
-        poi.description= request.input(description)
-        poi.horaire = request.input(horaire)
-        poi.site = request.input(site)
-        poi.latitude = request.input(latitude)
-        poi.longitude = request.input(longitude)
+        let posted = await Poi.create({
 
-        await User.save()
+            name : poi.name,
+            adress : poi.adress,
+            code_postal : poi.code_postal,
+            phone : poi.phone,
+            description : poi.description,
+            horaire : poi.horaire,
+            site : poi.site,
+            latitude : poi.latitude,
+            longitude : poi.longitude,
 
-        return response.json(poi)
+        })
+
+        return response.json(posted)
     }
 
 
