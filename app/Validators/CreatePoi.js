@@ -20,7 +20,7 @@ class CreatePoi {
   }
   async fails (errorMessages) {
     return this.ctx.response.send(errorMessages)
-    .flashAll()
+   
   }
 }
 
