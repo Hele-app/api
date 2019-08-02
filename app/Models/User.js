@@ -11,28 +11,27 @@ class User extends Model {
     super.boot()
 
     /**
-     * A hook to hash the user password before saving
-     * it to the database.
-     */
+    * A hook to hash the user password before saving
+    * it to the database.
+    */
     this.addHook('beforeSave', async (userInstance) => {
+      if (userInstance.dirty.phone) {
+        // remove dots or spaces in phone number
+        userInstance.phone = userInstance.phone.replace(/[.| ]/g, '')
+      }
       if (userInstance.dirty.password) {
         userInstance.password = await Hash.make(userInstance.password)
       }
     })
   }
 
-  /**
-   * A relationship on tokens is required for auth to
-   * work. Since features like `refreshTokens` or
-   * `rememberToken` will be saved inside the
-   * tokens table.
-   *
-   * @method tokens
-   *
-   * @return {Object}
-   */
-  tokens () {
-    return this.hasMany('App/Models/Token')
+
+  static get hidden () {
+    return ['password']
+  }
+
+  static get dates () {
+    return super.dates.concat(['last_login'])
   }
 }
 

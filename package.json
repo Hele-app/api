@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "pretest": "cp .env.example .env",
+    "pretest": "cp .env.example .env && node ace migration:run && npx @adonisjs/cli key:generate",
     "test": "node ace test"
   },
   "keywords": [
@@ -25,7 +25,11 @@
     "@adonisjs/framework": "^5.0.9",
     "@adonisjs/ignitor": "^2.0.8",
     "@adonisjs/lucid": "^6.1.3",
-    "@adonisjs/vow": "^1.0.17"
+    "@adonisjs/validator": "^5.0.6",
+    "@adonisjs/vow": "^1.0.17",
+    "mysql": "^2.17.1",
+    "pg": "^7.12.0",
+    "sqlite3": "^4.0.9"
   },
   "devDependencies": {
     "eslint": "^6.1.0"
