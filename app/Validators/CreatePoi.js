@@ -4,7 +4,7 @@ class CreatePoi {
   get rules () {
     return {
       'name': 'required',
-      'phone': 'required|regex:([0-9]{2}){4}[0-9]{2}',
+      'phone': 'required',
       'adress': 'required',
       'code_postal': 'required|number',
       'latitude': 'required',
