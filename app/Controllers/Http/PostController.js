@@ -4,6 +4,8 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
+const Database = use('Database')
+
 /**
  * Resourceful controller for interacting with posts
  */
@@ -21,9 +23,8 @@ class PostController {
     //recuperation de la request
     const all = request.all()
     // envoie en base de donnée
-
     //retourne le texte et une reponse http
-    return response.json(all)
+    return await Database.select('*').from('posts')    
   }
 
   /**
