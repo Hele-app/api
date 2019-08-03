@@ -18,7 +18,7 @@ class ChatUserSchema extends Schema {
         .unsigned()
         .notNullable()
         .references('id')
-        .inTable('chat_groups')
+        .inTable('chats')
     })
   }
 

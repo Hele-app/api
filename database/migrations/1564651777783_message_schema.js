@@ -14,7 +14,7 @@ class MessageSchema extends Schema {
         .references('id')
         .inTable('chat_users')
       table.text('content').notNullable()
-      table.datetime('date_msg').defaultTo(this.fn.now())
+      table.timestamps()
     })
   }
 

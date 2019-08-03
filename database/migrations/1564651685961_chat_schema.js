@@ -5,14 +5,14 @@ const Schema = use('Schema')
 
 class ChatGroupSchema extends Schema {
   up () {
-    this.create('chat_groups', (table) => {
+    this.create('chats', (table) => {
       table.increments()
       table.enu('type', ['PRIVATE', 'GROUP'])
     })
   }
 
   down () {
-    this.drop('chat_groups')
+    this.drop('chats')
   }
 }
 

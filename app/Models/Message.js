@@ -4,11 +4,7 @@
 const Model = use('Model')
 
 class Message extends Model {
-  users() {
-    return this
-      .belongsToMany('App/Models/User')
-      .pivotTable('chat_users')
-  }
+  
 }
 
 module.exports = Message

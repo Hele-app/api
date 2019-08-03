@@ -34,12 +34,10 @@ class User extends Model {
     return super.dates.concat(['last_login'])
   }
 
-  messages() {
-    return this.hasMany('App/Models/Message')
-  }
-
-  chatGroup() {
-    return this.hasMany('App/Models/chatGroup')
+  chats() {
+    return this
+      .belongsToMany('App/Models/Chat')
+      .pivotTable('chat_users')
   }
 }
 
