@@ -13,6 +13,7 @@ class MessageSchema extends Schema {
         .notNullable()
         .references('id')
         .inTable('chat_users')
+        .onDelete('cascade')
       table.text('content').notNullable()
       table.timestamps()
     })

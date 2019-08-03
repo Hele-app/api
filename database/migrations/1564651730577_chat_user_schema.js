@@ -13,12 +13,14 @@ class ChatUserSchema extends Schema {
         .notNullable()
         .references('id')
         .inTable('users')
+        .onDelete('cascade')
       table
         .integer('chat_id')
         .unsigned()
         .notNullable()
         .references('id')
         .inTable('chats')
+        .onDelete('cascade')
     })
   }
 
