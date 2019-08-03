@@ -50,7 +50,7 @@ class ChatController {
       // console.log(user.toJSON())
       // console.log(chat.toJSON())
 
-      console.log(user.toJSON())
+      // console.log(user.toJSON())
       console.log(message.toJSON())
 
     } catch (err){

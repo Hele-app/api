@@ -39,6 +39,10 @@ class User extends Model {
       .belongsToMany('App/Models/Chat')
       .pivotTable('chat_users')
   }
+
+  messages() {
+    return this.manyThrough('App/Models/ChatUser', 'messages')
+  }
 }
 
 module.exports = User
