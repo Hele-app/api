@@ -11,6 +11,10 @@ class Message extends Model {
   chat() {
     return this.manyThrough('App/Models/ChatUser', 'chat', 'chat_user_id', 'id')
   }
+
+  chatUser() {
+    return this.belongsTo('App/Models/ChatUser')
+  }
 }
 
 module.exports = Message
