@@ -10,10 +10,14 @@ class ChatController {
   }
 
   // Return all messages and their user & all users for this chat
-  async show({ params: { id }, request, response }) {
+  async show({ params: { id }, response }) {
 
-    const chat = await Chat.find(id)    
-    await chat.loadMany(['messages.user', 'users'])
+    const chat = await Chat.find(id)
+    
+    await chat.loadMany({
+      'messages.user': null, 
+      'users': builder => { builder.distinct('users.id').select('username', 'roles') }
+    })
 
     response.status(200).json(chat)
   }
