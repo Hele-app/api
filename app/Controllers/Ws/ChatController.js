@@ -1,60 +1,102 @@
 'use strict'
 
-const User = use('App/Models/User')
 const Message = use('App/Models/Message')
-const Chat = use('App/Models/Chat')
 const ChatUser = use('App/Models/ChatUser')
+const User = use('App/Models/User')
 
 class ChatController {
-  constructor ({ socket, request }) {
+  constructor ({ socket, request, auth }) {
     this.socket = socket
     this.request = request
+    this.auth = auth
   }
-
-  onOpen() {
+  
+  async onOpen() {
     console.log('connected')
   }
-
+  
   onClose() {
     console.log('disconnected')
   }
 
-  async onMessage(msg) {
-    console.log(msg)
-    // const user = User.find(1)
+  async onToken() {
     try {
 
-      // const byChatId = 
-      //   await Message
-      //     .query()
-      //     .wherePivot('chat_id', 1)
-      //     .fetch()
-      // const allMsg = await Message.all()
-      // // const user = await allMsg.users().fetch()
-      // console.log(byChatId.toJSON())
-      // console.log(allMsg.toJSON())      
-      // console.log(user)
+      const user = await User.findOrFail(1)
+  
+      let token = await this.auth.generate(user)
+      console.log(this.auth.user)
 
-      // const group = await ChatGroup.find(1) 
-      // const message = await group.messages().fetch()
-      // console.log(group.toJSON())
+      console.log({token})
+    } catch (error) {
+  
+      console.error('onTest error : ', error)
+
+    }
+  }
+
+  
+  async onMessage(data) {
+    try {
+      
+      console.log('message = ' + data.msg + ' || chatID = ' + data.chatID + ' || userID = ' + data.userID)
+
+      /**
+       * WORKING BUT DIRTY
+       */
+
+      const chatUser = new ChatUser
+      chatUser.user_id = data.userID
+      chatUser.chat_id = data.chatID
+      
+      await chatUser.save()
+
+      const message = new Message
+      message.content = data.msg
+      
+      // const saveMsg = 
+      await chatUser.messages().save(message)
+
+      // console.log('saveMSg = ' , saveMsg)
+      
+
+      /**
+       * TESTS
+       */
+
+      // const message = new Message
+      // message.content = data.msg
+
+      // const association = await message.chatUser().associate(message)
+      // console.log(association)
+
+      // const chat = await Chat.findOrFAil(1)
+      // const user = await User.findOrFail(1)
+
+      // const attach = await user.chats().attach([data.chatID])
+      // const test = await user.load('messages')
+      // await user.getRelated('test')
+      // console.log(test)
+      // console.log(user.toJSON())
+      // // // const attach = await user.save()
+
+
+      // console.log(attach.toJSON())
+      // console.log('attach id = ' , attach.id)
+
+
+      // dosen't work with manyThrough relationship
+      // await user.messages().save(message)
+      
+      // find the user username via its name on this chat
+      // const username = await chat.users().select('username').where('user_id', 3).fetch()
+
+      // console.log(username.toJSON())
       // console.log(message.toJSON())
-
-      const user = await User.find(1)
-      // const chat = await user.chats().fetch()
-      // const chat = await Chat.find(1)
-      // const user = await chat.users().fetch()
-      // const message = await chat.messages().fetch()
-      const message = await user.messages().fetch()
-
       // console.log(user.toJSON())
-      // console.log(chat.toJSON())
-
-      // console.log(user.toJSON())
-      console.log(message.toJSON())
 
     } catch (err){
-      console.error(err)
+      console.error('msg error', err)
     }
   }
 

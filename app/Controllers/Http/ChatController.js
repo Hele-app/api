@@ -12,7 +12,7 @@ class ChatController {
   // Return all messages and their user & all users for this chat
   async show({ params: { id }, response }) {
 
-    const chat = await Chat.find(id)
+    const chat = await Chat.findOrFail(id)
     
     await chat.loadMany({
       'messages.user': null, 
