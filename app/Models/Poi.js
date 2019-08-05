@@ -4,7 +4,6 @@
 const Model = use('Model')
 
 class Poi extends Model {
-    
 }
 
 module.exports = Poi

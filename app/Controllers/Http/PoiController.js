@@ -24,11 +24,14 @@ class PoiController {
             site : poi.site,
             latitude : poi.latitude,
             longitude : poi.longitude,
-
         })
 
         return response.json(posted)
     }
+   
+    
+    
+}
 
 
     async delete({ response, params }) {
@@ -63,7 +66,5 @@ class PoiController {
 
         return response.redirect('/poi');
     }
-
-}
 
 module.exports = PoiController
