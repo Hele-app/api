@@ -1,7 +1,6 @@
 'use strict'
 
 const Poi= use('App/Models/Poi')
-const region= use('App/Models/Region')
 
 class PoiController {
 
@@ -25,15 +24,15 @@ class PoiController {
             site : poi.site,
             latitude : poi.latitude,
             longitude : poi.longitude,
-            region_id: poi.region_id
-
-
         })
 
         return response.json(posted)
     }
-   
-    async delete({ response, params }) {
+
+
+
+}
+
 
         let poi = await Poi.find(params.id);
 
@@ -99,7 +98,5 @@ class PoiController {
 
         return response.redirect('/poi');
     }
-
-}
 
 module.exports = PoiController
