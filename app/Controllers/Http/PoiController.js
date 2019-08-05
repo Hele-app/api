@@ -1,6 +1,8 @@
 'use strict'
 
 const Poi= use('App/Models/Poi')
+const region= use('App/Models/Region')
+
 
 class PoiController {
 
@@ -17,21 +19,20 @@ class PoiController {
 
             name : poi.name,
             adress : poi.adress,
-            code_postal : poi.code_postal,
+            postal : poi.postal,
             phone : poi.phone,
             description : poi.description,
-            horaire : poi.horaire,
+            hour : poi.horaire,
             site : poi.site,
             latitude : poi.latitude,
             longitude : poi.longitude,
+            region_id: poi.region_id
+
+
         })
 
         return response.json(posted)
     }
-   
-    
-    
-
 
 
     async delete({ response, params }) {
@@ -54,17 +55,24 @@ class PoiController {
 
         poi.name = request.all().name
         poi.adress = request.all().adress
-        poi.code_postal = request.all().code_postal
+        poi.postal = request.all().postal
         poi.phone = request.all().phone
         poi.description = request.all().description
-        poi.horaire = request.all().horaire
+        poi.hour = request.all().hour
         poi.site = request.all().site
         poi.latitude = request.all().latitude
         poi.longitude = request.all().longitude
+        poi.region_id= request.all().region_id
 
         await poi.save();
 
         return response.redirect('/poi');
     }
+
+  
+
+    
+
 }
+
 module.exports = PoiController

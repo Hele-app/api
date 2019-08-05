@@ -6,7 +6,7 @@ class CreatePoi {
       'name': 'required',
       'phone': 'required',
       'adress': 'required',
-      'code_postal': 'required|number',
+      'postal': 'required|number',
       'latitude': 'required',
       'longitude': 'required'
     }
@@ -15,7 +15,7 @@ class CreatePoi {
     return {
       'required':'Error,{{field}} is required',
       'number':'Error, the {{field}} must be a number ',
-      'regex':'Error, the {{fiels}} must be a valid number phone'
+
     }
   }
   async fails (errorMessages) {
