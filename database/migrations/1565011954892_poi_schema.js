@@ -10,12 +10,13 @@ class PoiSchema extends Schema {
       table.string('name').notNullable()
       table.string('description')
       table.string('adress').notNullable()
-      table.integer('code_postal').notNullable()
-      table.string('horaire')
+      table.integer('postal').notNullable()
+      table.string('hour')
       table.string('phone').notNullable()
       table.string('site')
-      table.string('latitude').notNullable()
-      table.string('longitude').notNullable()
+      table.float('latitude').notNullable()
+      table.float('longitude').notNullable()
+      table.integer('region_id').notNullable()
       table.timestamps()
    
     })
@@ -27,3 +28,4 @@ class PoiSchema extends Schema {
 }
 
 module.exports = PoiSchema
+
