@@ -20,9 +20,6 @@ Route.get('/', () => {
   return { greeting: 'Hello world in JSON' }
 })
 
-<<<<<<< HEAD
-Route.post('/chat', 'PostController.index')
-=======
 Route.group(() => {
   Route.post('/auth/register', 'AuthController.register')
   Route.post('/auth/login', 'AuthController.login')
@@ -31,4 +28,3 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/auth/me', 'AuthController.me')
 }).prefix('/v1').middleware('auth')
->>>>>>> bdd
