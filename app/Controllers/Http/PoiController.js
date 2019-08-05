@@ -31,7 +31,7 @@ class PoiController {
    
     
     
-}
+
 
 
     async delete({ response, params }) {
@@ -66,5 +66,5 @@ class PoiController {
 
         return response.redirect('/poi');
     }
-
+}
 module.exports = PoiController
