@@ -33,8 +33,7 @@ class PoiController {
 
         return response.json(posted)
     }
-
-
+   
     async delete({ response, params }) {
 
         let poi = await Poi.find(params.id);
@@ -69,9 +68,6 @@ class PoiController {
         return response.redirect('/poi');
     }
 
-  
-
-    
 
 }
 

@@ -8,7 +8,7 @@ class RegionSchema extends Schema {
     this.create('regions', (table) => {
       table.increments()
       table.timestamps()
-      table.string('name')
+      table.string('name').notNullable()
     })
   }
 
