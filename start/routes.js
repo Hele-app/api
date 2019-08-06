@@ -38,9 +38,7 @@ Route.group(() => {
 Route.get('/poi', 'PoiController.home')
 Route.get('/poi/delete/:id', 'PoiController.delete')
 Route.get('/poi/edit/:id', 'PoiController.edit')
-
 Route.post('/poi/update/:id', 'PoiController.update').validator('CreatePoi')
-
 Route.post('/poi/create','PoiController.create').validator('CreatePoi')
 
 Route.get('/region', 'RegionController.show')
