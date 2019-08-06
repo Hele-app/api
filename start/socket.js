@@ -19,4 +19,6 @@ const Ws = use('Ws')
 //   console.log('user joined with %s socket id', socket.id)
 //})
 
-Ws.channel('chat', 'ChatController')
+Ws
+  .channel('chat:*', 'ChatController')
+  .middleware('auth')

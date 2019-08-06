@@ -1,8 +1,7 @@
 'use strict'
 
 const Message = use('App/Models/Message')
-const ChatUser = use('App/Models/ChatUser')
-const User = use('App/Models/User')
+const Database = use('Database')
 
 class ChatController {
   constructor ({ socket, request, auth }) {
@@ -10,90 +9,35 @@ class ChatController {
     this.request = request
     this.auth = auth
   }
-  
-  async onOpen() {
-    console.log('connected')
-  }
-  
-  onClose() {
-    console.log('disconnected')
-  }
 
-  async onToken() {
-    try {
-
-      const user = await User.findOrFail(1)
-  
-      let token = await this.auth.generate(user)
-      console.log(this.auth.user)
-
-      console.log({token})
-    } catch (error) {
-  
-      console.error('onTest error : ', error)
-
-    }
-  }
-
-  
-  async onMessage(data) {
+  async onMessage(msg) {
     try {
       
-      console.log('message = ' + data.msg + ' || chatID = ' + data.chatID + ' || userID = ' + data.userID)
+      const user = await this.auth.getUser()
+      const username = user.username
+      const userID = user.toJSON().id
+      const chatID = this.socket.topic.replace('chat:', '')
 
-      /**
-       * WORKING BUT DIRTY
-       */
-
-      const chatUser = new ChatUser
-      chatUser.user_id = data.userID
-      chatUser.chat_id = data.chatID
+      const chatUser = await Database
+        .select('id')
+        .from('chat_users')
+        .where({
+          'user_id': userID, 
+          'chat_id': chatID
+        })
       
-      await chatUser.save()
-
+      const chatUserID = chatUser[0].id
+      
       const message = new Message
-      message.content = data.msg
+      message.chat_user_id = chatUserID
+      message.content = msg
+
+      await message.save()
       
-      // const saveMsg = 
-      await chatUser.messages().save(message)
-
-      // console.log('saveMSg = ' , saveMsg)
-      
-
-      /**
-       * TESTS
-       */
-
-      // const message = new Message
-      // message.content = data.msg
-
-      // const association = await message.chatUser().associate(message)
-      // console.log(association)
-
-      // const chat = await Chat.findOrFAil(1)
-      // const user = await User.findOrFail(1)
-
-      // const attach = await user.chats().attach([data.chatID])
-      // const test = await user.load('messages')
-      // await user.getRelated('test')
-      // console.log(test)
-      // console.log(user.toJSON())
-      // // // const attach = await user.save()
-
-
-      // console.log(attach.toJSON())
-      // console.log('attach id = ' , attach.id)
-
-
-      // dosen't work with manyThrough relationship
-      // await user.messages().save(message)
-      
-      // find the user username via its name on this chat
-      // const username = await chat.users().select('username').where('user_id', 3).fetch()
-
-      // console.log(username.toJSON())
-      // console.log(message.toJSON())
-      // console.log(user.toJSON())
+      this.socket.broadcastToAll('message', {
+        messsage: message.content,
+        user: username
+      })
 
     } catch (err){
       console.error('msg error', err)

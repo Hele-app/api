@@ -33,3 +33,4 @@ Route.group(() => {
   Route.get('/chat', 'ChatController.index')
   Route.get('/chat/:id', 'ChatController.show')
 }).prefix('/v1')
+.middleware('auth')
