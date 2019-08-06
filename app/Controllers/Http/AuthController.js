@@ -45,9 +45,9 @@ class AuthController {
 
   async login({request, auth, response}) {
     const validation = await validateAll(request.all(), {
-      phone: 'required_without_all:username, email',
-      username: 'required_without_all:phone, email',
-      email: 'required_without_all:phone, username',
+      phone: 'required_without_all:username,email',
+      username: 'required_without_all:phone,email',
+      email: 'required_without_all:phone,username',
       password: 'required',
     })
 
