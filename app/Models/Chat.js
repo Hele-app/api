@@ -4,6 +4,14 @@
 const Model = use('Model')
 
 class Chat extends Model {
+  static get createdAtColumn() {
+    return undefined;
+  }
+
+  static get updatedAtColumn() {
+    return undefined;
+  }
+
   users() {
     return this
       .belongsToMany('App/Models/User')

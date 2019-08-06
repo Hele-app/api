@@ -1,6 +1,8 @@
 'use strict'
 
 const User = use('App/Models/User')
+const Chat = use('App/Models/Chat')
+const ChatUser = use('App/Models/ChatUser')
 const Database = use('Database')
 const { validateAll } = use('Validator')
 const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
@@ -37,7 +39,7 @@ class AuthController {
 
     if (isSave) {
       let userID = user.id
-      this.bindUserToPro(userID)
+      this.youngToPro(userID)
     }
 
     return response.json({user, password, access_token})
@@ -78,35 +80,25 @@ class AuthController {
     return response.json({"user": auth.user})
   }
 
-  async bindUserToPro(userID) {
+  async youngToPro(userID) {
     const trx = await Database.beginTransaction()
     try {
 
-      let chat = await trx
-        .insert({ type: "PRIVATE" })
-        .into('chats')
+      let chat = await Chat.create({ type: 'PRIVATE' }, trx)
+      let chatID = chat.id
 
-      let numberOfPro = await trx
+      let allPro = await trx
         .select('id')
         .from('users')
         .where('roles', 'PROFESSIONAL')
-        .getCount()
-      
-      let chatID = chat[0]
-      let randomPro = Math.round(Math.random() * (numberOfPro - 1) + 1)
 
-      await trx
-        .insert([
-        { 
-          user_id: userID,
-          chat_id: chatID
-        },
-        {
-          user_id: randomPro,
-          chat_id: chatID
-        }
-        ])
-      .into('chat_users')
+      let randomPro = allPro[Math.round(Math.random() * allPro.length)]
+      randomPro = randomPro.id
+
+      await ChatUser.createMany([
+        { user_id: userID, chat_id: chatID },
+        { user_id: randomPro, chat_id: chatID }
+      ], trx)
 
       await trx.commit()
 
