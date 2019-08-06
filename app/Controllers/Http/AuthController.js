@@ -1,6 +1,7 @@
 'use strict'
 
 const User = use('App/Models/User')
+const Database = use('Database')
 const { validateAll } = use('Validator')
 const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
 
@@ -30,9 +31,15 @@ class AuthController {
     user.birthyear = new Date().getFullYear() - request.input('age')
     user.password = password
 
-    await user.save()
+    let isSave = await user.save()
     let access_token = await auth.generate(user)
     // TODO: send SMS with password instead of sending it in the response.
+
+    if (isSave) {
+      let userID = user.id
+      this.bindUserToPro(userID)
+    }
+
     return response.json({user, password, access_token})
   }
 
@@ -69,6 +76,44 @@ class AuthController {
 
   async me({request, auth, response}) {
     return response.json({"user": auth.user})
+  }
+
+  async bindUserToPro(userID) {
+    const trx = await Database.beginTransaction()
+    try {
+
+      let chat = await trx
+        .insert({ type: "PRIVATE" })
+        .into('chats')
+
+      let numberOfPro = await trx
+        .select('id')
+        .from('users')
+        .where('roles', 'PROFESSIONAL')
+        .getCount()
+      
+      let chatID = chat[0]
+      let randomPro = Math.round(Math.random() * (numberOfPro - 1) + 1)
+
+      await trx
+        .insert([
+        { 
+          user_id: userID,
+          chat_id: chatID
+        },
+        {
+          user_id: randomPro,
+          chat_id: chatID
+        }
+        ])
+      .into('chat_users')
+
+      await trx.commit()
+
+    } catch (error) {
+      trx.rollback()
+      console.error(error)
+    }
   }
 }
 
