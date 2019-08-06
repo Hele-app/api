@@ -15,7 +15,7 @@ class ChatController {
       
       const user = await this.auth.getUser()
       const username = user.username
-      const userID = user.toJSON().id
+      const userID = user.id
       const chatID = this.socket.topic.replace('chat:', '')
 
       const chatUser = await Database
