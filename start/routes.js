@@ -43,3 +43,4 @@ Route.post('/poi/update/:id', 'PoiController.update').validator('CreatePoi')
 Route.post('/poi/create','PoiController.create').validator('CreatePoi')
 
 Route.get('/region', 'RegionController.show')
+Route.get('/region/poi/:id', 'RegionController.home')
