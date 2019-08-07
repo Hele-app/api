@@ -90,13 +90,9 @@ class RegionSeeder {
       }
     ]
 
-    // data.map(item =>  Regions.createMany(item.name))
-  
-
 
     let regions = await Regions.createMany(data)
-    const region = await Database.table('regions')
-    console.log(region)
+  
   }
 }
 
