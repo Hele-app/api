@@ -15,7 +15,7 @@ class RegionController {
     async home({response, params, request}) {
         
         const query = await Database.from('pois')
-        .where({regions_id: [params.id] })
+        .where({region_id: [params.id] })
         return response.json(query)
         return response.redirect('/region/poi');
     }   

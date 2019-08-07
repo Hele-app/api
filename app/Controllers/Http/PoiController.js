@@ -22,7 +22,7 @@ class PoiController {
             postal : poi.postal,
             phone : poi.phone,
             description : poi.description,
-            hour : poi.horaire,
+            hour : poi.hour,
             site : poi.site,
             latitude : poi.latitude,
             longitude : poi.longitude,
