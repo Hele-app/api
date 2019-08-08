@@ -19,7 +19,7 @@ class ChatController {
       'users': builder => { builder.distinct('users.id').select('username', 'roles') }
     })
 
-    response.status(200).json(chat)
+    response.status(200).json(chat.toJSON())
   }
 }
 
