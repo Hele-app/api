@@ -40,6 +40,7 @@ class AuthController {
     if (isSave) {
       let userID = user.id
       this.youngToPro(userID)
+      // this.youngToYoung(userID)
     }
 
     return response.json({user, password, access_token})
@@ -81,13 +82,12 @@ class AuthController {
   }
 
   async youngToPro(userID) {
-    const trx = await Database.beginTransaction()
     try {
 
-      let chat = await Chat.create({ type: 'PRIVATE' }, trx)
+      let chat = await Chat.create({ type: 'PRIVATE' })
       let chatID = chat.id
 
-      let allPro = await trx
+      let allPro = await Database
         .select('id')
         .from('users')
         .where('roles', 'PROFESSIONAL')
@@ -98,12 +98,55 @@ class AuthController {
       await ChatUser.createMany([
         { user_id: userID, chat_id: chatID },
         { user_id: randomPro, chat_id: chatID }
-      ], trx)
+      ])
 
-      await trx.commit()
-
+      this.youngToYoung(userID, allPro)
+      
     } catch (error) {
-      trx.rollback()
+      console.error(error)
+    }
+  }
+
+  async youngToYoung(userID, allPro) {
+    try {
+      
+      let user = await User.findOrFail(userID)
+
+      let chats = await Chat
+        .query()
+        .select('id')
+        .where('type', 'GROUP')
+        .whereHas('users', builder => {
+          builder.where('roles', 'YOUNG')
+        }, '<', 4)
+        .fetch()
+      
+      chats = chats.toJSON()
+
+      let chatsID = chats.map(chat => { 
+        return chat.id 
+      })
+
+      if (chatsID.length > 0) {
+        let randomChat = chatsID[Math.round(Math.random() * chatsID.length)]
+        await user.chats().attach(randomChat)
+      } else {
+        let newChat = await Chat.create({ type: 'GROUP' })
+        let newChatID = newChat.id
+        let randomPro = allPro[Math.round(Math.random() * allPro.length)]
+
+        await user.chats().attach(newChatID)
+        await newChat.users().attach(randomPro.id)
+
+        let allModo = await Database
+        .select('id')
+        .from('users')
+        .where('roles', 'MODERATOR')
+
+        let randomModo = allModo[Math.round(Math.random() * allModo.length)]
+        await newChat.users().attach(randomModo.id)
+      }
+    } catch (error) {
       console.error(error)
     }
   }
