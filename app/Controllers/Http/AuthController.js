@@ -92,7 +92,7 @@ class AuthController {
         .from('users')
         .where('roles', 'PROFESSIONAL')
 
-      let randomPro = allPro[Math.round(Math.random() * allPro.length)]
+      let randomPro = allPro[Math.floor(Math.random() * allPro.length)]
       randomPro = randomPro.id
 
       await ChatUser.createMany([
