@@ -9,7 +9,11 @@ class ChatController {
     const user = await auth.getUser()
     const chats = await user.chats().fetch()
 
-    response.status(200).json(chats.toJSON())
+    if (chats.length !== 0) {
+      response.status(200).json(chats.toJSON())
+    } else {
+      response.status(404).send('Not found')
+    }
   }
 
   async show({ params: { id }, response }) {
@@ -21,7 +25,11 @@ class ChatController {
       'users': builder => { builder.distinct('users.id').select('username', 'roles') }
     })
 
-    response.status(200).json(chat.toJSON())
+    if (chat.length !== 0) {
+      response.status(200).json(chat.toJSON())
+    } else {
+      response.status(404).send('Not found')
+    }  
   }
 }
 

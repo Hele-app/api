@@ -38,9 +38,7 @@ class AuthController {
     // TODO: send SMS with password instead of sending it in the response.
 
     if (isSave) {
-      let userID = user.id
-      this.youngToPro(userID)
-      // this.youngToYoung(userID)
+      this.youngToPro(user)
     }
 
     return response.json({user, password, access_token})
@@ -81,7 +79,7 @@ class AuthController {
     return response.json({"user": auth.user})
   }
 
-  async youngToPro(userID) {
+  async youngToPro(user) {
     try {
 
       let chat = await Chat.create({ type: 'PRIVATE' })
@@ -95,23 +93,19 @@ class AuthController {
       let randomPro = allPro[Math.round(Math.random() * allPro.length)]
       randomPro = randomPro.id
 
-      await ChatUser.createMany([
-        { user_id: userID, chat_id: chatID },
-        { user_id: randomPro, chat_id: chatID }
-      ])
+      await user.chats().attach(chatID)
+      await chat.users().attach(user.id)
 
-      this.youngToYoung(userID, allPro)
+      this.youngToYoung(user, allPro)
       
     } catch (error) {
       console.error(error)
     }
   }
 
-  async youngToYoung(userID, allPro) {
+  async youngToYoung(user, allPro) {
     try {
       
-      let user = await User.findOrFail(userID)
-
       let chats = await Chat
         .query()
         .select('id')
