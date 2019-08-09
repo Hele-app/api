@@ -13,9 +13,9 @@ class ChatController {
   async show({ params: { id }, response }) {
 
     const chat = await Chat.findOrFail(id)
-    
+
     await chat.loadMany({
-      'messages.user': null, 
+      'messages.user': null,
       'users': builder => { builder.distinct('users.id').select('username', 'roles') }
     })
 
