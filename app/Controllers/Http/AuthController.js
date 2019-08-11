@@ -11,7 +11,7 @@ class AuthController {
   async register({request, auth, response}) {
 
     const validation = await validateAll(request.all(), {
-      phone: 'required|unique:users|regex:(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}',
+      //phone: 'required|unique:users|regex:(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}',
       username: 'required|unique:users',
       age: 'required|integer|above:10',
       region: 'required'
@@ -46,9 +46,9 @@ class AuthController {
 
   async login({request, auth, response}) {
     const validation = await validateAll(request.all(), {
-      phone: 'required_without_all:username,email',
-      username: 'required_without_all:phone,email',
-      email: 'required_without_all:phone,username',
+     // phone: 'required_without_all:username,email',
+      //username: 'required_without_all:phone,email',
+      //email: 'required_without_all:phone,username',
       password: 'required',
     })
 
