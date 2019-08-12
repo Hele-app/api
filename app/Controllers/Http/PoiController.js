@@ -18,13 +18,14 @@ class PoiController {
         let posted = await Poi.create({
 
             name : poi.name,
-            adress : poi.adress,
-            postal : poi.postal,
+            address : poi.address,
+            zipcode : poi.zipcode,
+            city : poi.city,
             phone : poi.phone,
             description : poi.description,
             hour : poi.hour,
             site : poi.site,
-            latitude : poi.latitude,
+            lattitude : poi.lattitude,
             longitude : poi.longitude,
             region_id: poi.region_id
 
@@ -54,13 +55,14 @@ class PoiController {
         let poi = await Poi.find(params.id);
 
         poi.name = request.all().name
-        poi.adress = request.all().adress
-        poi.postal = request.all().postal
+        poi.address = request.all().address
+        poi.zipcode = request.all().zipcode
         poi.phone = request.all().phone
+        poi.city = request.all().city
         poi.description = request.all().description
         poi.hour = request.all().hour
         poi.site = request.all().site
-        poi.latitude = request.all().latitude
+        poi.lattitude = request.all().lattitude
         poi.longitude = request.all().longitude
         poi.region_id= request.all().region_id
 

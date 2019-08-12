@@ -7,8 +7,9 @@ class CreatePoi {
       'phone': 'required',
       'adress': 'required',
       'postal': 'required|number',
+      'city': 'required',
       'latitude': 'required',
-      'longitude': 'required',
+      'lattitude': 'required',
       'region_id': 'required'
     }
   }
