@@ -9,6 +9,7 @@ class PostController {
 
   //recuperation du message sur react native
   onMessage(message) {
+    //hello world
     //transmition a la base de donnée MySQL
     const Post = use('App/Models/Post')
     const post = new Post()
