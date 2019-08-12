@@ -11,7 +11,7 @@ class PoiSchema extends Schema {
       table.string('description')
       table.string('address').notNullable()
       table.integer('zipcode').notNullable()
-      table.integer('city').notNullable()
+      table.string('city').notNullable()
       table.string('hour')
       table.string('phone').notNullable()
       table.string('site')

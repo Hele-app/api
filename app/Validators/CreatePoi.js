@@ -5,11 +5,11 @@ class CreatePoi {
     return {
       'name': 'required',
       'phone': 'required',
-      'adress': 'required',
-      'postal': 'required|number',
+      'address': 'required',
+      'zipcode': 'required|number',
       'city': 'required',
-      'latitude': 'required',
       'lattitude': 'required',
+      'longitude': 'required',
       'region_id': 'required'
     }
   }

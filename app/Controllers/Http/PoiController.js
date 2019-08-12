@@ -28,8 +28,6 @@ class PoiController {
             lattitude : poi.lattitude,
             longitude : poi.longitude,
             region_id: poi.region_id
-
-
         })
 
         return response.json(posted)
