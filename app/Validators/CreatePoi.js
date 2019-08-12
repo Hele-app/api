@@ -8,7 +8,8 @@ class CreatePoi {
       'adress': 'required',
       'postal': 'required|number',
       'latitude': 'required',
-      'longitude': 'required'
+      'longitude': 'required',
+      'region_id': 'required'
     }
   }
   get messages(){
