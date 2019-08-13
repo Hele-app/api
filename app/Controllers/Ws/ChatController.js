@@ -35,7 +35,7 @@ class ChatController {
       await message.save()
       
       this.socket.broadcastToAll('message', {
-        messsage: message.content,
+        message: message.content,
         user: username
       })
 
