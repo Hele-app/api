@@ -12,6 +12,7 @@ class ChatController {
 
   async onMessage(msg) {
     try {
+      if (msg.length === 0 ) { return }
       
       const user = await this.auth.getUser()
       const username = user.username
@@ -25,12 +26,12 @@ class ChatController {
           'user_id': userID, 
           'chat_id': chatID
         })
-      
+  
       const chatUserID = chatUser[0].id
       
       const message = new Message
       message.chat_user_id = chatUserID
-      message.content = msg
+      message.content = msg.trim()
 
       await message.save()
       
