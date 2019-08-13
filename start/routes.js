@@ -40,9 +40,11 @@ Route.group(() => {
   Route.get('/region', 'RegionController.show')
   Route.get('/region/poi/:id', 'RegionController.home')
 }).prefix('/v1')
-
+//CRUD POI
 Route.get('/poi', 'PoiController.home')
 Route.post('/poi/create','PoiController.create').validator('CreatePoi')
 Route.get('/poi/delete/:id', 'PoiController.delete')
 Route.get('/poi/edit/:id', 'PoiController.edit')
 Route.post('/poi/update/:id', 'PoiController.update').validator('CreatePoi')
+//Afficher les régions
+Route.get('/poi/region','RegionController.home')
