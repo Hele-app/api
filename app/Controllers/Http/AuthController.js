@@ -90,12 +90,10 @@ class AuthController {
         .from('users')
         .where('roles', 'PROFESSIONAL')
 
-      let randomPro = allPro[Math.round(Math.random() * allPro.length)]
-      randomPro = randomPro.id
+      let randomPro = await allPro[Math.floor(Math.random() * allPro.length)]
 
       await user.chats().attach(chatID)
-      await chat.users().attach(user.id)
-
+      await chat.users().attach(randomPro.id)
       this.youngToYoung(user, allPro)
       
     } catch (error) {
@@ -120,24 +118,25 @@ class AuthController {
       let chatsID = chats.map(chat => { 
         return chat.id 
       })
-
+      
       if (chatsID.length > 0) {
-        let randomChat = chatsID[Math.round(Math.random() * chatsID.length)]
+        let randomChat = chatsID[Math.floor(Math.random() * chatsID.length)]
         await user.chats().attach(randomChat)
       } else {
         let newChat = await Chat.create({ type: 'GROUP' })
         let newChatID = newChat.id
-        let randomPro = allPro[Math.round(Math.random() * allPro.length)]
+        let randomPro = await allPro[Math.floor(Math.random() * allPro.length)]
 
         await user.chats().attach(newChatID)
         await newChat.users().attach(randomPro.id)
 
         let allModo = await Database
-        .select('id')
-        .from('users')
-        .where('roles', 'MODERATOR')
+          .select('id')
+          .from('users')
+          .where('roles', 'MODERATOR')
 
-        let randomModo = allModo[Math.round(Math.random() * allModo.length)]
+        let randomModo = await allModo[Math.floor(Math.random() * allModo.length)]
+
         await newChat.users().attach(randomModo.id)
       }
     } catch (error) {
