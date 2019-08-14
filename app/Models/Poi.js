@@ -5,7 +5,7 @@ const Model = use('Model')
 
 class Poi extends Model {
     region(){
-        return this.hasOne('App/Models/Region')
+        return this.belongsTo('App/Models/Region')
     }
 }
 

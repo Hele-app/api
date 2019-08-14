@@ -11,6 +11,7 @@ class RegionController {
     async show({response, params, request}) {    
         const query = await Database.from('pois')
         .where({region_id: [params.id] })
+        console.log(response.json(query))
         return response.json(query)
     }   
 }
