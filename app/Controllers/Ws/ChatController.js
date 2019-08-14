@@ -45,6 +45,20 @@ class ChatController {
     }
   }
 
+
+  async onDelete(msgID) {
+
+    const user = await this.auth.getUser()
+
+    if(user.roles === "YOUNG") { return }
+    
+    const message = await Message.findOrFail(msgID)
+    const isDeleted = await message.delete()
+
+    this.socket.broadcastToAll('delete', isDeleted ? 'success' : 'failed')
+    
+  }
+
   onError(err) {
     console.error('error', err)
   }
