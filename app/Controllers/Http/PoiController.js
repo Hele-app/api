@@ -8,7 +8,7 @@ class PoiController {
 
     async home({response}) {
         const pois = await Poi.query().with('region').fetch();
-        console.log(pois.toJSON())
+        // console.log(pois.toJSON())
         return response.json(pois)
     }
 
