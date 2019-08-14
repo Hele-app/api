@@ -12,8 +12,8 @@ class ChatController {
 
   async onMessage(msg) {
     try {
-      if (msg.length === 0 ) { return }
-      
+      if (msg.length === 0 || /^\s*$/.test(msg)) { return }
+
       const user = await this.auth.getUser()
       const username = user.username
       const userID = user.id
