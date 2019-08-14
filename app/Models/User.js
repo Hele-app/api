@@ -43,6 +43,10 @@ class User extends Model {
   messages() {
     return this.manyThrough('App/Models/ChatUser', 'messages')
   }
+
+  verifyPasswords() {
+    return this.hasMany('App/Models/VerifyPassword')
+  }
 }
 
 module.exports = User

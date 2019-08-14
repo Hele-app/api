@@ -34,3 +34,6 @@ Route.group(() => {
   Route.get('/chat/:id', 'ChatController.show')
 }).prefix('/v1')
 .middleware('auth')
+
+Route.get('/send/code', 'AuthController.sendCode')
+Route.get('/change/code', 'AuthController.changeCode')
