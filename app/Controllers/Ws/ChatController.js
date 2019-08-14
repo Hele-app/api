@@ -12,7 +12,8 @@ class ChatController {
 
   async onMessage(msg) {
     try {
-      
+      if (msg.length === 0 || /^\s*$/.test(msg)) { return }
+
       const user = await this.auth.getUser()
       const username = user.username
       const userID = user.id
@@ -25,23 +26,37 @@ class ChatController {
           'user_id': userID, 
           'chat_id': chatID
         })
-      
+  
       const chatUserID = chatUser[0].id
       
       const message = new Message
       message.chat_user_id = chatUserID
-      message.content = msg
+      message.content = msg.trim()
 
       await message.save()
       
       this.socket.broadcastToAll('message', {
-        messsage: message.content,
+        message: message.content,
         user: username
       })
 
     } catch (err){
       console.error('msg error', err)
     }
+  }
+
+
+  async onDelete(msgID) {
+
+    const user = await this.auth.getUser()
+
+    if(user.roles === "YOUNG") { return }
+    
+    const message = await Message.findOrFail(msgID)
+    const isDeleted = await message.delete()
+
+    this.socket.broadcastToAll('delete', isDeleted ? 'success' : 'failed')
+    
   }
 
   onError(err) {
