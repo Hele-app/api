@@ -37,8 +37,8 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/poi', 'PoiController.home')
-  Route.get('/region', 'RegionController.show')
-  Route.get('/region/poi/:id', 'RegionController.home')
+  Route.get('/region', 'RegionController.all')
+  Route.get('/region/:id', 'RegionController.show')
 }).prefix('/v1')
 //CRUD POI
 Route.get('/poi', 'PoiController.home')
