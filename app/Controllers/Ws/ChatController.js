@@ -65,22 +65,22 @@ class ChatController {
     }
   }
 
-  async onBan(userToBanID) {
+  async onBan(youngToBanID) {
     try {
       
-      const user = await this.auth.getUser()
+      const userConnected = await this.auth.getUser()
   
-      if(user.roles === "YOUNG") { return }
+      if(userConnected.roles === "YOUNG") { return }
   
-      const userToBan = await User.findOrFail(userToBanID)
-      let actualGroupChat = await userToBan
+      const youngToBan = await User.findOrFail(youngToBanID)
+      let actualGroupChat = await youngToBan
         .chats()
         .where('type', 'GROUP')
         .first()
 
       actualGroupChat = actualGroupChat.toJSON()
 
-      await userToBan.chats().detach(actualGroupChat.id)
+      await youngToBan.chats().detach(actualGroupChat.id)
 
       let chats = await Chat
         .query()
@@ -94,15 +94,44 @@ class ChatController {
 
       chats = chats.toJSON()
 
-      let chatsID = chats.map(chat => { 
-        return chat.id 
-      })
+      if (chats.length > 0) {
+        let chatsID = chats.map(chat => { 
+          return chat.id 
+        })
+  
+        const randomGroupChat = chatsID[Math.floor(Math.random() * chatsID.length)]
+  
+        await youngToBan.chats().attach(randomGroupChat)
+      
+        this.socket.emit('ban', `success, transferred to chat group ${randomGroupChat}`)
+      } else {
+        const newChat = await Chat.create({ type: 'GROUP' })
+        let allPro = await User
+          .query()
+          .where('roles', 'PROFESSIONAL')
+          .fetch()
+        
+        allPro = allPro.toJSON()
 
-      const randomGroupChat = chatsID[Math.floor(Math.random() * chatsID.length)]
+        const randomPro = await allPro[Math.floor(Math.random() * allPro.length)]
 
-      await userToBan.chats().attach(randomGroupChat)
-    
-      this.socket.emit('ban', 'success')
+        await youngToBan.chats().attach(newChat.id)
+        await newChat.users().attach(randomPro.id)
+
+        let allModo = await User
+          .query()
+          .where('roles', 'MODERATOR')
+          .fetch()
+        
+        allModo = allModo.toJSON()
+
+        let randomModo =  allModo[Math.floor(Math.random() * allModo.length)]
+
+        await newChat.users().attach(randomModo.id)
+
+        this.socket.emit('ban', `success, transferred to chat group ${newChat.id}`)        
+      }
+
 
     } catch (error) {
       this.socket.emit('ban', 'failed')
