@@ -47,45 +47,46 @@ class ChatController {
     }
   }
 
-
   async onDelete(msgID) {
+    try {
+      
+      const user = await this.auth.getUser()
+  
+      if(user.roles === "YOUNG") { return }
+      
+      const message = await Message.findOrFail(msgID)
+      const isDeleted = await message.delete()
+  
+      this.socket.emit('delete', isDeleted ? 'success' : 'failed')
 
-    const user = await this.auth.getUser()
-
-    if(user.roles === "YOUNG") { return }
-    
-    const message = await Message.findOrFail(msgID)
-    const isDeleted = await message.delete()
-
-    this.socket.broadcastToAll('delete', isDeleted ? 'success' : 'failed')
-
+    } catch (error) {
+      console.error(error)
+      this.socket.emit('delete', 'failed')
+    }
   }
 
-  async onBan(userID) {
+  async onBan(userToBanID) {
     try {
       
       const user = await this.auth.getUser()
   
       if(user.roles === "YOUNG") { return }
   
-      const userToBan = await User.findOrFail(userID)
-      let actualChat = await user
+      const userToBan = await User.findOrFail(userToBanID)
+      let actualGroupChat = await userToBan
         .chats()
         .where('type', 'GROUP')
         .first()
 
-      actualChat = actualChat.toJSON()
+      actualGroupChat = actualGroupChat.toJSON()
 
-      await userToBan
-        .chats()
-        .where('type', 'GROUP')
-        .delete()
+      await userToBan.chats().detach(actualGroupChat.id)
 
       let chats = await Chat
         .query()
         .select('id')
         .where('type', 'GROUP')
-        .whereNot('id', actualChat.id)
+        .whereNot('id', actualGroupChat.id)
         .whereHas('users', builder => {
           builder.where('roles', 'YOUNG')
         }, '<', 6)
@@ -97,14 +98,14 @@ class ChatController {
         return chat.id 
       })
 
-      const randomChat = chatsID[Math.floor(Math.random() * chatsID.length)]
+      const randomGroupChat = chatsID[Math.floor(Math.random() * chatsID.length)]
 
-      await userToBan.chats().attach(randomChat.id)
+      await userToBan.chats().attach(randomGroupChat)
     
-      this.socket.broadcastToAll('ban', 'success')
-      
+      this.socket.emit('ban', 'success')
+
     } catch (error) {
-      this.socket.broadcastToAll('ban', 'failed')
+      this.socket.emit('ban', 'failed')
       console.error(error)
     }
   }

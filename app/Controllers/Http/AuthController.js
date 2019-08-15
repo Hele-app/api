@@ -90,7 +90,7 @@ class AuthController {
         .from('users')
         .where('roles', 'PROFESSIONAL')
 
-      let randomPro = await allPro[Math.floor(Math.random() * allPro.length)]
+      let randomPro =  allPro[Math.floor(Math.random() * allPro.length)]
 
       await user.chats().attach(chatID)
       await chat.users().attach(randomPro.id)
@@ -135,7 +135,7 @@ class AuthController {
           .from('users')
           .where('roles', 'MODERATOR')
 
-        let randomModo = await allModo[Math.floor(Math.random() * allModo.length)]
+        let randomModo =  allModo[Math.floor(Math.random() * allModo.length)]
 
         await newChat.users().attach(randomModo.id)
       }
