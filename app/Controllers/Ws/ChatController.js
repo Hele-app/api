@@ -1,6 +1,8 @@
 'use strict'
 
 const Message = use('App/Models/Message')
+const User = use('App/Models/User')
+const Chat = use('App/Models/Chat')
 const Database = use('Database')
 
 class ChatController {
@@ -45,18 +47,96 @@ class ChatController {
     }
   }
 
-
   async onDelete(msgID) {
+    try {
+      
+      const user = await this.auth.getUser()
+  
+      if(user.roles === "YOUNG") { return }
+      
+      const message = await Message.findOrFail(msgID)
+      const isDeleted = await message.delete()
+  
+      this.socket.emit('delete', isDeleted ? 'success' : 'failed')
 
-    const user = await this.auth.getUser()
+    } catch (error) {
+      console.error(error)
+      this.socket.emit('delete', 'failed')
+    }
+  }
 
-    if(user.roles === "YOUNG") { return }
-    
-    const message = await Message.findOrFail(msgID)
-    const isDeleted = await message.delete()
+  async onBan(youngToBanID) {
+    try {
+      
+      const userConnected = await this.auth.getUser()
+  
+      if(userConnected.roles === "YOUNG") { return }
+  
+      const youngToBan = await User.findOrFail(youngToBanID)
+      let actualGroupChat = await youngToBan
+        .chats()
+        .where('type', 'GROUP')
+        .first()
 
-    this.socket.broadcastToAll('delete', isDeleted ? 'success' : 'failed')
-    
+      actualGroupChat = actualGroupChat.toJSON()
+
+      await youngToBan.chats().detach(actualGroupChat.id)
+
+      let chats = await Chat
+        .query()
+        .select('id')
+        .where('type', 'GROUP')
+        .whereNot('id', actualGroupChat.id)
+        .whereHas('users', builder => {
+          builder.where('roles', 'YOUNG')
+        }, '<', 6)
+        .fetch()
+
+      chats = chats.toJSON()
+
+      if (chats.length > 0) {
+        let chatsID = chats.map(chat => { 
+          return chat.id 
+        })
+  
+        const randomGroupChat = chatsID[Math.floor(Math.random() * chatsID.length)]
+  
+        await youngToBan.chats().attach(randomGroupChat)
+      
+        this.socket.emit('ban', `success, transferred to chat group ${randomGroupChat}`)
+      } else {
+        const newChat = await Chat.create({ type: 'GROUP' })
+        let allPro = await User
+          .query()
+          .where('roles', 'PROFESSIONAL')
+          .fetch()
+        
+        allPro = allPro.toJSON()
+
+        const randomPro = await allPro[Math.floor(Math.random() * allPro.length)]
+
+        await youngToBan.chats().attach(newChat.id)
+        await newChat.users().attach(randomPro.id)
+
+        let allModo = await User
+          .query()
+          .where('roles', 'MODERATOR')
+          .fetch()
+        
+        allModo = allModo.toJSON()
+
+        let randomModo =  allModo[Math.floor(Math.random() * allModo.length)]
+
+        await newChat.users().attach(randomModo.id)
+
+        this.socket.emit('ban', `success, transferred to chat group ${newChat.id}`)        
+      }
+
+
+    } catch (error) {
+      this.socket.emit('ban', 'failed')
+      console.error(error)
+    }
   }
 
   onError(err) {
