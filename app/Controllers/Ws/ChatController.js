@@ -1,6 +1,8 @@
 'use strict'
 
 const Message = use('App/Models/Message')
+const User = use('App/Models/User')
+const Chat = use('App/Models/Chat')
 const Database = use('Database')
 
 class ChatController {
@@ -56,7 +58,55 @@ class ChatController {
     const isDeleted = await message.delete()
 
     this.socket.broadcastToAll('delete', isDeleted ? 'success' : 'failed')
+
+  }
+
+  async onBan(userID) {
+    try {
+      
+      const user = await this.auth.getUser()
+  
+      if(user.roles === "YOUNG") { return }
+  
+      const userToBan = await User.findOrFail(userID)
+      let actualChat = await user
+        .chats()
+        .where('type', 'GROUP')
+        .first()
+
+      actualChat = actualChat.toJSON()
+
+      await userToBan
+        .chats()
+        .where('type', 'GROUP')
+        .delete()
+
+      let chats = await Chat
+        .query()
+        .select('id')
+        .where('type', 'GROUP')
+        .whereNot('id', actualChat.id)
+        .whereHas('users', builder => {
+          builder.where('roles', 'YOUNG')
+        }, '<', 6)
+        .fetch()
+
+      chats = chats.toJSON()
+
+      let chatsID = chats.map(chat => { 
+        return chat.id 
+      })
+
+      const randomChat = chatsID[Math.floor(Math.random() * chatsID.length)]
+
+      await userToBan.chats().attach(randomChat.id)
     
+      this.socket.broadcastToAll('ban', 'success')
+      
+    } catch (error) {
+      this.socket.broadcastToAll('ban', 'failed')
+      console.error(error)
+    }
   }
 
   onError(err) {
