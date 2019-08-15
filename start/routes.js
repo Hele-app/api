@@ -32,19 +32,15 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/chat', 'ChatController.index')
   Route.get('/chat/:id', 'ChatController.show')
-}).prefix('/v1')
-.middleware('auth')
+}).prefix('/v1').middleware('auth')
 
 Route.group(() => {
   Route.get('/poi', 'PoiController.home')
   Route.get('/region', 'RegionController.all')
   Route.get('/region/:id', 'RegionController.show')
+
+  Route.post('/poi/create','PoiController.create').validator('CreatePoi')
+  Route.delete('/poi/delete/:id', 'PoiController.delete')
+  Route.get('/poi/edit/:id', 'PoiController.edit')
+  Route.put('/poi/update/:id', 'PoiController.update').validator('CreatePoi')
 }).prefix('/v1')
-//CRUD POI
-Route.get('/poi', 'PoiController.home')
-Route.post('/poi/create','PoiController.create').validator('CreatePoi')
-Route.get('/poi/delete/:id', 'PoiController.delete')
-Route.get('/poi/edit/:id', 'PoiController.edit')
-Route.post('/poi/update/:id', 'PoiController.update').validator('CreatePoi')
-//Afficher les régions
-Route.get('/poi/region','RegionController.home')
