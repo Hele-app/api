@@ -14,7 +14,7 @@ class PoiController {
 
     async create({request, response , pois}) {
 
-        const poi= request.all();
+        const poi = request.all();
 
         let posted = await Poi.create({
 
@@ -33,18 +33,18 @@ class PoiController {
 
         return response.json(posted)
     }
-   
+
     async delete({ response, params }) {
 
         let poi = await Poi.find(params.id);
 
         await poi.delete();
 
-        return response.redirect('/poi');
+        return response.json(poi);
     }
 
     async edit ({ params, response }) {
-        let poi = await Poi.find(params.id);
+        let poi = await Poi.findOrFail(params.id);
         return response.json(poi)
     }
 
@@ -52,24 +52,22 @@ class PoiController {
 
         let poi = await Poi.find(params.id);
 
-        poi.name = request.all().name
-        poi.address = request.all().address
-        poi.zipcode = request.all().zipcode
-        poi.phone = request.all().phone
-        poi.city = request.all().city
-        poi.description = request.all().description
-        poi.hour = request.all().hour
-        poi.site = request.all().site
-        poi.lattitude = request.all().lattitude
-        poi.longitude = request.all().longitude
-        poi.region_id= request.all().region_id
+        poi.name = request.input('name')
+        poi.address = request.input('address')
+        poi.zipcode = request.input('zipcode')
+        poi.phone = request.input('phone')
+        poi.city = request.input('city')
+        poi.description = request.input('description')
+        poi.hour = request.input('hour')
+        poi.site = request.input('site')
+        poi.lattitude = request.input('lattitude')
+        poi.longitude = request.input('longitude')
+        poi.region_id= request.input('region_id')
 
         await poi.save();
 
-        return response.redirect('/poi');
+        return response.json(poi);
     }
-
-
 }
 
 module.exports = PoiController
