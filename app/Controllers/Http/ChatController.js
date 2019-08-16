@@ -22,6 +22,7 @@ class ChatController {
     let usersChats = await Chat
       .query()
       .whereIn('id', chatsID)
+      .orderBy('type', 'asc')
       .with('users', builder => { builder.select('username') })
       .fetch()
 
@@ -31,17 +32,19 @@ class ChatController {
 
   }
 
-  async show({ params: { id }, response }) {
+  async show({ params: { id, page }, response }) {
 
-    const chat = await Chat.findOrFail(id)
+    let messages =  await Chat
+      .query()
+      .where('id', id)
+      .with('messages.user')
+      .with('users', builder => { builder.distinct('users.id').select('username', 'roles') })
+      .paginate(page || 1)
 
-    await chat.loadMany({
-      'messages.user': null,
-      'users': builder => { builder.distinct('users.id').select('username', 'roles') }
-    })
+    messages = messages.toJSON()
 
-    if (chat.length !== 0) {
-      response.status(200).json(chat.toJSON())
+    if (messages.length !== 0) {
+      response.status(200).json(messages)
     } else {
       response.status(404).send('Not found')
     }  
