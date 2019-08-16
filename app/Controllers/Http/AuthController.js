@@ -22,7 +22,6 @@ class AuthController {
       Math.random().toString(36).substring(2, 15) +
       Math.random().toString(36).substring(2, 15)
     ).substring(0, 10)
-
     let user = new User()
     user.phone = request.input('phone')
     user.username = request.input('username')
