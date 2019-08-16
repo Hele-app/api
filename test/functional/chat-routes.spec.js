@@ -77,29 +77,33 @@ test('get all messages & users from a chat', async ({ client }) => {
 
   response.assertStatus(200)
   response.assertJSONSubset({
-    type: "PRIVATE",
-    messages: [{
-      content: "Hello, message 1 from user 1 in chat 1",
-      user: [{
-        username: "newMoon",
-        roles: "YOUNG"
-      }]
-    },
-    {
-      content: "Hello, message 2 from user 2 in chat 1",
-      user: [{
-        username: "thePsy",
-        roles: "PROFESSIONAL"
-      }]
-    }],
-    users: [{
-      username: "newMoon",
-      roles: "YOUNG",
-    },
-    {
-      username: "thePsy",
-      roles: "PROFESSIONAL",    
-    }]
+    data: [
+      {
+        type: "PRIVATE",
+        messages: [{
+          content: "Hello, message 1 from user 1 in chat 1",
+          user: [{
+            username: "newMoon",
+            roles: "YOUNG"
+          }]
+        },
+        {
+          content: "Hello, message 2 from user 2 in chat 1",
+          user: [{
+            username: "thePsy",
+            roles: "PROFESSIONAL"
+          }]
+        }],
+        users: [{
+          username: "newMoon",
+          roles: "YOUNG",
+        },
+        {
+          username: "thePsy",
+          roles: "PROFESSIONAL",    
+        }]
+      }
+    ]
   })
 })
 
