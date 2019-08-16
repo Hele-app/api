@@ -181,7 +181,6 @@ class AuthController {
     await user.verifyPasswords().save(pass)
 
     // await pass.user().associate(user)
-    console.log(pass)
     return response.json(pass)
   }
 
@@ -195,7 +194,6 @@ class AuthController {
       code: 'required'
     })
 
-    console.log(request.all(), validation.messages())
 
     if (validation.fails()) {
       throw new ValidationException(validation.messages(), 400)
@@ -206,8 +204,6 @@ class AuthController {
     const verifyPassword = await user.verifyPasswords().whereNull('used').where('code', request.input('code')).first();
 
     if (verifyPassword) {
-      console.log('good code');
-      console.log(verifyPassword.toJSON());
 
       const password = (
         Math.random().toString(36).substring(2, 15) +
@@ -219,7 +215,6 @@ class AuthController {
 
       verifyPassword.used = true
       await verifyPassword.save()
-      console.log(password)
 
       await user.verifyPasswords().whereNull('used').update({
         used: false
@@ -230,7 +225,6 @@ class AuthController {
         password
       })
     } else {
-      console.log('wrong code')
       throw new ValidationException([{
         code: "wrong code"
       }], 400)
