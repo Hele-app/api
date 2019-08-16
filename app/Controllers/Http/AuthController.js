@@ -164,9 +164,13 @@ class AuthController {
     const code = Math.floor(Math.random() * (max - min)) + min;
 
 
-    const validation = await validateAll(request, {
+    const validation = await validateAll(request.all(), {
       phone: 'required'
     })
+
+    if (validation.fails()) {
+      throw new ValidationException(validation.messages(), 400)
+    }
 
     const user = await User.query().where('phone', request.input('phone')).firstOrFail()
 
@@ -186,14 +190,20 @@ class AuthController {
     request
   }) {
 
-    const validation = await validateAll(request, {
+    const validation = await validateAll(request.all(), {
       phone: 'required',
       code: 'required'
     })
 
+    console.log(request.all(), validation.messages())
+
+    if (validation.fails()) {
+      throw new ValidationException(validation.messages(), 400)
+    }
+
     const user = await User.query().where('phone', request.input('phone')).firstOrFail()
 
-    const verifyPassword = await user.verifyPasswords().where('used', null).where('code', request.input('code')).first();
+    const verifyPassword = await user.verifyPasswords().whereNull('used').where('code', request.input('code')).first();
 
     if (verifyPassword) {
       console.log('good code');
@@ -206,18 +216,26 @@ class AuthController {
 
       user.password = password
       await user.save()
-      console.log(password)   
 
-      user.verifyPasswords().update({ used: false })
-      // verifyPassword.used = true
-      
+      verifyPassword.used = true
+      await verifyPassword.save()
+      console.log(password)
 
-      return response.json(user, password)
+      await user.verifyPasswords().whereNull('used').update({
+        used: false
+      })
+
+      return response.json({
+        user,
+        password
+      })
     } else {
       console.log('wrong code')
-      throw new ValidationException(validation.messages(), 400)
+      throw new ValidationException([{
+        code: "wrong code"
+      }], 400)
     }
-    
+
   }
 }
 

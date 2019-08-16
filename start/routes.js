@@ -35,5 +35,5 @@ Route.group(() => {
 }).prefix('/v1')
 .middleware('auth')
 
-Route.get('/send/code', 'AuthController.sendCode')
-Route.get('/change/code', 'AuthController.changeCode')
+Route.post('/send/code', 'AuthController.sendCode')
+Route.post('/change/code', 'AuthController.changeCode')
