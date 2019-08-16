@@ -19,74 +19,131 @@ class RegionSeeder {
   async run () {
     const data =[
       {
-        name: "Auvergne-Rhône-Alpes"
+        name: "Auvergne-Rhône-Alpes",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
       },
       {
-        name: "Bourgogne-Franche-Comté"
+        name: "Bourgogne-Franche-Comté",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
 
       },
       {
-        name: "Bretagne"
-
+        name: "Bretagne",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
       },
       {
-        name: "Centre-Val de Loire"
-
+        name: "Centre-Val de Loire",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
       },
       {
-        name: "Corse"
-
+        name: "Corse",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
       },
       {
-        name: "Grand Est"
-
+        name: "Grand Est",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
       },
       {
-        name: "Guadeloupe"
-
+        name: "Guadeloupe",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
       },
       {
-        name: "Guyane"
-
+        name: "Guyane",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
       },
       {
-        name: "Hauts-de-France"
-
+        name: "Hauts-de-France",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
       },
       {
-        name: "Île-de-France"
+        name: "Île-de-France",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
       },
       {
-        name: "Martinique"
-
+        name: "Martinique",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
       },
       {
-        name: "Mayotte"
-
+        name: "Mayotte",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
       },
       {
-        name: "Normandie"
-
+        name: "Normandie",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
       },
       {
-        name: "Nouvelle-Aquitaine"
-
+        name: "Nouvelle-Aquitaine",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
       },
       {
-        name: "Occitanie"
-
+        name: "Occitanie",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
       },
       {
-        name: "Pays de la Loire"
-
+        name: "Pays de la Loire",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
       },
       {
-        name: "Provence-Alpes-Côte d'Azur"
-
+        name: "Provence-Alpes-Côte d'Azur",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
       },
       {
-            name: "Réunion"
-
+        name: "Réunion",
+        lattitude: "",
+        longitude: "",
+        lattitudeDelta: "",
+        longitudeDelta: ""
       }
     ]
 

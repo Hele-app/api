@@ -9,6 +9,10 @@ class RegionSchema extends Schema {
       table.increments()
       table.timestamps()
       table.string('name').notNullable()
+      table.float('lattitude', 14, 10).notNullable()
+      table.float('longitude', 14, 10).notNullable()
+      table.float('lattitudeDelta', 14, 10).notNullable()
+      table.float('longitudeDelta', 14, 10).notNullable()
     })
   }
 
