@@ -16,6 +16,31 @@ class AdminController {
         return response.json({pro})
     }
 
+    async verifyid({request, auth, response}) {
+      const id = request.input('id')
+      const pro = await User.findOrFail(id)
+      return response.json({pro})
+    }
+
+    async updateuser({request, auth, response}){
+      const id = request.input('id')
+      const params = JSON.parse(request.input('params'))
+      const validation = await validateAll(params, {
+        phone : 'unique:users',
+        email:'unique:users',
+        username: 'unique:users',
+      })
+      if (validation.fails()) {
+        throw new ValidationException(validation.messages(), 400)
+      }
+      const user = await User.findOrFail(id)
+      for(var param in params){
+        user[param] = params[param]
+      }
+      await user.save()
+      return response.json({'200' : "L'update a bien fonctionné !"})
+    }
+
     async createadmin({request, auth, response}) {
         const validation = await validateAll(request.all(), {
             phone : 'required|unique:users',
@@ -53,7 +78,7 @@ class AdminController {
           // send the pass with a sms
           return response.json({"c" : "bon"})
     }
-    async delete_user({request, auth, response}) {
+    async deleteuser({request, auth, response}) {
         const id = request.input('id_user')
         console.log(request.all())
         const user = await User.find(id)
