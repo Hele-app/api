@@ -31,8 +31,9 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/chat', 'ChatController.index')
-  Route.get('/chat/:id', 'ChatController.show')
+  Route.get('/chat/:id/:page?', 'ChatController.show')
 }).prefix('/v1')
+
 .middleware('auth')
 
 Route.post('/send/code', 'AuthController.sendCode')

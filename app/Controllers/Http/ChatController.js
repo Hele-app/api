@@ -1,25 +1,53 @@
 'use strict'
 
 const Chat = use('App/Models/Chat')
-const Message = use('App/Models/Message')
+
 
 class ChatController {
 
-  async index({ request, response }) {
-    //TODO : get all group the user can access
-  }
+  async index({ response, auth }) {
 
-  // Return all messages and their user & all users for this chat
-  async show({ params: { id }, response }) {
-
-    const chat = await Chat.findOrFail(id)
+    const user = await auth.getUser()
     
-    await chat.loadMany({
-      'messages.user': null, 
-      'users': builder => { builder.distinct('users.id').select('username', 'roles') }
+    let chats = await user.chats().fetch()
+    chats = chats.toJSON()
+
+  
+    if (chats.length === 0) { return response.status(404).send('Not found') }
+
+    const chatsID = chats.map(chat => {
+      return chat.id
     })
 
-    response.status(200).json(chat)
+    let usersChats = await Chat
+      .query()
+      .whereIn('id', chatsID)
+      .orderBy('type', 'asc')
+      .with('users', builder => { builder.select('username') })
+      .fetch()
+
+    usersChats = usersChats.toJSON()
+
+    response.status(200).json(usersChats)
+
+  }
+
+  async show({ params: { id, page }, response }) {
+
+    let messages =  await Chat
+      .query()
+      .where('id', id)
+      .with('messages.user')
+      .with('users', builder => { builder.distinct('users.id').select('username', 'roles') })
+      .paginate(page || 1)
+
+    messages = messages.toJSON()
+
+    if (messages.length !== 0) {
+      response.status(200).json(messages)
+    } else {
+      response.status(404).send('Not found')
+    }  
   }
 }
 
