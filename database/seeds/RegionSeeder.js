@@ -77,10 +77,10 @@ class RegionSeeder {
       },
       {
         name: "Hauts-de-France",
-        lattitude: "49,992872",
-        longitude: "2,7805755",
-        lattitudeDelta: "0,070712",
-        longitudeDelta: "1,357333"
+        lattitude: "49.992872",
+        longitude: "2.7805755",
+        lattitudeDelta: "0.070712",
+        longitudeDelta: "1.357333"
       },
       {
         name: "Île-de-France",
