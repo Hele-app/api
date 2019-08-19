@@ -19,7 +19,7 @@ const Ws = use('Ws')
   //   console.log('user joined with %s socket id', socket.id)
   //})
   
-Ws.channel('chat', 'PostController')
+Ws.channel('post', 'PostController')
 
 // Ws
 //   .channel('chat:*', 'ChatController')
