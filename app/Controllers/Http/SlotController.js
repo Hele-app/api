@@ -14,11 +14,12 @@ class SlotController {
         const user =  await auth.getUser()
 
         const validation = await validateAll(request.all(), {
-            // pro_id: user.id,
+           
             start_time: 'required'
           })
 
           console.log(user)
+          // console.log(user.id)
 
         // console.log(moment())
         // console.log(moment().add(45, 'minutes'))
@@ -35,17 +36,21 @@ class SlotController {
             const startTime = request.input('start_time')
 
         //   console.log(request.input('start_time'))
-          console.log(moment(startTime, 'DD/MM/YYYY, h:mm'))
+          // console.log(moment(startTime, 'DD/MM/YYYY, HH:mm'))
 
-            const time = moment(startTime, 'DD/MM/YYYY, h:mm')
-
+            const time = moment(startTime, 'DD/MM/YYYY, HH:mm').format("YYYY-MM-DD HH:mm")
+            console.log(time)
+            const endTime = moment(time).add(45, 'minutes').format("YYYY-MM-DD HH:mm")
+            console.log(endTime)
             const createSlot = new Slot();
+            createSlot.pro_id = user.id
             createSlot.start_time = time
+            createSlot.end_time = endTime
 
             await createSlot.save()
 
             return response.json({
-                user, time
+                user, createSlot
             })
     }
 

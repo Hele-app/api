@@ -12,6 +12,7 @@ class SlotSchema extends Schema {
       table.timestamp('start_time').defaultTo(this.fn.now())
       table.timestamp('end_time').defaultTo(this.fn.now())
       table.timestamp('real_end').defaultTo(this.fn.now())
+      table.timestamps()
     })
   }
 
