@@ -12,7 +12,7 @@ class PostController {
 
   async onMessage(message) {
     try {
-      if (msg.length === 0 || /^\s*$/.test(msg)) { return }
+      if (message.length === 0 || /^\s*$/.test(message)) { return }
       await message.save()
       //retour du message afin de l'afficher
       this.socket.broadcastToAll('send', message)
