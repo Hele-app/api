@@ -15,12 +15,10 @@
 
 const Ws = use('Ws')
 
-// Ws.channel('chat', ({ socket }) => {
-  //   console.log('user joined with %s socket id', socket.id)
-  //})
-  
-Ws.channel('chat', 'PostController')
+Ws
+  .channel('post', 'PostController')
+  .middleware('auth')
 
-// Ws
-//   .channel('chat:*', 'ChatController')
-//   .middleware('auth')
+Ws
+  .channel('chat:*', 'ChatController')
+  .middleware('auth')
