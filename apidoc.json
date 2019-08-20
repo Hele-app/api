@@ -1,0 +1,6 @@
+{
+  "name": "adonis-api-app",
+  "version": "1.0.0",
+  "description": "Adonisjs boilerplate for API server with pre-configured JWT",
+  "title": "apiDoc for project-hele-api"
+}

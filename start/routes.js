@@ -19,3 +19,17 @@ const Route = use('Route')
 Route.get('/', () => {
   return { greeting: 'Hello world in JSON' }
 })
+
+Route.group(() => {
+  Route.post('/auth/register', 'AuthController.register')
+  Route.post('/auth/login', 'AuthController.login')
+}).prefix('/v1').middleware('guest')
+
+Route.group(() => {
+  Route.get('/auth/me', 'AuthController.me')
+}).prefix('/v1').middleware('auth')
+
+Route.group(() => {
+  Route.get('/chat', 'ChatController.index')
+  Route.get('/chat/:id/:page?', 'ChatController.show')
+}).prefix('/v1').middleware('auth')
