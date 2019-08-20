@@ -5,7 +5,6 @@ const User = use('App/Models/User')
 const { validateAll } = use('Validator')
 const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
 const moment = use('moment')
-// pm.globals.set("timestamp", moment().format(X))
 
 
 class SlotController {

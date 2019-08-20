@@ -36,6 +36,8 @@ Route.group(() => {
 .middleware('auth')
 
 Route.post('/make/slot', 'SlotController.create')
+.prefix('/v1')
 // .middleware('auth')
 
 Route.post('/get/slot', 'SlotController.slot')
+.prefix('/v1')
