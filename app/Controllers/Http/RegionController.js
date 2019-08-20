@@ -11,10 +11,15 @@ class RegionController {
     }
 
     async show({response, params, request}) {
-        const pois = await Poi.query()
+        const pois = await Poi.query().with('region')
         .where({region_id: [params.id] })
         .fetch()
         return response.json(pois)
+    }
+
+    async showid ({ params, response }) {
+        let region = await Region.findOrFail(params.id);
+        return response.json(region)
     }
 }
 

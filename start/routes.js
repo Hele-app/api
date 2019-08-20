@@ -42,5 +42,6 @@ Route.group(() => {
   Route.post('/poi/create','PoiController.create').validator('CreatePoi')
   Route.delete('/poi/delete/:id', 'PoiController.delete')
   Route.get('/poi/edit/:id', 'PoiController.edit')
+  Route.get('/region/show/:id', 'RegionController.showid')
   Route.put('/poi/update/:id', 'PoiController.update').validator('CreatePoi')
 }).prefix('/v1')
