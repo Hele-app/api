@@ -20,6 +20,7 @@ Route.get('/', () => {
   return { greeting: 'Hello world in JSON' }
 })
 
+
 Route.group(() => {
   Route.post('/auth/register', 'AuthController.register')
   Route.post('/auth/login', 'AuthController.login')
@@ -32,4 +33,8 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/chat', 'ChatController.index')
   Route.get('/chat/:id/:page?', 'ChatController.show')
+}).prefix('/v1')
+
+Route.group(() => {
+  Route.get('/posts', 'PostController.index')
 }).prefix('/v1')
