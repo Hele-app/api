@@ -69,14 +69,25 @@ class ChatController {
 
   async show({ params: { id, page }, response }) {
 
-    let messages =  await Chat
-      .query()
-      .where('id', id)
-      .with('messages.user')
-      .with('users', builder => { builder.distinct('users.id').select('username', 'roles') })
+    const chat =  await Chat.findOrFail(id);
+    await chat.load('users', 
+      builder => { builder.distinct('users.id').select('username', 'roles')
+    })
+
+    let messages = await chat.messages()
+      .with('user')
+      .orderBy('created_at', 'DESC')
       .paginate(page || 1)
 
     messages = messages.toJSON()
+
+    messages.data = messages.data.map((m) => {
+      m.user = {
+        username: m.user[0].username,
+        roles: m.user[0].roles
+      }
+      return m;
+    });
 
     if (messages.length !== 0) {
       response.status(200).json(messages)
