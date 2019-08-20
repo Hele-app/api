@@ -5,6 +5,18 @@ const Chat = use('App/Models/Chat')
 
 class ChatController {
 
+  /***
+   * @api {get} /chat
+   * @apiVersion 1.0.0
+   * @apiPermission logged
+   * @apiName GetChat
+   * @apiGroup Chat
+   * @apiDescription
+   * Get all chats the user logged can access, and get all their users.
+   * 
+   * @apiSuccess (Success 200) {Object} usersChats An object that contain all chats the user can access and the all the users they contain.
+   */
+
   async index({ response, auth }) {
 
     const user = await auth.getUser()
@@ -31,6 +43,21 @@ class ChatController {
     response.status(200).json(usersChats)
 
   }
+
+  /***
+   * @api {get} /chat/:id/:page?
+   * @apiVersion 1.0.0
+   * @apiPermission logged
+   * @apiName GeChatMessage
+   * @apiGroup Chat
+   * @apiDescription
+   * Get all messages from a given chat with their author, and the list of all users in that chat.
+   * 
+   * @apiParam {Number} id Chat unique ID.
+   * @apiParam {Number} [page] Optional page number for messages pagination.
+   * 
+   * @apiSuccess (Success 200) {Object} messages An object that contains all messages (and their author) from a given chat, and all users connected to that chat.
+   */
 
   async show({ params: { id, page }, response }) {
 
