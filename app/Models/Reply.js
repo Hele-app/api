@@ -1,9 +1,9 @@
 'use strict'
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
-const Replies = use('Replies')
+const Reply = use('Reply')
 
-class Replies extends Model {
+class Reply extends Model {
 	user () {
         return this.belongsTo('App/Models/User')
     }
@@ -12,4 +12,4 @@ class Replies extends Model {
     }
 }
 
-module.exports = Replies
+module.exports = Reply
