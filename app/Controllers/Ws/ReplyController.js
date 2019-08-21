@@ -1,6 +1,6 @@
 'use strict'
 
-class CommentController {
+class ReplyController {
   constructor({ socket, request, auth, post }) {
     this.socket = socket
     this.request = request
@@ -31,4 +31,4 @@ class CommentController {
   }
 }
 
-module.exports = CommentController
+module.exports = ReplyController
