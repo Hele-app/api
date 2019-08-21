@@ -20,5 +20,9 @@ Ws
   .middleware('auth')
 
 Ws
+  .channel('replies', 'RepliesController')
+  .middleware('auth')
+
+Ws
   .channel('chat:*', 'ChatController')
   .middleware('auth')
