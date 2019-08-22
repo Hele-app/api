@@ -17,14 +17,14 @@ class PostController {
       const user = await this.auth.getUser()
       const postId = await Database
         .table('posts')
-        .insert({ id_user: user.id , contenu: message.message, created_at: message.date})
+        .insert({ user_id: user.id , content: message.message})
     } catch (err) {
       console.error('erreur', err)
     }
     this.socket.broadcastToAll('send', {
       // user: user,
       message: message,
-      date: Date.now()
+      date: "12/12/12"
     })
     console.log('you receive a message socket from client', message)
   }

@@ -43,6 +43,11 @@ class User extends Model {
   messages() {
     return this.manyThrough('App/Models/ChatUser', 'messages')
   }
+
+  posts() {
+    return this
+      .belongsTo('App/Models/Post')
+  }
 }
 
 module.exports = User
