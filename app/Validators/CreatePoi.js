@@ -8,7 +8,7 @@ class CreatePoi {
       'address': 'required',
       'zipcode': 'required|number',
       'city': 'required',
-      'lattitude': 'required',
+      'latitude': 'required',
       'longitude': 'required',
       'region_id': 'required'
     }

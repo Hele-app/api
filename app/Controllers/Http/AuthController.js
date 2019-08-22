@@ -14,7 +14,8 @@ class AuthController {
       phone: 'required|unique:users|regex:^0[6-7](\\d{2}){4}$',
       username: 'required|unique:users',
       age: 'required|integer|above:10',
-      region: 'required'
+      region_id: 'required',
+      
     })
 
     if (validation.fails()) {
@@ -29,7 +30,7 @@ class AuthController {
     let user = new User()
     user.phone = request.input('phone')
     user.username = request.input('username')
-    user.region = request.input('region')
+    user.region_id = request.input('region_id')
     user.birthyear = new Date().getFullYear() - request.input('age')
     user.password = password
 
