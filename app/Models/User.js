@@ -46,7 +46,7 @@ class User extends Model {
 
   posts() {
     return this
-      .belongsTo('App/Models/Post')
+      .hasMany('App/Models/Post')
   }
 }
 

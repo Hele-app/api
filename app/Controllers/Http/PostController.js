@@ -9,6 +9,7 @@ const Database = use('Database')
 /**
  * Resourceful controller for interacting with posts
  */
+const Post = use ('App/Model/Post')
 class PostController {
   /**
    * Show a list of all posts.
@@ -21,6 +22,9 @@ class PostController {
    */
   async index({ request, response }) {
     // const all = request.all()
+    // const user = await auth.getUser()
+    // console.log(user)
+    console.log(Post)
     return await Database.select('*').from('posts')    
   }
 }
