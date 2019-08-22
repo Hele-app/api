@@ -17,7 +17,7 @@ const Ws = use('Ws')
 
 Ws
   .channel('post', 'PostController')
-  .middleware('auth')
+  // .middleware('auth')
 
 Ws
   .channel('chat:*', 'ChatController')
