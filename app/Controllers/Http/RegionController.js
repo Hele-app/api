@@ -19,6 +19,7 @@ class RegionController {
 
     async showid ({ params, response }) {
         let region = await Region.findOrFail(params.id);
+        await region.load('pois')
         return response.json(region)
     }
 }
