@@ -5,7 +5,7 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const Database = use('Database')
-
+const Post = use('App/Models/Post')
 /**
  * Resourceful controller for interacting with posts
  */
@@ -19,9 +19,17 @@ class PostController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index({ request, response }) {
-    // const all = request.all()
-    return await Database.select('*').from('posts')    
+  async index({ request, response, auth }) {
+    //const id_user = await auth.getUser()
+    const posts = await Post
+      .query()
+      .with('user')
+      .fetch()
+    return (posts.toJSON())
+    /*const posts = await user
+      .posts()
+      .fetch()*/
+    //return await Database.select('*').from('posts')    
   }
 }
 
