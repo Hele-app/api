@@ -9,6 +9,7 @@ const Post = use('App/Models/Post')
 /**
  * Resourceful controller for interacting with posts
  */
+const Post = use ('App/Model/Post')
 class PostController {
   /**
    * Show a list of all posts.
