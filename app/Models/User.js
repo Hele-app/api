@@ -44,8 +44,8 @@ class User extends Model {
     return this.manyThrough('App/Models/ChatUser', 'messages')
   }
 
-  slot(){
-    return this.hasMany('App/Models/Slot')
+  slots(){
+    return this.hasMany('App/Models/Slot', 'id', 'pro_id')
   }
 }
 

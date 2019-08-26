@@ -2,6 +2,7 @@
 
 const Slot = use('App/Models/Slot')
 const User = use('App/Models/User')
+const Chat = use('App/Models/Chat')
 const { validateAll } = use('Validator')
 const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
 const moment = use('moment')
@@ -18,7 +19,7 @@ class SlotController {
             start_time: 'required'
           })
 
-          console.log(user)
+          //console.log(user)
     
           if(validation.fails()){
               throw new ValidationException([{
@@ -28,14 +29,14 @@ class SlotController {
 
             const startTime = request.input('start_time')
 
-          //console.log(request.input('start_time'))
+          console.log(request.input('start_time'))
           // console.log(moment(startTime, 'DD/MM/YYYY, HH:mm'))
 
             const time = moment(startTime, 'DD-MM-YYYY, HH:mm').format("YYYY-MM-DD HH:mm")
             console.log(time)
             
             const endTime = moment(time).add(45, 'minutes').format("YYYY-MM-DD HH:mm")
-            console.log(endTime)
+            //console.log(endTime)
             
             const createSlot = new Slot();
             createSlot.pro_id = user.id
@@ -53,13 +54,43 @@ class SlotController {
 
       const user =  await auth.getUser()
 
-        console.log(user)
-
-        const pro = await User.query().where('roles', 'PROFESSIONAL' ).firstOrFail()
-
+        // console.log(user)
+        
+        // console.log(pro.id)
+        
+        // console.log(result);
+        
+        const chat = await Chat.query().where('type', "PRIVATE").firstOrFail()
+        
+        let getPro = await chat.users().whereNot('user_id', user.id).first()
+        
+        // console.log(getPro.toJSON())
+       
+        // getPro  = getPro.toJSON()
+        console.log(getPro.id)
+        const pro = await User.findOrFail(getPro.id)
         console.log(pro)
+        const allSlots = await pro.slots().where('pro_id', pro.id).whereNull('young_id').fetch()
+        let result = allSlots.toJSON();
+        // console.log(chat.toJSON())
 
-      return response.json({user})
+        result = result.map(function(element) {
+  
+         return {
+           id : element.id,
+           start_time : element.start_time,
+           end_time : element.end_time
+         }
+      
+          
+        });
+        //  console.log(slot);
+
+        
+
+
+
+      return response.json({result})
 
     }
 }

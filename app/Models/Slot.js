@@ -4,9 +4,12 @@
 const Model = use('Model')
 
 class Slot extends Model {
-    user() {
-        return this.belongsTo('App/Models/User')
-    }
+  static get dates () {
+    return super.dates.concat(['start_time', 'end_time', 'real_end'])
+  }
+  user() {
+    return this.belongsTo('App/Models/User', 'pro_id', 'id')
+  }
 }
 
 module.exports = Slot
