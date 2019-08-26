@@ -5,14 +5,15 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const Database = use('Database')
-const Post = use('App/Models/Post')
+const Reply = use('App/Models/Reply')
 /**
- * Resourceful controller for interacting with posts
+ * Resourceful controller for interacting with replies
  */
-class PostController {
-  /**
-   * Show a list of all posts.
-   * GET posts
+
+class ReplyController {
+	/**
+   * Show a list of all replies.
+   * GET replies
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -20,12 +21,13 @@ class PostController {
    * @param {View} ctx.view
    */
   async index({ request, response }) {
-    const posts = await Post
+    const replies = await Reply
       .query()
       .with('user')
+      .with('post')
       .fetch()
-    return (posts.toJSON())
+    return (replies.toJSON())
   }
 }
 
-module.exports = PostController
+module.exports = ReplyController
