@@ -43,6 +43,10 @@ class User extends Model {
   messages() {
     return this.manyThrough('App/Models/ChatUser', 'messages')
   }
+
+  slots(){
+    return this.hasMany('App/Models/Slot', 'id', 'pro_id')
+  }
 }
 
 module.exports = User
