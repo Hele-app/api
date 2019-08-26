@@ -47,6 +47,10 @@ class User extends Model {
   verifyPasswords() {
     return this.hasMany('App/Models/VerifyPassword')
   }
+
+  slots() {
+    return this.hasMany('App/Models/Slot', 'id', 'pro_id')
+  }
 }
 
 module.exports = User
