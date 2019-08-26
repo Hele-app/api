@@ -154,7 +154,7 @@ class AuthController {
 
   async sendCode({ response, request }) {
 
-    const code = const code = (
+    const code = (
       Math.random().toString().substring(2, 15) +
       Math.random().toString().substring(2, 15)
     ).substring(0, 6)
