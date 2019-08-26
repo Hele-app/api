@@ -31,9 +31,10 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/chat', 'ChatController.index')
-  Route.get('/chat/:id', 'ChatController.show')
-}).prefix('/v1')
-.middleware('auth')
+  
+    Route.get('/chat/:id/:page?', 'ChatController.show')
+  }).prefix('/v1').middleware('auth')
+
 
 Route.post('/make/slot', 'SlotController.create')
 .prefix('/v1')
@@ -41,3 +42,4 @@ Route.post('/make/slot', 'SlotController.create')
 
 Route.post('/get/slot', 'SlotController.index')
 .prefix('/v1')
+

@@ -38,8 +38,7 @@ class AuthController {
     // TODO: send SMS with password instead of sending it in the response.
 
     if (isSave) {
-      let userID = user.id
-      this.youngToPro(userID)
+      this.youngToPro(user)
     }
 
     return response.json({user, password, access_token})
@@ -80,30 +79,67 @@ class AuthController {
     return response.json({"user": auth.user})
   }
 
-  async youngToPro(userID) {
-    const trx = await Database.beginTransaction()
+  async youngToPro(user) {
     try {
 
-      let chat = await Chat.create({ type: 'PRIVATE' }, trx)
+      let chat = await Chat.create({ type: 'PRIVATE' })
       let chatID = chat.id
 
-      let allPro = await trx
+      let allPro = await Database
         .select('id')
         .from('users')
         .where('roles', 'PROFESSIONAL')
 
-      let randomPro = allPro[Math.floor(Math.random() * allPro.length)]
-      randomPro = randomPro.id
+      let randomPro =  allPro[Math.floor(Math.random() * allPro.length)]
 
-      await ChatUser.createMany([
-        { user_id: userID, chat_id: chatID },
-        { user_id: randomPro, chat_id: chatID }
-      ], trx)
-
-      await trx.commit()
-
+      await user.chats().attach(chatID)
+      await chat.users().attach(randomPro.id)
+      this.youngToYoung(user, allPro)
+      
     } catch (error) {
-      trx.rollback()
+      console.error(error)
+    }
+  }
+
+  async youngToYoung(user, allPro) {
+    try {
+      
+      let chats = await Chat
+        .query()
+        .select('id')
+        .where('type', 'GROUP')
+        .whereHas('users', builder => {
+          builder.where('roles', 'YOUNG')
+        }, '<', 4)
+        .fetch()
+      
+      chats = chats.toJSON()
+
+      let chatsID = chats.map(chat => { 
+        return chat.id 
+      })
+      
+      if (chatsID.length > 0) {
+        let randomChat = chatsID[Math.floor(Math.random() * chatsID.length)]
+        await user.chats().attach(randomChat)
+      } else {
+        let newChat = await Chat.create({ type: 'GROUP' })
+        let newChatID = newChat.id
+        let randomPro = await allPro[Math.floor(Math.random() * allPro.length)]
+
+        await user.chats().attach(newChatID)
+        await newChat.users().attach(randomPro.id)
+
+        let allModo = await Database
+          .select('id')
+          .from('users')
+          .where('roles', 'MODERATOR')
+
+        let randomModo =  allModo[Math.floor(Math.random() * allModo.length)]
+
+        await newChat.users().attach(randomModo.id)
+      }
+    } catch (error) {
       console.error(error)
     }
   }

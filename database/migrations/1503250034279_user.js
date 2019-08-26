@@ -29,3 +29,4 @@ class UserSchema extends Schema {
 }
 
 module.exports = UserSchema
+
