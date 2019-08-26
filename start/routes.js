@@ -23,6 +23,9 @@ Route.get('/', () => {
 Route.group(() => {
   Route.post('/auth/register', 'AuthController.register')
   Route.post('/auth/login', 'AuthController.login')
+
+  Route.post('/code/send', 'AuthController.sendCode')
+  Route.post('/code/change', 'AuthController.changeCode')
 }).prefix('/v1').middleware('guest')
 
 Route.group(() => {
@@ -32,9 +35,4 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/chat', 'ChatController.index')
   Route.get('/chat/:id/:page?', 'ChatController.show')
-}).prefix('/v1')
-
-.middleware('auth')
-
-Route.post('/send/code', 'AuthController.sendCode')
-Route.post('/change/code', 'AuthController.changeCode')
+}).prefix('/v1').middleware('auth')

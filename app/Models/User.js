@@ -36,8 +36,8 @@ class User extends Model {
 
   chats() {
     return this
-      .belongsToMany('App/Models/Chat')
-      .pivotTable('chat_users')
+    .belongsToMany('App/Models/Chat')
+    .pivotTable('chat_users')
   }
 
   messages() {

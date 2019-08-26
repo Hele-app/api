@@ -4,9 +4,9 @@
 const Model = use('Model')
 
 class VerifyPassword extends Model {
-    user() {
-        return this.belongsTo('App/Models/User')
-    }
+  user() {
+    return this.belongsTo('App/Models/User')
+  }
 }
 
 module.exports = VerifyPassword
