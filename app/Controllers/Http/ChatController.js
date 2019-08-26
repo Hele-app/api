@@ -77,7 +77,7 @@ class ChatController {
     let messages = await chat.messages()
       .with('user')
       .orderBy('created_at', 'DESC')
-      .paginate(page || 1)
+      .paginate(page || 1, 10)
 
     messages = messages.toJSON()
 
