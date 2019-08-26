@@ -20,7 +20,8 @@ class ReplyController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index({ request, response }) {
+  async index({ param: id}) {
+    
     const replies = await Reply
       .query()
       .with('user')

@@ -7,7 +7,7 @@ const Model = use('Model')
 const Hash = use('Hash')
 
 class User extends Model {
-  static boot () {
+  static boot() {
     super.boot()
 
     /**
@@ -26,11 +26,11 @@ class User extends Model {
   }
 
 
-  static get hidden () {
+  static get hidden() {
     return ['password']
   }
 
-  static get dates () {
+  static get dates() {
     return super.dates.concat(['last_login'])
   }
 

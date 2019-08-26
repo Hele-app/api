@@ -4,8 +4,8 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
-const Database = use('Database')
 const Post = use('App/Models/Post')
+
 /**
  * Resourceful controller for interacting with posts
  */
@@ -19,12 +19,13 @@ class PostController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index({ request, response }) {
+  async index() {
     const posts = await Post
-      .query()
-      .with('user')
-      .fetch()
-    return (posts.toJSON())
+    .query()
+    .with('user')
+    .fetch()
+
+    return posts.toJSON()
   }
 }
 
