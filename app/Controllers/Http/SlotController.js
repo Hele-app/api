@@ -50,7 +50,7 @@ class SlotController {
             })
     }
 
-    async slot({request, auth, response}){
+    async index({request, auth, response}){
 
       const user =  await auth.getUser()
 
