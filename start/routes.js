@@ -36,5 +36,5 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/posts', 'PostController.index')
-  Route.get('/replies/:id', 'ReplyController.index')
+  Route.get('/post/:id', 'ReplyController.index')
 }).prefix('/v1')
