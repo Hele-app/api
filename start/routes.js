@@ -29,11 +29,10 @@ Route.group(() => {
   Route.get('/auth/me', 'AuthController.me')
 }).prefix('/v1').middleware('auth')
 
-Route.group(() => {
-  Route.get('/chat', 'ChatController.index')
-  
-    Route.get('/chat/:id/:page?', 'ChatController.show')
-  }).prefix('/v1').middleware('auth')
+Route.group(() => {	Route.group(() => {
+  Route.get('/chat', 'ChatController.index')	  Route.get('/chat', 'ChatController.index')
+  Route.get('/chat/:id/:page?', 'ChatController.show')	
+ }).prefix('/v1').middleware('auth')
 
 
 Route.post('/make/slot', 'SlotController.create')
