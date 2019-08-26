@@ -5,6 +5,7 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const Database = use('Database')
+const Post = use('App/Models/Post')
 const Reply = use('App/Models/Reply')
 /**
  * Resourceful controller for interacting with replies
@@ -25,9 +26,20 @@ class ReplyController {
     const replies = await Reply
       .query()
       .with('user')
-      .with('post')
+      .with('posts')
       .fetch()
     return (replies.toJSON())
+  }
+
+  async show({ params: { id } , response }) {
+
+    const replies =  await Reply
+      .query()
+      .where('post_id', id)
+      .with('user')
+      .fetch()
+
+      return (replies.toJSON())
   }
 }
 
