@@ -23,6 +23,9 @@ Route.get('/', () => {
 Route.group(() => {
   Route.post('/auth/register', 'AuthController.register')
   Route.post('/auth/login', 'AuthController.login')
+
+  Route.post('/code/send', 'AuthController.sendCode')
+  Route.post('/code/change', 'AuthController.changeCode')
 }).prefix('/v1').middleware('guest')
 
 Route.group(() => {
