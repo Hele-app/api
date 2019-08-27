@@ -34,6 +34,11 @@ Route.group(() => {
   Route.get('/chat/:id/:page?', 'ChatController.show')
  }).prefix('/v1').middleware('auth')
 
+ Route.group(() => {
+   Route.get('/advice-card', 'AdviceCardController.index')
+   Route.post('/advice-card', 'AdviceCardController.store')
+ }).prefix('/v1').middleware('auth')
+
 
 Route.post('/make/slot', 'SlotController.create')
 .prefix('/v1')
