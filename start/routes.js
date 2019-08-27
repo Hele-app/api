@@ -61,3 +61,6 @@ Route.post('/make/slot', 'SlotController.create')
 
 Route.post('/get/slot', 'SlotController.index')
 .prefix('/v1')
+
+Route.post('/select/:id', 'SlotController.select')
+.prefix('/v1')
