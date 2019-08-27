@@ -73,7 +73,7 @@ class SlotController {
       // console.log(pro)
       const allSlots = await pro.slots().where('pro_id', pro.id).whereNull('young_id').fetch()
       let result = allSlots.toJSON();
-      console.log(result)
+      // console.log(result)
       // console.log(chat.toJSON())
   
       result = result.map(function(element) {
@@ -89,7 +89,12 @@ class SlotController {
   
     
     }
-    async select({request, auth, response}) {
+    async select({ params, request, auth, response}) {
+
+      const UserId = params.id
+      console.log(UserId)
+
+      
 
     }
 }
