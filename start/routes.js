@@ -40,6 +40,7 @@ Route.group(() => {
  Route.group(() => {
    Route.get('/advice-card', 'AdviceCardController.index')
    Route.post('/advice-card', 'AdviceCardController.store')
+   Route.delete('/advice-card/:id', 'AdviceCardController.destroy')
  }).prefix('/v1').middleware('auth')
 
 

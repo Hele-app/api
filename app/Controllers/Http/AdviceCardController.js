@@ -26,7 +26,7 @@ class AdviceCardController {
     /***
      * @api {post} /advice-card
      * @apiVersion 1.0.0
-     * @apiPermission logged
+     * @apiPermission professional, moderator, admin
      * @apiName CreateAdviceCard
      * @apiGroup Advice Card
      * @apiDescription Create an advice card
@@ -52,6 +52,27 @@ class AdviceCardController {
 
         if (isCreate) {
             response.status(201).json(newCard)
+        } else {
+            response.status(400).json('failed')
+        }
+    }
+    /***
+     * @api {delete} /advice-card/:id
+     * @apiVersion 1.0.0
+     * @apiPermission professional, moderator, admin
+     * @apiName DeleteAdviceCard
+     * @apiGroup Advice Card
+     * @apiDescription Delete an advice card.
+     * 
+     * @apiParam {Number} id Advice card unique ID.
+     */
+    async destroy({ params: {id}, response }) {
+        
+        const card = await AdviceCard.findOrFail(id) 
+        const isDeleted = await card.delete()
+
+        if (isDeleted) {
+            response.status(204).json('success')
         } else {
             response.status(400).json('failed')
         }
