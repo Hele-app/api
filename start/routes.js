@@ -37,6 +37,17 @@ Route.group(() => {
   Route.get('/chat/:id/:page?', 'ChatController.show')
  }).prefix('/v1').middleware('auth')
 
+Route.group(() => {
+  Route.get('/poi', 'PoiController.home')
+  Route.get('/region_id', 'RegionController.all')
+  Route.get('/region_id/:id', 'RegionController.show')
+  Route.post('/poi/create','PoiController.create').validator('CreatePoi')
+  Route.delete('/poi/delete/:id', 'PoiController.delete')
+  Route.get('/poi/edit/:id', 'PoiController.edit')
+  Route.get('/region/:id', 'RegionController.showid')
+  Route.get('/region', 'RegionController.all')
+  Route.put('/poi/update/:id', 'PoiController.update').validator('CreatePoi')
+}).prefix('/v1')
  Route.group(() => {
    Route.get('/advice-card', 'AdviceCardController.index')
    Route.post('/advice-card', 'AdviceCardController.store')
