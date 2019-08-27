@@ -65,9 +65,9 @@ class AdviceCardController {
      * @apiGroup Advice Card
      * @apiDescription Draw a random advice card
      * 
-     * @apiSuccess (Success 200) {Object} card Randomly selected card.
-     * @apiSuccess (Success 200) {Number} card.id Randomly selected card ID.
-     * @apiSuccess (Success 200) {String} card.content Randomly selected card content.
+     * @apiSuccess (Success 200) {Object} randomCard Randomly selected card.
+     * @apiSuccess (Success 200) {Number} randomCard.id Randomly selected card ID.
+     * @apiSuccess (Success 200) {String} randomCard.content Randomly selected card content.
      */
     async randomCard({ response }) {
 
@@ -76,9 +76,7 @@ class AdviceCardController {
 
         const randomCard =  allCards[Math.floor(Math.random() * allCards.length)]
 
-        const card = await AdviceCard.findOrFail(randomCard.id)
-
-        response.status(200).json(card)
+        response.status(200).json(randomCard)
     }
 }
 
