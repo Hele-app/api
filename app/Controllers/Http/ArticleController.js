@@ -1,6 +1,7 @@
 'use strict'
 
 const Helpers = use('Helpers')
+const Drive = use('Drive')
 const Article = use('App/Models/Article')
 
 class ArticleController {
@@ -50,6 +51,8 @@ class ArticleController {
 
         const article = await Article.findOrFail(id)
         const isDeleted = await article.delete()
+
+        await Drive.delete(Helpers.publicPath(`/upload/articles/${article.title}`))
 
         if (isDeleted) {
             response.status(204).json('success')
