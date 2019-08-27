@@ -56,6 +56,30 @@ class AdviceCardController {
             response.status(400).json('failed')
         }
     }
+
+     /***
+     * @api {get} /advice-card/random
+     * @apiVersion 1.0.0
+     * @apiPermission logged
+     * @apiName RandomAdviceCard
+     * @apiGroup Advice Card
+     * @apiDescription Draw a random advice card
+     * 
+     * @apiSuccess (Success 200) {Object} card Randomly selected card.
+     * @apiSuccess (Success 200) {Number} card.id Randomly selected card ID.
+     * @apiSuccess (Success 200) {String} card.content Randomly selected card content.
+     */
+    async randomCard({ response }) {
+
+        let allCards = await AdviceCard.all()
+        allCards = allCards.toJSON()
+
+        const randomCard =  allCards[Math.floor(Math.random() * allCards.length)]
+
+        const card = await AdviceCard.findOrFail(randomCard.id)
+
+        response.status(200).json(card)
+    }
 }
 
 module.exports = AdviceCardController
