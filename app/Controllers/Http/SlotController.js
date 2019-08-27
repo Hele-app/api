@@ -33,7 +33,6 @@ class SlotController {
           // console.log(moment(startTime, 'DD/MM/YYYY, HH:mm'))
 
             const time = moment(startTime, 'DD-MM-YYYY, HH:mm').format("YYYY-MM-DD HH:mm")
-            console.log(time)
             
             const endTime = moment(time).add(45, 'minutes').format("YYYY-MM-DD HH:mm")
             //console.log(endTime)
@@ -50,47 +49,41 @@ class SlotController {
             })
     }
 
-    async index({request, auth, response}){
-
-      const user =  await auth.getUser()
-
-        // console.log(user)
-        
-        // console.log(pro.id)
-        
-        // console.log(result);
-        
-        const chat = await Chat.query().where('type', "PRIVATE").firstOrFail()
-        
-        let getPro = await chat.users().whereNot('user_id', user.id).first()
-        
-        // console.log(getPro.toJSON())
-       
-        // getPro  = getPro.toJSON()
-        console.log(getPro.id)
-        const pro = await User.findOrFail(getPro.id)
-        console.log(pro)
-        const allSlots = await pro.slots().where('pro_id', pro.id).whereNull('young_id').fetch()
-        let result = allSlots.toJSON();
-        // console.log(chat.toJSON())
-
-        result = result.map(function(element) {
   
-         return {
+    async index({ request, auth, response }) {
+
+      const user = await auth.getUser()
+  
+      let chat = await user.chats().where('type', "PRIVATE").first()
+    
+      let pro1 = await chat.users().fetch()
+      pro1 = pro1.toJSON()
+
+      let getPro = pro1.filter( p => {
+        if(p.id !== user.id) {
+          return p.id
+        }
+      })
+
+      const pro = await User.findOrFail(getPro[0].id)
+     
+      const allSlots = await pro.slots().where('pro_id', pro.id).whereNull('young_id').fetch()
+      let result = allSlots.toJSON();    
+      result = result.map(function(element) {
+          return {
            id : element.id,
            start_time : element.start_time,
            end_time : element.end_time
-         }
+          }    
+        })
+      return response.json({result})  
+    }
+    async select({ params, request, auth, response}) {
+
+      const UserId = params.id
+      console.log(UserId)
+
       
-          
-        });
-        //  console.log(slot);
-
-        
-
-
-
-      return response.json({result})
 
     }
 }
