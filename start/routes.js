@@ -67,6 +67,7 @@ Route.group(() => {
  }).prefix('/v1').middleware('auth')
 
 Route.group(() => {
+  Route.get('/articles', 'ArticleController.index')
   Route.post('/article/upload', 'ArticleController.upload')
   Route.delete('article/:id', 'ArticleController.destroy')
 }).prefix('/v1').middleware('auth')
