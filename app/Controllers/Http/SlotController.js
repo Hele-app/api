@@ -33,7 +33,6 @@ class SlotController {
           // console.log(moment(startTime, 'DD/MM/YYYY, HH:mm'))
 
             const time = moment(startTime, 'DD-MM-YYYY, HH:mm').format("YYYY-MM-DD HH:mm")
-            console.log(time)
             
             const endTime = moment(time).add(45, 'minutes').format("YYYY-MM-DD HH:mm")
             //console.log(endTime)
@@ -55,40 +54,31 @@ class SlotController {
 
       const user = await auth.getUser()
   
-      // console.log(user)
-  
-      // console.log(pro.id)
-  
-      // console.log(result);
-  
-      let chat = await user.chats().where('type', "PRIVATE").fetch()
-      chat = chat.toJSON()
-      chat = chat[0].pivot.user_id
-  
-      // console.log(getPro.toJSON())
-  
-      // getPro  = getPro.toJSON()
-      //   console.log(getPro.id)
-      const pro = await User.findOrFail(chat)
-      // console.log(pro)
+      let chat = await user.chats().where('type', "PRIVATE").first()
+    
+      let pro1 = await chat.users().fetch()
+      pro1 = pro1.toJSON()
+
+      let getPro = pro1.filter( p => {
+        if(p.id !== user.id) {
+          return p.id
+        }
+      })
+
+      const pro = await User.findOrFail(getPro[0].id)
+     
       const allSlots = await pro.slots().where('pro_id', pro.id).whereNull('young_id').fetch()
-      let result = allSlots.toJSON();
-      console.log(result)
-      // console.log(chat.toJSON())
-  
+      let result = allSlots.toJSON();    
       result = result.map(function(element) {
-  
-         return {
+          return {
            id : element.id,
            start_time : element.start_time,
            end_time : element.end_time
-         }    
+          }    
         })
-      return response.json({result})
-      
-  
-    
+      return response.json({result})  
     }
+
     async select({request, auth, response}) {
 
     }
