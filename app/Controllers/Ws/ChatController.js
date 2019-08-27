@@ -17,7 +17,6 @@ class ChatController {
       if (msg.length === 0 || /^\s*$/.test(msg)) { return }
 
       const user = await this.auth.getUser()
-      const username = user.username
       const userID = user.id
       const chatID = this.socket.topic.replace('chat:', '')
 
@@ -38,8 +37,10 @@ class ChatController {
       await message.save()
       
       this.socket.broadcastToAll('message', {
+        messageID: message.id,
         message: message.content,
-        user: username
+        userID: userID,
+        user: user.username
       })
 
     } catch (err){
