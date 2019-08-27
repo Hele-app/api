@@ -78,8 +78,12 @@ class SlotController {
         })
       return response.json({result})  
     }
+    async select({ params, request, auth, response}) {
 
-    async select({request, auth, response}) {
+      const UserId = params.id
+      console.log(UserId)
+
+      
 
     }
 }
