@@ -40,7 +40,8 @@ class ChatController {
         messageID: message.id,
         message: message.content,
         userID: userID,
-        user: user.username
+        user: user.username,
+        userRole: user.roles
       })
 
     } catch (err){
