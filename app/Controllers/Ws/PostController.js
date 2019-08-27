@@ -1,7 +1,5 @@
 'use strict'
 
-const User = use('App/Models/User')
-const Post = use('App/Models/Post')
 const Database = use('Database')
 
 class PostController {
