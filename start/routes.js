@@ -44,7 +44,8 @@ Route.group(() => {
  }).prefix('/v1').middleware('auth')
 
 Route.group(() => {
-  Route.post('/article/update', 'ArticleController.update')
+  Route.post('/article/upload', 'ArticleController.upload')
+  Route.delete('article/:id', 'ArticleController.destroy')
 }).prefix('/v1').middleware('auth')
 
 Route.post('/make/slot', 'SlotController.create')
