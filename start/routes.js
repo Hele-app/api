@@ -43,6 +43,9 @@ Route.group(() => {
    Route.get('/advice-card/random', 'AdviceCardController.randomCard')
  }).prefix('/v1').middleware('auth')
 
+Route.group(() => {
+  Route.post('/article/update', 'ArticleController.update')
+}).prefix('/v1').middleware('auth')
 
 Route.post('/make/slot', 'SlotController.create')
 .prefix('/v1')
