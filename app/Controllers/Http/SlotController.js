@@ -50,45 +50,45 @@ class SlotController {
             })
     }
 
-    async index({request, auth, response}){
+  
+    async index({ request, auth, response }) {
 
-      const user =  await auth.getUser()
-
-        // console.log(user)
-        
-        // console.log(pro.id)
-        
-        // console.log(result);
-        
-        const chat = await Chat.query().where('type', "PRIVATE").fetch()
-        
-        let getPro = await chat.users().whereNot('user_id', user.id).first()
-        
-        // console.log(getPro.toJSON())
-       
-        // getPro  = getPro.toJSON()
-        console.log(getPro.id)
-        const pro = await User.findOrFail(getPro.id)
-        console.log(pro)
-        const allSlots = await pro.slots().where('pro_id', pro.id).whereNull('young_id').fetch()
-        let result = allSlots.toJSON();
-        // console.log(chat.toJSON())
-
-        result = result.map(function(element) {
+      const user = await auth.getUser()
+  
+      // console.log(user)
+  
+      // console.log(pro.id)
+  
+      // console.log(result);
+  
+      let chat = await user.chats().where('type', "PRIVATE").fetch()
+      chat = chat.toJSON()
+      chat = chat[0].pivot.user_id
+  
+      // console.log(getPro.toJSON())
+  
+      // getPro  = getPro.toJSON()
+      //   console.log(getPro.id)
+      const pro = await User.findOrFail(chat)
+      // console.log(pro)
+      const allSlots = await pro.slots().where('pro_id', pro.id).whereNull('young_id').fetch()
+      let result = allSlots.toJSON();
+      console.log(result)
+      // console.log(chat.toJSON())
+  
+      result = result.map(function(element) {
   
          return {
            id : element.id,
            start_time : element.start_time,
            end_time : element.end_time
          }    
-          
-        });
-        //  console.log(slot);
-
+        })
       return response.json({result})
-
+      
+  
+    
     }
-
     async select({request, auth, response}) {
 
     }

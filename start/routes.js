@@ -23,9 +23,6 @@ Route.get('/', () => {
 Route.group(() => {
   Route.post('/auth/register', 'AuthController.register')
   Route.post('/auth/login', 'AuthController.login')
-
-  Route.post('/code/send', 'AuthController.sendCode')
-  Route.post('/code/change', 'AuthController.changeCode')
 }).prefix('/v1').middleware('guest')
 
 Route.group(() => {
@@ -35,12 +32,6 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/chat', 'ChatController.index')
   Route.get('/chat/:id/:page?', 'ChatController.show')
- }).prefix('/v1').middleware('auth')
-
- Route.group(() => {
-   Route.get('/advice-card', 'AdviceCardController.index')
-   Route.post('/advice-card', 'AdviceCardController.store')
-   Route.get('/advice-card/random', 'AdviceCardController.randomCard')
  }).prefix('/v1').middleware('auth')
 
 
