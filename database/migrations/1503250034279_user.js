@@ -12,7 +12,7 @@ class UserSchema extends Schema {
       table.string('password', 100).notNullable()
       table.string('email').index()
       table.integer('birthyear').notNullable()
-      table.string('region', 100).notNullable()
+      table.integer('region_id').notNullable()
       table.enu('roles', ['YOUNG', 'MODERATOR', 'PROFESSIONAL', 'ADMIN']).defaultTo('YOUNG').index()
       table.string('profession', 100)
       table.string('city', 100)
@@ -29,3 +29,4 @@ class UserSchema extends Schema {
 }
 
 module.exports = UserSchema
+

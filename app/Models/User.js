@@ -33,6 +33,24 @@ class User extends Model {
   static get dates () {
     return super.dates.concat(['last_login'])
   }
+
+  chats() {
+    return this
+    .belongsToMany('App/Models/Chat')
+    .pivotTable('chat_users')
+  }
+
+  messages() {
+    return this.manyThrough('App/Models/ChatUser', 'messages')
+  }
+
+  verifyPasswords() {
+    return this.hasMany('App/Models/VerifyPassword')
+  }
+
+  slots() {
+    return this.hasMany('App/Models/Slot', 'id', 'pro_id')
+  }
 }
 
 module.exports = User
