@@ -36,13 +36,17 @@ class ChatController {
 
       await message.save()
       
-      this.socket.broadcastToAll('message', {
-        messageID: message.id,
-        message: message.content,
-        userID: userID,
-        user: user.username,
-        userRole: user.roles
-      })
+      this.socket.broadcastToAll('message', [{
+        id: message.id,
+        content: message.content,
+        created_at: message.created_at,
+        updated_at: message.updated_at,
+        user: {
+          id: user.id,
+          username: user.username,
+          roles: user.roles
+        }
+      }])
 
     } catch (err){
       console.error('msg error', err)
