@@ -26,7 +26,7 @@ class PoiController {
             description : poi.description,
             hour : poi.hour,
             site : poi.site,
-            lattitude : poi.lattitude,
+            latitude : poi.latitude,
             longitude : poi.longitude,
             region_id: poi.region_id
         })
@@ -60,7 +60,7 @@ class PoiController {
         poi.description = request.input('description')
         poi.hour = request.input('hour')
         poi.site = request.input('site')
-        poi.lattitude = request.input('lattitude')
+        poi.latitude = request.input('latitude')
         poi.longitude = request.input('longitude')
         poi.region_id= request.input('region_id')
 

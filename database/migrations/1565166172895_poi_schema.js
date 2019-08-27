@@ -15,7 +15,7 @@ class PoiSchema extends Schema {
       table.string('hour')
       table.string('phone').notNullable()
       table.string('site')
-      table.float('lattitude', 14, 10).notNullable()
+      table.float('latitude', 14, 10).notNullable()
       table.float('longitude', 14, 10).notNullable()
       table.integer('region_id').notNullable()
       table.timestamps()

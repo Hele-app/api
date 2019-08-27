@@ -36,8 +36,8 @@ class User extends Model {
 
   chats() {
     return this
-      .belongsToMany('App/Models/Chat')
-      .pivotTable('chat_users')
+    .belongsToMany('App/Models/Chat')
+    .pivotTable('chat_users')
   }
 
   messages() {
@@ -48,9 +48,19 @@ class User extends Model {
     return this
       .hasMany('App/Models/Post')
   }
+
   replies() {
     return this
       .manyThrough('App/Models/Reply')
+  }
+
+  verifyPasswords() {
+    return this.hasMany('App/Models/VerifyPassword')
+  }
+
+  slots() {
+    return this.hasMany('App/Models/Slot', 'id', 'pro_id')
+
   }
 }
 
