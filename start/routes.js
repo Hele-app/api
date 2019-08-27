@@ -40,6 +40,7 @@ Route.group(() => {
  Route.group(() => {
    Route.get('/advice-card', 'AdviceCardController.index')
    Route.post('/advice-card', 'AdviceCardController.store')
+   Route.get('/advice-card/random', 'AdviceCardController.randomCard')
  }).prefix('/v1').middleware('auth')
 
 
