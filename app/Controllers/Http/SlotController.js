@@ -60,7 +60,7 @@ class SlotController {
         
         // console.log(result);
         
-        const chat = await Chat.query().where('type', "PRIVATE").firstOrFail()
+        const chat = await Chat.query().where('type', "PRIVATE").fetch()
         
         let getPro = await chat.users().whereNot('user_id', user.id).first()
         
@@ -80,17 +80,16 @@ class SlotController {
            id : element.id,
            start_time : element.start_time,
            end_time : element.end_time
-         }
-      
+         }    
           
         });
         //  console.log(slot);
 
-        
-
-
-
       return response.json({result})
+
+    }
+
+    async select({request, auth, response}) {
 
     }
 }
