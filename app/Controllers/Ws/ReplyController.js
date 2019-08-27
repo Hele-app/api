@@ -17,15 +17,15 @@ class ReplyController {
       console.log(user)
       const postId = await Database
         .table('replies')
-        .insert({ user_id: 1 , post_id: 1, content: 'foofoofoo', created_at: '12/12/21'})
+        .insert({ user_id: user.id , post_id: 1, content: message.message })
         console.log(postId)
     } catch (err) {
       console.error('erreur', err)
     }
     this.socket.broadcastToAll('send', {
-      user: 'dr jacob',
+      user: 'user',
       message: message,
-      date:'12/12/21'
+      date:''
     })
     console.log('you receive a message socket from client', message)
   }

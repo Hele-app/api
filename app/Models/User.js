@@ -48,9 +48,9 @@ class User extends Model {
     return this
       .hasMany('App/Models/Post')
   }
-  repliess() {
+  replies() {
     return this
-      .hasMany('App/Models/Reply')
+      .manyThrough('App/Models/Reply')
   }
 }
 

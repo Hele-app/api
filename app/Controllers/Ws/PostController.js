@@ -9,7 +9,6 @@ class PostController {
     this.socket = socket
     this.request = request
     this.auth = auth
-    console.log('socket id message', socket.id)
   }
 
   async onMessage(message) {
@@ -27,8 +26,6 @@ class PostController {
       message: message,
       date: ''
     })
-
-    console.log('you receive a message socket from client', message)
   }
 }
 
