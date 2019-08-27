@@ -27,18 +27,6 @@ class PostController {
 
     return posts.toJSON()
   }
-
-  async show({ params: { id } , response }) {
-
-    const post =  await Post
-      .query()
-      .where('id', id)
-      .with('user')
-      .with('replies')
-      .fetch()
-
-      return post.toJSON()
-  }
 }
 
 module.exports = PostController

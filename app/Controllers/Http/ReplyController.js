@@ -21,7 +21,7 @@ class ReplyController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index({ param: id}) {
+  async index({ param: id }) {
     
     const replies = await Reply
       .query()
@@ -31,12 +31,13 @@ class ReplyController {
     return (replies.toJSON())
   }
 
-  async show({ params: { id } , response }) {
+  async show({ param: id }) {
 
     const replies =  await Reply
       .query()
-      .where('post_id', id)
+      .where('post_id', id )
       .with('user')
+      .with('post')
       .fetch()
 
       return (replies.toJSON())
