@@ -9,14 +9,15 @@ const { validateAll } = use('Validator')
 const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
 
 class AuthController {
-  async register({ request, auth, response }) {
+
+  async register({request, auth, response}) {
 
     const validation = await validateAll(request.all(), {
       phone: 'required|unique:users|regex:^0[6-7](\\d{2}){4}$',
       username: 'required|unique:users',
       age: 'required|integer|above:10',
       region_id: 'required',
-      
+
     })
 
     if (validation.fails()) {
