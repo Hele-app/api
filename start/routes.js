@@ -30,6 +30,12 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/auth/me', 'AuthController.me')
+  Route.post('/get/all', 'AdminController.getall')
+  Route.post('/get/users', 'AdminController.getusers')
+  Route.post('/getuser', 'AdminController.verifyid')
+  Route.post('/admin/register', 'AdminController.createadmin')
+  Route.post("/admin/delete", 'AdminController.deleteuser')
+  Route.post("/admin/update", 'AdminController.updateuser')
 }).prefix('/v1').middleware('auth')
 
 Route.group(() => {
