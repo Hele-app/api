@@ -15,7 +15,7 @@ class ReplyController {
         .table('replies')
         .insert({ user_id: user.id , post_id: message.id, content: message.message })
         this.socket.broadcastToAll('send', {
-          user: 'user',
+          user: user,
           content: message.message,
           created_at: ''
         })
