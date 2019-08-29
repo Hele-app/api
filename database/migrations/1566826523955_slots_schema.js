@@ -8,7 +8,7 @@ class SlotSchema extends Schema {
     this.create('slots', (table) => {
       table.increments()
       table.integer('pro_id').notNullable()
-      table.integer('young_id')
+      table.integer('young_id').nullable()
       table.timestamp('start_time').defaultTo(this.fn.now())
       table.timestamp('end_time').defaultTo(this.fn.now())
       table.timestamp('real_end').nullable()

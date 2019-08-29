@@ -3,6 +3,7 @@
 const Slot = use('App/Models/Slot')
 const User = use('App/Models/User')
 const Chat = use('App/Models/Chat')
+const Database = use('Database')
 const { validateAll } = use('Validator')
 const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
 const moment = use('moment')
@@ -78,13 +79,34 @@ class SlotController {
         })
       return response.json({result})  
     }
+
+  
     async select({ params, request, auth, response}) {
 
-      const UserId = params.id
-      console.log(UserId)
+      const user = await auth.getUser()
+      console.log(user.id)
 
+      const SlotId = params.id
+
+      let getSlot = await Slot.query().where('id', SlotId).whereNull('young_id').firstOrFail()
       
+      // getSlot = getSlot.toJSON()
+      console.log(getSlot)
+      // if (getSlot.young_id) {
+        await getSlot.young().associate(user)
+  
+      // }
 
+
+      // getSlot.young_id = user.id
+      // await getSlot.save()
+
+      // const getYoung = await Chat.users().where('user_id', user.id).firstOrFail()
+      // await getYoung.save()
+
+      // await chat.users().whereNull('young_id').update()
+
+      return response.json({user, getSlot})
     }
 }
 

@@ -10,6 +10,10 @@ class Slot extends Model {
   user() {
     return this.belongsTo('App/Models/User', 'pro_id', 'id')
   }
+
+  young() {
+    return this.belongsTo('App/Models/User', 'young_id', 'id')
+  }
 }
 
 module.exports = Slot
