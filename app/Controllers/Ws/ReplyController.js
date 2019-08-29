@@ -14,14 +14,14 @@ class ReplyController {
       const postId = await Database
         .table('replies')
         .insert({ user_id: user.id , post_id: message.id, content: message.message })
+        this.socket.broadcastToAll('send', {
+          user: 'user',
+          content: message.message,
+          created_at: ''
+        })
     } catch (err) {
       console.error('erreur', err)
     }
-    this.socket.broadcastToAll('send', {
-      user: 'user',
-      message: message,
-      date: ''
-    })
   }
 }
 
