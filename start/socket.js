@@ -20,7 +20,7 @@ Ws
   .middleware('auth')
 
 Ws
-  .channel('replies', 'RepliesController')
+  .channel('replies', 'ReplyController')
   .middleware('auth')
 
 Ws
