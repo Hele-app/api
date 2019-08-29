@@ -1,4 +1,5 @@
 'use strict'
+const Database = use('Database')
 
 class ReplyController {
   constructor({ socket, request, auth }) {
@@ -19,6 +20,7 @@ class ReplyController {
           content: message.message,
           created_at: ''
         })
+        console.log(message)
     } catch (err) {
       console.error('erreur', err)
     }
