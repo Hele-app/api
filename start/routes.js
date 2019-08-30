@@ -30,6 +30,12 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/auth/me', 'AuthController.me')
+  Route.post('/get/all', 'AdminController.getall')
+  Route.post('/get/users', 'AdminController.getusers')
+  Route.post('/getuser', 'AdminController.verifyid')
+  Route.post('/admin/register', 'AdminController.createadmin')
+  Route.post("/admin/delete", 'AdminController.deleteuser')
+  Route.post("/admin/update", 'AdminController.updateuser')
 }).prefix('/v1').middleware('auth')
 
 Route.group(() => {
@@ -48,12 +54,24 @@ Route.group(() => {
   Route.get('/region', 'RegionController.all')
   Route.put('/poi/update/:id', 'PoiController.update').validator('CreatePoi')
 }).prefix('/v1')
+
+Route.group(() => {
+  Route.get('/posts', 'PostController.index')
+  Route.get('/post/:id', 'ReplyController.index')
+}).prefix('/v1')
+
  Route.group(() => {
    Route.get('/advice-card', 'AdviceCardController.index')
    Route.post('/advice-card', 'AdviceCardController.store')
+   Route.delete('/advice-card/:id', 'AdviceCardController.destroy')
    Route.get('/advice-card/random', 'AdviceCardController.randomCard')
  }).prefix('/v1').middleware('auth')
 
+Route.group(() => {
+  Route.get('/articles', 'ArticleController.index')
+  Route.post('/article/upload', 'ArticleController.upload')
+  Route.delete('article/:id', 'ArticleController.destroy')
+}).prefix('/v1').middleware('auth')
 
 Route.post('/make/slot', 'SlotController.create')
 .prefix('/v1')

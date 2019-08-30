@@ -21,6 +21,7 @@
     "@adonisjs/auth": "^3.0.7",
     "@adonisjs/bodyparser": "^2.0.5",
     "@adonisjs/cors": "^1.0.7",
+    "@adonisjs/drive": "^1.0.4",
     "@adonisjs/fold": "^4.0.9",
     "@adonisjs/framework": "^5.0.9",
     "@adonisjs/ignitor": "^2.0.8",
@@ -28,13 +29,15 @@
     "@adonisjs/validator": "^5.0.6",
     "@adonisjs/vow": "^1.0.17",
     "@adonisjs/websocket": "^1.0.11",
+    "indicative": "^7.2.0",
     "moment": "^2.24.0",
     "mysql": "^2.17.1",
-    "pg": "^7.12.0",
-    "sqlite3": "^4.0.9"
+    "pg": "^7.12.1",
+    "slug": "^1.1.0",
+    "sqlite3": "^4.1.0"
   },
   "devDependencies": {
-    "eslint": "^6.1.0"
+    "eslint": "^6.2.2"
   },
   "autoload": {
     "App": "./app"

@@ -16,9 +16,10 @@ const providers = [
   '@adonisjs/bodyparser/providers/BodyParserProvider',
   '@adonisjs/cors/providers/CorsProvider',
   '@adonisjs/lucid/providers/LucidProvider',
-
+  '@adonisjs/websocket/providers/WsProvider',
   '@adonisjs/validator/providers/ValidatorProvider',
-  '@adonisjs/websocket/providers/WsProvider'
+  '@adonisjs/websocket/providers/WsProvider',
+  '@adonisjs/drive/providers/DriveProvider'
 ]
 
 /*
@@ -47,7 +48,8 @@ const aceProviders = [
 |   { Route: 'Adonis/Src/Route' }
 |
 */
-const aliases = {}
+const aliases = {
+}
 
 /*
 |--------------------------------------------------------------------------
