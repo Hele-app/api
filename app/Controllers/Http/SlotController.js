@@ -83,11 +83,35 @@ class SlotController {
 
       let getSlot = await Slot.query().where('id', SlotId).whereNull('young_id').firstOrFail()
 
-      console.log(getSlot)
+      // console.log(getSlot)
       
         await getSlot.young().associate(user)
 
       return response.json({user, getSlot})
+    }
+
+
+    async indexProSlot({request,auth,response}){
+
+      const user = await auth.getUser()
+      // console.log(user.id)
+      if(user.roles === 'YOUNG'){
+        return;
+      }
+
+      let getSlot = await Slot.query().where('pro_id', user.id ).with('young').fetch()
+      getSlot = getSlot.toJSON()
+      getSlot.young = getSlot.map((slot) => {
+  
+        if (slot.young_id !== null) {
+          slot.young = {
+            id: slot.young.id,
+            username: slot.young.username,
+          }
+        }
+        return slot;
+      });
+      response.status(200).json(getSlot)
     }
 }
 

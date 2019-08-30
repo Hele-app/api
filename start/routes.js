@@ -61,8 +61,12 @@ Route.post('/make/slot', 'SlotController.create')
 
 Route.get('/get/slot', 'SlotController.index')
 .prefix('/v1')
-// .middleware('auth')
+.middleware('auth')
 
 Route.post('/select/:id', 'SlotController.select')
+.prefix('/v1')
+.middleware('auth')
+
+Route.post('/slot/pro', 'SlotController.indexProSlot')
 .prefix('/v1')
 .middleware('auth')
