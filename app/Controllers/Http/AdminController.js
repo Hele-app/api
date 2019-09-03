@@ -1,5 +1,14 @@
 'use strict'
 
+const Env = use('Env')
+
+const mode = Env.get('NODE_ENV', 'development')
+
+const accountSid = Env.get('TWILIO_SID','')
+const authToken = Env.get('TWILIO_TOKEN', )
+const phone = Env.get('TWILIO_PHONE', '')
+const client = require('twilio')(accountSid, authToken)
+
 const User = use('App/Models/User')
 const { validateAll } = use('Validator')
 const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
@@ -37,10 +46,23 @@ class AdminController {
     this.fillUser(user, request)
     user.password = password
 
-    await user.save()
-    // TODO: send SMS with password instead of sending it in the response.
-
-    return response.json({user})
+    if (mode === 'production') {
+      try {
+      const message = await client.messages
+            .create({body: `Salut ${user.username} !\n Bienvenu sur Hélé. Ton mot de passe pour te connecter est ${password}. A bientôt sur Hélé !`, from: phone, to: user.phone})
+        return response.status(201).json({user})
+      }
+      catch (e) {
+        console.log(e)
+        return response.status(500).json({message: e})
+      }
+    }
+    else {
+      return response.status(201).json({
+        user,
+        password
+      })
+    }
   }
 
   async update({request, auth, response, params: {id} }) {
