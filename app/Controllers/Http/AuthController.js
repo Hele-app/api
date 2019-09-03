@@ -1,5 +1,14 @@
 'use strict'
 
+const Env = use('Env')
+
+const mode = Env.get('NODE_ENV', 'development')
+
+const accountSid = Env.get('TWILIO_SID','')
+const authToken = Env.get('TWILIO_TOKEN', )
+const phone = Env.get('TWILIO_PHONE', '')
+const client = require('twilio')(accountSid, authToken)
+
 const User = use('App/Models/User')
 const VerifyPassword = use('App/Models/VerifyPassword')
 const Chat = use('App/Models/Chat')
@@ -28,6 +37,7 @@ class AuthController {
       Math.random().toString(36).substring(2, 15) +
       Math.random().toString(36).substring(2, 15)
     ).substring(0, 10)
+
     let user = new User()
     user.phone = request.input('phone')
     user.username = request.input('username')
@@ -36,18 +46,27 @@ class AuthController {
     user.password = password
 
     let isSave = await user.save()
-    let access_token = await auth.generate(user)
-    // TODO: send SMS with password instead of sending it in the response.
-
     if (isSave) {
       this.youngToPro(user)
     }
 
-    return response.json({
-      user,
-      password,
-      access_token
-    })
+    if (mode === 'production') {
+      try {
+      const message = await client.messages
+            .create({body: `Salut ${user.username} !\n Bienvenu sur Hélé. Ton mot de passe pour te connecter est ${password}. A bientôt sur Hélé !`, from: phone, to: user.phone})
+        return response.status(201).json({user})
+      }
+      catch (e) {
+        console.log(e)
+        return response.status(500).json({message: e})
+      }
+    }
+    else {
+      return response.status(201).json({
+        user,
+        password
+      })
+    }
   }
 
   async login({ request, auth, response }) {
