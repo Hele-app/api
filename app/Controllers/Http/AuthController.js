@@ -2,7 +2,7 @@
 
 const Env = use('Env')
 
-const mode = Env.get('MODE', 'DEV')
+const mode = Env.get('NODE_ENV', 'development')
 
 const accountSid = Env.get('TWILIO_SID','')
 const authToken = Env.get('TWILIO_TOKEN', )
@@ -46,17 +46,15 @@ class AuthController {
     user.password = password
 
     let isSave = await user.save()
-    let access_token = await auth.generate(user)
-
     if (isSave) {
       this.youngToPro(user)
     }
 
-    if (mode === 'PROD') {
+    if (mode === 'production') {
       try {
       const message = await client.messages
-            .create({body: 'Hi there!', from: phone, to: '+33648001807'})
-        return response.status(201).json({message: 'Account created'})
+            .create({body: `Salut ${user.username} !\n Bienvenu sur Hélé. Ton mot de passe pour te connecter est ${password}. A bientôt sur Hélé !`, from: phone, to: user.phone})
+        return response.status(201).json({user})
       }
       catch (e) {
         console.log(e)
@@ -64,10 +62,9 @@ class AuthController {
       }
     }
     else {
-      return response.json({
+      return response.status(201).json({
         user,
-        password,
-        access_token
+        password
       })
     }
   }
