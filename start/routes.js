@@ -26,17 +26,15 @@ Route.group(() => {
 
   Route.post('/code/send', 'AuthController.sendCode')
   Route.post('/code/change', 'AuthController.changeCode')
+  Route.get('/auth/me', 'AuthController.me')
 }).prefix('/v1').middleware('guest')
 
 Route.group(() => {
-  Route.get('/auth/me', 'AuthController.me')
-  Route.post('/get/all', 'AdminController.getall')
-  Route.post('/get/users', 'AdminController.getusers')
-  Route.post('/getuser', 'AdminController.verifyid')
-  Route.post('/admin/register', 'AdminController.createadmin')
-  Route.post("/admin/delete", 'AdminController.deleteuser')
-  Route.post("/admin/update", 'AdminController.updateuser')
-}).prefix('/v1').middleware('auth')
+  Route.get('/users', 'AdminController.index')
+  Route.post('/users', 'AdminController.create')
+  Route.put("/users/:id", 'AdminController.update')
+  Route.delete("/users/:id", 'AdminController.delete')
+}).prefix('/v1/admin').middleware(['auth', 'admin'])
 
 Route.group(() => {
   Route.get('/chat', 'ChatController.index')
@@ -53,12 +51,12 @@ Route.group(() => {
   Route.get('/region/:id', 'RegionController.showid')
   Route.get('/region', 'RegionController.all')
   Route.put('/poi/update/:id', 'PoiController.update').validator('CreatePoi')
-}).prefix('/v1')
+}).prefix('/v1').middleware('auth')
 
 Route.group(() => {
   Route.get('/posts', 'PostController.index')
   Route.get('/post/:id', 'ReplyController.index')
-}).prefix('/v1')
+}).prefix('/v1').middleware('auth')
 
  Route.group(() => {
    Route.get('/advice-card', 'AdviceCardController.index')
@@ -73,18 +71,9 @@ Route.group(() => {
   Route.delete('article/:id', 'ArticleController.destroy')
 }).prefix('/v1').middleware('auth')
 
-Route.post('/make/slot', 'SlotController.create')
-.prefix('/v1')
-.middleware('auth')
-
-Route.get('/get/slot', 'SlotController.index')
-.prefix('/v1')
-.middleware('auth')
-
-Route.post('/select/:id', 'SlotController.select')
-.prefix('/v1')
-.middleware('auth')
-
-Route.post('/slot/pro', 'SlotController.indexProSlot')
-.prefix('/v1')
-.middleware('auth')
+Route.group(() => {
+  Route.post('/make/slot', 'SlotController.create')
+  Route.get('/get/slot', 'SlotController.index')
+  Route.post('/select/:id', 'SlotController.select')
+  Route.post('/slot/pro', 'SlotController.indexProSlot')
+}).prefix('/v1').middleware('auth')
