@@ -26,8 +26,11 @@ Route.group(() => {
 
   Route.post('/code/send', 'AuthController.sendCode')
   Route.post('/code/change', 'AuthController.changeCode')
-  Route.get('/auth/me', 'AuthController.me')
 }).prefix('/v1').middleware('guest')
+
+Route.group(() => {
+  Route.get('/auth/me', 'AuthController.me')
+}).prefix('/v1').middleware('auth')
 
 Route.group(() => {
   Route.get('/users', 'AdminController.index')
