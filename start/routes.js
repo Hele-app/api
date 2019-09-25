@@ -51,7 +51,7 @@ Route.group(() => {
   Route.get('/region/:id', 'RegionController.showid')
   Route.get('/region', 'RegionController.all')
   Route.put('/poi/update/:id', 'PoiController.update').validator('CreatePoi')
-}).prefix('/v1').middleware('auth')
+}).prefix('/v1')
 
 Route.group(() => {
   Route.get('/posts', 'PostController.index')
