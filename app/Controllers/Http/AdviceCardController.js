@@ -13,7 +13,7 @@ class AdviceCardController {
      * @apiName GetAdviceCard
      * @apiGroup Advice Card
      * @apiDescription List of all advice cards.
-     * 
+     *
      * @apiSuccess (Success 200) {Object} allCards List of all advice cards.
      * @apiSuccess (Success 200) {Number} allCards.id Card unique ID.
      * @apiSuccess (Success 200) {String} allCards.content Card content.
@@ -30,7 +30,7 @@ class AdviceCardController {
      * @apiName CreateAdviceCard
      * @apiGroup Advice Card
      * @apiDescription Create an advice card
-     * 
+     *
      * @apiSuccess (Success 201) {Object} newCard Created card.
      * @apiSuccess (Success 201) {Number} newCard.id Created card ID.
      * @apiSuccess (Success 201) {String} newCard.content Created card content.
@@ -64,7 +64,7 @@ class AdviceCardController {
      * @apiName RandomAdviceCard
      * @apiGroup Advice Card
      * @apiDescription Draw a random advice card
-     * 
+     *
      * @apiSuccess (Success 200) {Object} randomCard Randomly selected card.
      * @apiSuccess (Success 200) {Number} randomCard.id Randomly selected card ID.
      * @apiSuccess (Success 200) {String} randomCard.content Randomly selected card content.
@@ -85,12 +85,12 @@ class AdviceCardController {
      * @apiName DeleteAdviceCard
      * @apiGroup Advice Card
      * @apiDescription Delete an advice card.
-     * 
+     *
      * @apiParam {Number} id Advice card unique ID.
      */
     async destroy({ params: {id}, response }) {
-        
-        const card = await AdviceCard.findOrFail(id) 
+
+        const card = await AdviceCard.findOrFail(id)
         const isDeleted = await card.delete()
 
         if (isDeleted) {

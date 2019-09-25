@@ -31,11 +31,10 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/users', 'AdminController.index')
-  Route.get('/users/:id', 'AdminController.findUser')
   Route.post('/users', 'AdminController.create')
   Route.put("/users/:id", 'AdminController.update')
   Route.delete("/users/:id", 'AdminController.delete')
-}).prefix('/v1/admin').middleware('auth')
+}).prefix('/v1/admin').middleware(['auth', 'admin'])
 
 Route.group(() => {
   Route.get('/chat', 'ChatController.index')
