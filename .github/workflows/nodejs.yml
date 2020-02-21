@@ -1,0 +1,74 @@
+name: Hele Adonis CI
+
+on:
+  pull_request:
+    tags:
+      - v*
+    branches:
+      - dev
+      - master
+  push:
+    branches:
+      - feature/*
+
+jobs:
+  #Unit testing job
+  unit:
+    name: "Unit testing at build time"
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Cache node modules
+      uses: actions/cache@v1
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+        key: ${{ runner.os }}-unit-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-unit-${{ env.cache-name }}-
+          ${{ runner.os }}-unit-
+          ${{ runner.os }}-
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Test
+      run: npm test
+
+  # Lint testing job
+  lint:
+    name: "Lint testing"
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Cache node dev modules
+      uses: actions/cache@v1
+      env:
+        cache-name: cache-node-dev-modules
+      with:
+        path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+        key: ${{ runner.os }}-lint-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-lint-${{ env.cache-name }}-
+          ${{ runner.os }}-lint-
+          ${{ runner.os }}-
+
+    - name: Install Dev Dependencies
+      run: npm install --dev
+
+    - name: Run Lint Tests
+      run: npm run lint
