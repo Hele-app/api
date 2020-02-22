@@ -49,7 +49,7 @@ jobs:
   #     run: npm test
 
   # Lint testing job
-  build:
+  lint:
     name: "Lint testing"
 
     runs-on: ubuntu-latest
@@ -63,10 +63,10 @@ jobs:
         cache-name: cache-node-dev-modules
       with:
         path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
-          ${{ runner.os }}-build-
+        key: ${{ runner.os }}-lint-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys:
+          ${{ runner.os }}-lint-${{ env.cache-name }}-
+          ${{ runner.os }}-lint-
           ${{ runner.os }}-
 
     - name: Install Dev Dependencies
