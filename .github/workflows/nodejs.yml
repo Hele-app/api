@@ -45,8 +45,10 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
-    - name: PreTest
+    - name: Copy environment file
       run: cp .env.example .env
+
+    - name: Generate adonis key
       run: npx @adonisjs/cli key:generate
 
     - name: Test
