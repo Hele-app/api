@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "node ace test",
-    "lint": "npx eslint ."
+    "lint": "eslint ."
   },
   "keywords": [
     "adonisjs",

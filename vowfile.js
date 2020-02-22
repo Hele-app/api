@@ -24,6 +24,7 @@ module.exports = (cli, runner) => {
     | line, if http server is not required
     |
     */
+    // eslint-disable-next-line
     use('Adonis/Src/Server').listen(process.env.HOST, process.env.PORT)
 
     /*
@@ -46,6 +47,7 @@ module.exports = (cli, runner) => {
     | Shutdown the HTTP server when all tests have been executed.
     |
     */
+    // eslint-disable-next-line
     use('Adonis/Src/Server').getInstance().close()
 
     /*

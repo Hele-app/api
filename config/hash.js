@@ -1,6 +1,7 @@
 'use strict'
 
 /** @type {import('@adonisjs/framework/src/Env')} */
+// eslint-disable-next-line
 const Env = use('Env')
 
 module.exports = {

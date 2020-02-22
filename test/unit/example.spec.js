@@ -1,5 +1,6 @@
 'use strict'
 
+// eslint-disable-next-line
 const { test } = use('Test/Suite')('Example')
 
 test('make sure 2 + 2 is 4', async ({ assert }) => {
