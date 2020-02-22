@@ -50,6 +50,8 @@ jobs:
 
     - name: GitHub Action for npx
       uses: mikeal/npx@1.0.0
+
+    - name: Generate adonis key
       run: npx @adonisjs/cli key:generate
 
     - name: Test
