@@ -45,6 +45,10 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
+    - name: PreTest
+      run: cp .env.example .env
+      run:
+
     - name: Test
       run: npm test
 
