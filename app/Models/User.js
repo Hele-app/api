@@ -1,9 +1,11 @@
 'use strict'
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
+// eslint-disable-next-line
 const Model = use('Model')
 
 /** @type {import('@adonisjs/framework/src/Hash')} */
+// eslint-disable-next-line
 const Hash = use('Hash')
 
 class User extends Model {

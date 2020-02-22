@@ -1,6 +1,7 @@
 'use strict'
 
 /** @type {import('@adonisjs/framework/src/Server')} */
+// eslint-disable-next-line
 const Server = use('Server')
 
 /*

@@ -7,9 +7,6 @@ on:
     branches:
       - dev
       - master
-  push:
-    branches:
-      - feature/*
 
 jobs:
   #Unit testing job
@@ -23,7 +20,9 @@ jobs:
         node-version: [10.x, 12.x]
 
     steps:
-    - uses: actions/checkout@v2
+    # Downloads a copy of the code in your repository before running CI tests
+    - name: Check out repository code
+      uses: actions/checkout@v2
 
     - name: Cache node modules
       uses: actions/cache@v1
@@ -32,7 +31,7 @@ jobs:
       with:
         path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
         key: ${{ runner.os }}-unit-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
+        restore-keys:
           ${{ runner.os }}-unit-${{ env.cache-name }}-
           ${{ runner.os }}-unit-
           ${{ runner.os }}-
@@ -42,8 +41,30 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: Shutdown Ubuntu MySQL (SUDO)
+      run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please not remove it
+
+    - name: Set up MySQL
+      uses: mirromutth/mysql-action@v1.1
+      with:
+        # host port: 3800 # Optional, default value is 3306. The port of host
+        # container port: 3307 # Optional, default value is 3306. The port of container
+        character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
+        collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
+        mysql version: '5.7' # Optional, default value is "latest". The version of the MySQL
+        mysql database: 'hele' # Optional, default value is "test". The specified database which will be create
+        # mysql root password: 'root' # Required if "mysql user" is empty, default is empty. The root superuser password
+        mysql user: 'developer' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
+        mysql password: 'test' # Required if "mysql user" exists. The password for the "mysql user"
+
     - name: Install Dependencies
       run: npm install
+
+    - name: Copy environment file
+      run: cp .env.example .env
+
+    - name: Migrate Database
+      run: node ace migration:run
 
     - name: Test
       run: npm test
@@ -55,6 +76,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@v2
+
     - name: Cache node dev modules
       uses: actions/cache@v1
       env:
@@ -62,7 +85,7 @@ jobs:
       with:
         path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
         key: ${{ runner.os }}-lint-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
+        restore-keys:
           ${{ runner.os }}-lint-${{ env.cache-name }}-
           ${{ runner.os }}-lint-
           ${{ runner.os }}-

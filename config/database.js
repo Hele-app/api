@@ -1,9 +1,11 @@
 'use strict'
 
 /** @type {import('@adonisjs/framework/src/Env')} */
+// eslint-disable-next-line
 const Env = use('Env')
 
 /** @type {import('@adonisjs/ignitor/src/Helpers')} */
+// eslint-disable-next-line
 const Helpers = use('Helpers')
 
 module.exports = {

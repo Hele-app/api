@@ -14,6 +14,7 @@
 */
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
+// eslint-disable-next-line
 const Route = use('Route')
 
 Route.get('/', () => {
