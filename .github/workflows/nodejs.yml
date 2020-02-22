@@ -32,7 +32,7 @@ jobs:
       with:
         path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
         key: ${{ runner.os }}-unit-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
+        restore-keys:
           ${{ runner.os }}-unit-${{ env.cache-name }}-
           ${{ runner.os }}-unit-
           ${{ runner.os }}-
@@ -47,7 +47,7 @@ jobs:
 
     - name: PreTest
       run: cp .env.example .env
-      run:
+      run: npx @adonisjs/cli key:generate
 
     - name: Test
       run: npm test
