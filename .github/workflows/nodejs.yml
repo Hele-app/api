@@ -48,12 +48,6 @@ jobs:
     - name: Copy environment file
       run: cp .env.example .env
 
-    - name: GitHub Action for npx
-      uses: mikeal/npx@1.0.0
-
-    - name: Generate adonis key
-      run: npx @adonisjs/cli key:generate
-
     - name: Test
       run: npm test
 
