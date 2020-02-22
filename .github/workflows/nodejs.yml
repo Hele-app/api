@@ -12,44 +12,44 @@ on:
       - feature/*
 
 jobs:
-  #Unit testing job
-  unit:
-    name: "Unit testing at build time"
+  # #Unit testing job
+  # unit:
+  #   name: "Unit testing at build time"
 
-    runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [10.x, 12.x]
+  #   strategy:
+  #     matrix:
+  #       node-version: [10.x, 12.x]
 
-    steps:
-    - uses: actions/checkout@v2
+  #   steps:
+  #   - uses: actions/checkout@v2
 
-    - name: Cache node modules
-      uses: actions/cache@v1
-      env:
-        cache-name: cache-node-modules
-      with:
-        path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-        key: ${{ runner.os }}-unit-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-unit-${{ env.cache-name }}-
-          ${{ runner.os }}-unit-
-          ${{ runner.os }}-
+  #   - name: Cache node modules
+  #     uses: actions/cache@v1
+  #     env:
+  #       cache-name: cache-node-modules
+  #     with:
+  #       path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+  #       key: ${{ runner.os }}-unit-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+  #       restore-keys: |
+  #         ${{ runner.os }}-unit-${{ env.cache-name }}-
+  #         ${{ runner.os }}-unit-
+  #         ${{ runner.os }}-
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+  #   - name: Use Node.js ${{ matrix.node-version }}
+  #     uses: actions/setup-node@v1
+  #     with:
+  #       node-version: ${{ matrix.node-version }}
 
-    - name: Install Dependencies
-      run: npm install
+  #   - name: Install Dependencies
+  #     run: npm install
 
-    - name: Test
-      run: npm test
+  #   - name: Test
+  #     run: npm test
 
   # Lint testing job
-  lint:
+  build:
     name: "Lint testing"
 
     runs-on: ubuntu-latest
@@ -61,10 +61,10 @@ jobs:
         cache-name: cache-node-dev-modules
       with:
         path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-        key: ${{ runner.os }}-lint-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-lint-${{ env.cache-name }}-
-          ${{ runner.os }}-lint-
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
           ${{ runner.os }}-
 
     - name: Install Dev Dependencies
