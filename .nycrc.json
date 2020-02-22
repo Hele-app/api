@@ -1,0 +1,7 @@
+{
+  "all": true,
+  "check-coverage": true,
+  "reporter": ["text"],
+  "include": ["app/**"],
+  "exclude": ["app/Models/**", "app/Middleware/ConvertEmptyStringsToNull.js"]
+}
