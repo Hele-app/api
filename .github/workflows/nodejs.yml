@@ -64,7 +64,7 @@ jobs:
       run: npm install
 
     - name: Copy environment file
-      run: cp .env.testing .env
+      run: cp .env.example .env
 
     - name: Migrate Database
       run: node ace migration:run
