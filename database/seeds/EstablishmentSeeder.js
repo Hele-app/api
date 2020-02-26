@@ -10,9 +10,6 @@
 |
 */
 
-/** @type {import('@adonisjs/lucid/src/Factory')} */
-const Factory = use('Factory')
-
 // eslint-disable-next-line
 const Establishment = use('App/Models/Establishment')
 
@@ -21,18 +18,18 @@ class EstablishmentSeeder {
     const data = [
       {
         id: 1,
-        name: "Louis Le Grand",
-        code: "AAA",
+        name: 'Louis Le Grand',
+        code: 'AAA',
         region_id: 1
       },
       {
         id: 2,
-        name: "Polytechnique",
-        code: "BBB",
+        name: 'Polytechnique',
+        code: 'BBB',
         region_id: 2
       }
     ]
-    let establishments = await Establishment.createMany(data)
+    await Establishment.createMany(data)
   }
 }
 
