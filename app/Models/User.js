@@ -8,6 +8,9 @@ const Model = use('Model')
 // eslint-disable-next-line
 const Hash = use('Hash')
 
+// eslint-disable-next-line
+const Phone = use('App/Models/Phone')
+
 class User extends Model {
   static boot() {
     super.boot()
@@ -21,9 +24,16 @@ class User extends Model {
         userInstance.password = await Hash.make(userInstance.password)
       }
       if (userInstance.dirty.phone) {
+        const phoneHash = new Phone()
+        phoneHash.number = userInstance.phone
+        await phoneHash.save()
         userInstance.phone = await Hash.make(userInstance.phone)
       }
     })
+  }
+
+  static get hidden () {
+    return ['phone, password']
   }
 
   /**
