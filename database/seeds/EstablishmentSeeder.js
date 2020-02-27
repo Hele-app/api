@@ -19,13 +19,13 @@ class EstablishmentSeeder {
       {
         id: 1,
         name: 'Louis Le Grand',
-        code: 'AAA',
+        code: 'AAAAA',
         region_id: 1
       },
       {
         id: 2,
         name: 'Polytechnique',
-        code: 'BBB',
+        code: 'BBBBB',
         region_id: 2
       }
     ]
