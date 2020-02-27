@@ -18,5 +18,10 @@
 const Route = use('Route')
 
 Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
+  return { greeting: 'Hello from Hélé API' }
 })
+
+Route.group(() => {
+  Route.post('/register', 'AuthenticationController.register')
+    .validator('Register')
+}).prefix('/auth').middleware('guest')
