@@ -8,32 +8,23 @@ const Model = use('Model')
 // eslint-disable-next-line
 const Hash = use('Hash')
 
-// eslint-disable-next-line
-const Phone = use('App/Models/Phone')
-
 class User extends Model {
   static boot() {
     super.boot()
 
     /**
-     * A hook to hash the user password and the phone number
-     * before saving it to the database.
+     * A hook to hash the user password before
+     * saving it to the database.
      */
     this.addHook('beforeSave', async (userInstance) => {
       if (userInstance.dirty.password) {
         userInstance.password = await Hash.make(userInstance.password)
       }
-      if (userInstance.dirty.phone) {
-        const phoneHash = new Phone()
-        phoneHash.number = userInstance.phone
-        await phoneHash.save()
-        userInstance.phone = await Hash.make(userInstance.phone)
-      }
     })
   }
 
   static get hidden () {
-    return ['phone, password']
+    return ['password']
   }
 
   /**

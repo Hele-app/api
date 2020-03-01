@@ -6,7 +6,7 @@ const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
 class Authentication {
   get rules() {
     return {
-      phone: 'required|regex:^0[6-7](\\d{2}){4}$',
+      phone: 'required|regex:^0[6-7](\\d{2}){4}$|unique:users,phone',
       username: 'required|regex:^[a-z]+[a-z0-9]+$',
       age: 'required|integer|range:11,17',
       establishment_code: 'required|regex:^[a-zA-Z0-9]{5}$'
@@ -18,6 +18,7 @@ class Authentication {
       'phone.required': 'Please provide your phone number',
       'phone.regex': 'Please provide a phone number starting with 06 or 07 ' +
         'followed by 8 digits',
+      'phone.unique': 'Phone number already used',
       'username.required': 'Please provide a username',
       'username.regex': 'Please provide a username with lowercase letters ' +
         'and digits',

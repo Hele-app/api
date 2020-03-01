@@ -64,7 +64,11 @@ test('Registration failing with existing phone number', async ({ client }) => {
   response.assertStatus(400)
   response.assertError({
     status: 400,
-    errors: 'Phone number already used'
+    errors: [{
+      message: 'Phone number already used',
+      field: 'phone',
+      validation: 'unique'
+    }]
   })
 })
 
@@ -183,5 +187,4 @@ test('Registration successful with correct data', async ({ assert, client }) => 
   const response = await client.post('auth/register').send(young).end()
 
   response.assertStatus(201)
-  assert.isTrue(await Hash.verify(young.phone, response.body.user.phone))
 })

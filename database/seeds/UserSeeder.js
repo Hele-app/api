@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| PhoneSeeder
+| UserSeeder
 |--------------------------------------------------------------------------
 |
 | Make use of the Factory instance to seed database with dummy data or
@@ -10,22 +10,24 @@
 |
 */
 
-const crypto = require('crypto')
-
 // eslint-disable-next-line
-const Phone = use('App/Models/Phone')
+const User = use('App/Models/User')
 
-class PhoneSeeder {
-  async run() {
+class UserSeeder {
+  async run () {
     const data = [
       {
         id: 1,
-        number: crypto.createHash('sha256').update('0600000000').digest('hex')
+        phone: "0600000000",
+        username: "john",
+        password: "doe",
+        establishment_id: 1,
+        birthYear: 2007
       }
     ]
 
-    await Phone.createMany(data)
+    await User.createMany(data)
   }
 }
 
-module.exports = PhoneSeeder
+module.exports = UserSeeder
