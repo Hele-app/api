@@ -9,7 +9,8 @@ class Authentication {
       phone: 'required|regex:^0[6-7](\\d{2}){4}$|unique:users,phone',
       username: 'required|regex:^[a-z]+[a-z0-9]+$',
       age: 'required|integer|range:11,17',
-      establishment_code: 'required|regex:^[a-zA-Z0-9]{5}$'
+      establishment_code: 'required|regex:^[a-zA-Z0-9]{5}$' +
+        '|exists:establishments,code'
     }
   }
 
@@ -22,7 +23,8 @@ class Authentication {
       'username.regex': 'E_USERNAME_WRONG_FORMAT',
       'age.required': 'E_AGE_REQUIRED',
       'age.range': 'E_AGE_VALIDATION',
-      'establishment_code.required': 'E_ESTABLISHMENT_CODE_REQUIRED'
+      'establishment_code.required': 'E_ESTABLISHMENT_CODE_REQUIRED',
+      'establishment_code.exists': 'E_ESTABLISHMENT_CODE_NOT_FOUND'
     }
   }
 
