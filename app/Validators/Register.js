@@ -15,16 +15,14 @@ class Authentication {
 
   get messages() {
     return {
-      'phone.required': 'Please provide your phone number',
-      'phone.regex': 'Please provide a phone number starting with 06 or 07 ' +
-        'followed by 8 digits',
-      'phone.unique': 'Phone number already used',
-      'username.required': 'Please provide a username',
-      'username.regex': 'Please provide a username with lowercase letters ' +
-        'and digits',
-      'age.required': 'Please provide your age',
-      'age.range': 'You must be older than 10yrs old and under 18yrs old',
-      'establishment_code.required': 'Please provide your establishment code'
+      'phone.required': 'E_PHONE_REQUIRED',
+      'phone.regex': 'E_PHONE_WRONG_FORMAT',
+      'phone.unique': 'E_PHONE_NOT_UNIQUE',
+      'username.required': 'E_USERNAME_REQUIRED',
+      'username.regex': 'E_USERNAME_WRONG_FORMAT',
+      'age.required': 'E_AGE_REQUIRED',
+      'age.range': 'E_AGE_VALIDATION',
+      'establishment_code.required': 'E_ESTABLISHMENT_CODE_REQUIRED'
     }
   }
 

@@ -30,7 +30,7 @@ test('Registration failing without phone number', async ({ client }) => {
   response.assertError({
     status: 400,
     errors: [{
-      message: 'Please provide your phone number',
+      message: 'E_PHONE_REQUIRED',
       field: 'phone',
       validation: 'required'
     }]
@@ -47,8 +47,7 @@ test('Registration failing with wrong phone format', async ({ client }) => {
   response.assertError({
     status: 400,
     errors: [{
-      message: 'Please provide a phone number starting with 06 or 07 ' +
-        'followed by 8 digits',
+      message: 'E_PHONE_WRONG_FORMAT',
       field: 'phone',
       validation: 'regex'
     }]
@@ -65,7 +64,7 @@ test('Registration failing with existing phone number', async ({ client }) => {
   response.assertError({
     status: 400,
     errors: [{
-      message: 'Phone number already used',
+      message: 'E_PHONE_NOT_UNIQUE',
       field: 'phone',
       validation: 'unique'
     }]
@@ -82,7 +81,7 @@ test('Registration failing without username', async ({ client }) => {
   response.assertError({
     status: 400,
     errors: [{
-      message: 'Please provide a username',
+      message: 'E_USERNAME_REQUIRED',
       field: 'username',
       validation: 'required'
     }]
@@ -99,7 +98,7 @@ test('Registration failing with wrong username format', async ({ client }) => {
   response.assertError({
     status: 400,
     errors: [{
-      message: 'Please provide a username with lowercase letters and digits',
+      message: 'E_USERNAME_WRONG_FORMAT',
       field: 'username',
       validation: 'regex'
     }]
@@ -116,7 +115,7 @@ test('Registration failing without age', async ({ client }) => {
   response.assertError({
     status: 400,
     errors: [{
-      message: 'Please provide your age',
+      message: 'E_AGE_REQUIRED',
       field: 'age',
       validation: 'required'
     }]
@@ -133,7 +132,7 @@ test('Registration failing with age under 11yrs old', async ({ client }) => {
   response.assertError({
     status: 400,
     errors: [{
-      message: 'You must be older than 10yrs old and under 18yrs old',
+      message: 'E_AGE_VALIDATION',
       field: 'age',
       validation: 'range'
     }]
@@ -150,7 +149,7 @@ test('Registration failing with age above 17yrs old', async ({ client }) => {
   response.assertError({
     status: 400,
     errors: [{
-      message: 'You must be older than 10yrs old and under 18yrs old',
+      message: 'E_AGE_VALIDATION',
       field: 'age',
       validation: 'range'
     }]
@@ -167,7 +166,7 @@ test('Registration failing without establishment code', async ({ client }) => {
   response.assertError({
     status: 400,
     errors: [{
-      message: 'Please provide your establishment code',
+      message: 'E_ESTABLISHMENT_CODE_REQUIRED',
       field: 'establishment_code',
       validation: 'required'
     }]
@@ -181,6 +180,14 @@ test('Registration failing with wrong establishment code', async ({ client }) =>
   const response = await client.post('auth/register').send(testYoung).end()
 
   response.assertStatus(404)
+  response.assertError({
+    status: 404,
+    errors: [{
+      message: 'E_ESTABLISHMENT_CODE_NOT_EXISTS',
+      field: 'establishment_code',
+      validation: 'exists'
+    }]
+  })
 })
 
 test('Registration successful with correct data', async ({ assert, client }) => {
