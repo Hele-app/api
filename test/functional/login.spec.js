@@ -164,5 +164,4 @@ test('Succeed with existing email and password', async ({ client }) => {
   const response = await client.post('auth/login').send(testUser).end()
 
   response.assertStatus(200)
-  console.log(response.body)
 })
