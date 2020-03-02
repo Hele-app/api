@@ -24,4 +24,6 @@ Route.get('/', () => {
 Route.group(() => {
   Route.post('/register', 'AuthenticationController.register')
     .validator('Register')
+  Route.post('/login', 'AuthenticationController.login')
+    .validator('Login')
 }).prefix('/auth').middleware('guest')

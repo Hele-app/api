@@ -17,14 +17,7 @@ class AuthenticationController {
     const phone = request.input('phone')
 
     const code = request.input('establishment_code')
-    const establishment = await Establishment.findBy('code', code)
-    if (establishment === null) {
-      throw new ValidationException([{
-        message: "E_ESTABLISHMENT_CODE_NOT_EXISTS",
-        field: 'establishment_code',
-        validation: 'exists'
-      }], 404)
-    }
+    const establishment = await Establishment.findByOrFail('code', code)
 
     const user = new User()
     user.phone = phone
@@ -35,7 +28,30 @@ class AuthenticationController {
 
     await user.save()
 
-    return response.status(201).json({ user: user })
+    return response.status(201).json({ user })
+  }
+
+  async login({ request, auth, response }) {
+    let field, value = null
+
+    if (request.input('phone', false) !== false) {
+      field = 'phone'
+      value = request.input('phone')
+    } else if (request.input('username', false) !== false) {
+      field = 'username'
+      value = request.input('username')
+    } else if (request.input('email', false) !== false) {
+      field = 'email'
+      value = request.input('email')
+    }
+
+    const user = await User.findByOrFail(field, value)
+
+    if (await auth.attempt(user.phone, request.input('password'))) {
+      let access_token = await auth.withRefreshToken().generate(user)
+
+      return response.status(200).json({ user, access_token })
+    }
   }
 }
 

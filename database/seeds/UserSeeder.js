@@ -18,9 +18,9 @@ class UserSeeder {
     const data = [
       {
         id: 1,
-        phone: "0600000000",
-        username: "john",
-        password: "doe",
+        phone: '0600000000',
+        username: 'john',
+        password: 'doe',
         establishment_id: 1,
         birthYear: 2007
       }
