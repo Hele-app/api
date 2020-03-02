@@ -32,7 +32,8 @@ class AuthenticationController {
   }
 
   async login({ request, auth, response }) {
-    let field, value = null
+    let field = null
+    let value = null
 
     if (request.input('phone', false) !== false) {
       field = 'phone'
@@ -48,9 +49,9 @@ class AuthenticationController {
     const user = await User.findByOrFail(field, value)
 
     if (await auth.attempt(user.phone, request.input('password'))) {
-      let access_token = await auth.withRefreshToken().generate(user)
+      const accessToken = await auth.withRefreshToken().generate(user)
 
-      return response.status(200).json({ user, access_token })
+      return response.status(200).json({ user, accessToken })
     }
   }
 }
