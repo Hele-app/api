@@ -17,10 +17,9 @@ const generatePassword = (length = 10) => {
 const sendSMS = async (username, phone, password) => {
   try {
     const client = twilio(accountSid, authToken)
-    const message = await client.messages
+    await client.messages
       .create({ body: `Salut ${username} !\n Bienvenu sur Hélé. Ton mot de passe pour te connecter est ${password}. A bientôt sur Hélé !`, from: helePhone, to: phone })
-  }
-  catch (e) {
+  } catch (e) {
     console.log(e)
   }
 }
