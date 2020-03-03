@@ -1,16 +1,17 @@
 'use strict'
 
 // eslint-disable-next-line
+const Env = use('Env')
+const env = Env.get('NODE_ENV', 'development')
+
+// eslint-disable-next-line
 const Establishment = use('App/Models/Establishment')
 
 // eslint-disable-next-line
 const User = use('App/Models/User')
 
 // eslint-disable-next-line
-const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
-
-// eslint-disable-next-line
-const { generatePassword } = use('App/Helpers')
+const { generatePassword, sendSMS } = use('App/Helpers/Authentication')
 
 class AuthenticationController {
   async register({ request, response }) {
@@ -19,16 +20,22 @@ class AuthenticationController {
     const code = request.input('establishment_code')
     const establishment = await Establishment.findByOrFail('code', code)
 
-    const user = new User()
-    user.phone = phone
-    user.username = request.input('username')
-    user.establishment_id = establishment.id
-    user.birthyear = new Date().getFullYear() - request.input('age')
-    user.password = generatePassword()
+    const password = generatePassword()
 
-    await user.save()
+    const user = await User.create({
+      phone: phone,
+      username: request.input('username'),
+      establishment_id: establishment.id,
+      birthyear: new Date().getFullYear() - request.input('age'),
+      password: password
+    })
 
-    return response.status(201).json({ user })
+    /* istanbul ignore next */
+    if (env === 'production') {
+      sendSMS(user.username, user.phone, password)
+      return response.status(201).end()
+    }
+    return response.status(201).json({ user, password })
   }
 
   async login({ request, auth, response }) {
@@ -41,17 +48,22 @@ class AuthenticationController {
     } else if (request.input('username', false) !== false) {
       field = 'username'
       value = request.input('username')
-    } else if (request.input('email', false) !== false) {
+    } else {
       field = 'email'
       value = request.input('email')
     }
 
     const user = await User.findByOrFail(field, value)
 
-    if (await auth.attempt(user.phone, request.input('password'))) {
+    try {
+      await auth.attempt(user.phone, request.input('password'))
       const accessToken = await auth.withRefreshToken().generate(user)
-
       return response.status(200).json({ user, accessToken })
+    } catch (e) {
+      return response.status(400).json({
+        status: 400,
+        errors: [{ message: 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT' }]
+      })
     }
   }
 }

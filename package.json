@@ -29,7 +29,8 @@
     "@adonisjs/vow": "^1.0.17",
     "argon2": "^0.26.0",
     "crypto": "^1.0.1",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "twilio": "^3.39.5"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
