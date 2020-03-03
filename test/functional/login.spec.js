@@ -38,7 +38,6 @@ test('Failing without phone, username and email', async ({ client }) => {
   delete testUser.email
 
   const response = await client.post('auth/login').send(testUser).end()
-  console.log(response)
   response.assertStatus(400)
   response.assertError({
     status: 400,
