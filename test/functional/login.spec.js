@@ -42,21 +42,9 @@ test('Failing without phone, username and email', async ({ client }) => {
   response.assertError({
     status: 400,
     errors: [
-      {
-        message: 'E_USER_IDENTIFICATION_REQUIRED',
-        field: 'phone',
-        validation: 'requiredWithoutAll'
-      },
-      {
-        message: 'E_USER_IDENTIFICATION_REQUIRED',
-        field: 'username',
-        validation: 'requiredWithoutAll'
-      },
-      {
-        message: 'E_USER_IDENTIFICATION_REQUIRED',
-        field: 'email',
-        validation: 'requiredWithoutAll'
-      }
+      { message: 'E_USER_IDENTIFIER_REQUIRED' },
+      { message: 'E_USER_IDENTIFIER_REQUIRED' },
+      { message: 'E_USER_IDENTIFIER_REQUIRED' }
     ]
   })
 })
@@ -70,11 +58,7 @@ test('Failing without password', async ({ client }) => {
   response.assertStatus(400)
   response.assertError({
     status: 400,
-    errors: [{
-      message: 'E_PASSWORD_REQUIRED',
-      field: 'password',
-      validation: 'required'
-    }]
+    errors: [{ message: 'E_PASSWORD_REQUIRED' }]
   })
 })
 
@@ -89,11 +73,7 @@ test('Failing with not existing phone', async ({ client }) => {
   response.assertStatus(400)
   response.assertError({
     status: 400,
-    errors: [{
-      message: 'E_PHONE_NOT_FOUND',
-      field: 'phone',
-      validation: 'exists'
-    }]
+    errors: [{ message: 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT' }]
   })
 })
 
@@ -108,11 +88,7 @@ test('Failing with not existing username', async ({ client }) => {
   response.assertStatus(400)
   response.assertError({
     status: 400,
-    errors: [{
-      message: 'E_USERNAME_NOT_FOUND',
-      field: 'username',
-      validation: 'exists'
-    }]
+    errors: [{ message: 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT' }]
   })
 })
 
@@ -127,11 +103,22 @@ test('Failing with not existing email', async ({ client }) => {
   response.assertStatus(400)
   response.assertError({
     status: 400,
-    errors: [{
-      message: 'E_EMAIL_NOT_FOUND',
-      field: 'email',
-      validation: 'exists'
-    }]
+    errors: [{ message: 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT' }]
+  })
+})
+
+test('Failing with wrong password', async ({ client }) => {
+  const testUser = Object.assign({}, user)
+  testUser.password = 'bond007'
+  delete testUser.username
+  delete testUser.email
+
+  const response = await client.post('auth/login').send(testUser).end()
+
+  // response.assertStatus(400)
+  response.assertError({
+    status: 400,
+    errors: [{ message: 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT' }]
   })
 })
 

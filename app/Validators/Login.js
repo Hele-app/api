@@ -3,11 +3,18 @@
 // eslint-disable-next-line
 const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
 
+// eslint-disable-next-line
+const LoginFormatter = use('App/Validators/Formatter/Login')
+
 class Login {
   get sanitizationRules () {
     return {
       email: 'normalize_email'
     }
+  }
+
+  get formatter() {
+    return LoginFormatter
   }
 
   get rules() {
@@ -21,11 +28,11 @@ class Login {
 
   get messages() {
     return {
-      required_without_all: 'E_USER_IDENTIFICATION_REQUIRED',
+      required_without_all: 'E_USER_IDENTIFIER_REQUIRED',
       'password.required': 'E_PASSWORD_REQUIRED',
-      'phone.exists': 'E_PHONE_NOT_FOUND',
-      'username.exists': 'E_USERNAME_NOT_FOUND',
-      'email.exists': 'E_EMAIL_NOT_FOUND'
+      'phone.exists': 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT',
+      'username.exists': 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT',
+      'email.exists': 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT'
     }
   }
 
