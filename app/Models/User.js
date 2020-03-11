@@ -9,18 +9,34 @@ const Model = use('Model')
 const Hash = use('Hash')
 
 class User extends Model {
-  static boot () {
+  static boot() {
     super.boot()
 
     /**
-     * A hook to hash the user password before saving
-     * it to the database.
+     * A hook to hash the user password before
+     * saving it to the database.
      */
     this.addHook('beforeSave', async (userInstance) => {
       if (userInstance.dirty.password) {
         userInstance.password = await Hash.make(userInstance.password)
       }
     })
+  }
+
+  static get hidden () {
+    return ['password']
+  }
+
+  /**
+   * A relationship on establishment is required for
+   * a young registration to work.
+   *
+   * @method establishment
+   *
+   * @return {Object}
+   */
+  establishment() {
+    return this.belongsTo('App/Models/Establishment')
   }
 
   /**
@@ -33,7 +49,7 @@ class User extends Model {
    *
    * @return {Object}
    */
-  tokens () {
+  tokens() {
     return this.hasMany('App/Models/Token')
   }
 }

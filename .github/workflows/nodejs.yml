@@ -57,14 +57,29 @@ jobs:
         mysql user: 'developer' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
         mysql password: 'test' # Required if "mysql user" exists. The password for the "mysql user"
 
+    - name: Install Adonis CLI
+      run: npm i -g @adonisjs/cli
+
     - name: Install Dependencies
       run: npm install
 
     - name: Copy environment file
       run: cp .env.example .env
 
+    - name: Generate adonis APP KEY
+      run: adonis key:generate
+
     - name: Migrate Database
       run: node ace migration:run
+
+    - name: Fill Database with Region Seed
+      run: node ace seed --files database/seeds/RegionSeeder.js
+
+    - name: Fill Database with Establishment Seed
+      run: node ace seed --files database/seeds/EstablishmentSeeder.js
+
+    - name: Fill Database with User Seed
+      run: node ace seed --files database/seeds/UserSeeder.js
 
     - name: Test
       run: npm test

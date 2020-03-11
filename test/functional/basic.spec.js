@@ -9,5 +9,5 @@ test('default api route', async ({ client }) => {
   const response = await client.get('/').end()
 
   response.assertStatus(200)
-  response.assertJSON({ greeting: 'Hello world in JSON' })
+  response.assertJSON({ greeting: 'Hello from Hélé API' })
 })
