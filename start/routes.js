@@ -23,7 +23,12 @@ Route.get('/', () => {
 
 Route.group(() => {
   Route.post('/register', 'AuthenticationController.register')
-    .validator('Register')
+    .validator('Authentication/Register')
   Route.post('/login', 'AuthenticationController.login')
-    .validator('Login')
+    .validator('Authentication/Login')
+
+  Route.post('/password/request', 'PasswordController.request')
+    .validator('Password/Request')
+  Route.post('/password/reset', 'PasswordController.reset')
+    .validator('Password/Reset')
 }).prefix('/auth').middleware('guest')
