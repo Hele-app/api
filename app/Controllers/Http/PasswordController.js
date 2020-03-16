@@ -15,8 +15,8 @@ class PasswordController {
     const previousRequest = await user.passwordResets().orderBy('created_at', 'DESC').first()
 
     if (previousRequest && previousRequest.generatedAgo('hours') < 24) {
-      return response.status(400).json({
-        status: 400,
+      return response.status(403).json({
+        status: 403,
         errors: [{ message: 'E_RESET_ALREADY_ASKED' }]
       })
     }
