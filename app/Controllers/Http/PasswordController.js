@@ -24,7 +24,7 @@ class PasswordController {
     const code = generatePassword(6)
 
     const pr = await user.passwordResets().create({ code })
-    return response.status(200).json(pr);
+    return response.status(200).json(pr)
   }
 
   async reset({ request, response }) {

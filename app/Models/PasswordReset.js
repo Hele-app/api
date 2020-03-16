@@ -7,7 +7,6 @@ const moment = require('moment')
 const Model = use('Model')
 
 class PasswordReset extends Model {
-
   /**
    * Returns true if token is generated in the previous 60 minutes.
    * False otherwise.
