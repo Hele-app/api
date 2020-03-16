@@ -1,19 +1,19 @@
 'use strict'
 
+// eslint-disable-next-line
+const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
+
 class PasswordRequest {
   get rules () {
     return {
-      phone: 'required|exists:users,phone',
-      code: 'required|exists:password_resets,code'
+      phone: 'required|exists:users,phone'
     }
   }
 
   get messages() {
     return {
       'phone.required': 'E_PHONE_REQUIRED',
-      'phone.exists': 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT',
-      'code.required': 'E_CODE_REQUIRED',
-      'code.exists': 'E_CODE_NOT_FOUND'
+      'phone.exists': 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT'
     }
   }
 
