@@ -4,7 +4,7 @@
 const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
 
 class PasswordRequest {
-  get rules () {
+  get rules() {
     return {
       phone: 'required|exists:users,phone'
     }
