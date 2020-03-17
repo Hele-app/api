@@ -30,9 +30,9 @@ class Login {
     return {
       required_without_all: 'E_USER_IDENTIFIER_REQUIRED',
       'password.required': 'E_PASSWORD_REQUIRED',
-      'phone.exists': 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT',
-      'username.exists': 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT',
-      'email.exists': 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT'
+      'phone.exists': 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT', // TODO: should not be thrown, but handled in Controller to preserve database integrity
+      'username.exists': 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT', // TODO: should not be thrown, but handled in Controller to preserve database integrity
+      'email.exists': 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT' // TODO: should not be thrown, but handled in Controller to preserve database integrity
     }
   }
 
