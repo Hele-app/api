@@ -32,8 +32,9 @@ class AuthenticationController {
 
     /* istanbul ignore next */
     if (env === 'production') {
-      sendSMS(user.username, user.phone, password)
-      return response.status(201).end()
+      // TODO: text should be generated from a package and not from an hardcoded unlocalised string
+      sendSMS(`Salut ${user.username} !\nBienvenu sur Hélé. Ton mot de passe pour te connecter est ${password}.\nA bientôt sur Hélé !`, user.phone)
+      return response.status(201).json({})
     }
     return response.status(201).json({ user, password })
   }
