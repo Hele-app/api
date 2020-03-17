@@ -1,10 +1,12 @@
 'use strict'
 
 // eslint-disable-next-line
-const { test, trait } = use('Test/Suite')('Registration')
+const Database = use('Database')
+
+// eslint-disable-next-line
+const { test, trait, before, after } = use('Test/Suite')('Registration')
 
 trait('Test/ApiClient')
-trait('DatabaseTransactions')
 
 const young = {
   phone: '0600000001',
@@ -12,6 +14,14 @@ const young = {
   age: 14,
   establishment_code: 'AAAAA'
 }
+
+before(async () => {
+  await Database.beginGlobalTransaction()
+})
+
+after(async () => {
+  Database.rollbackGlobalTransaction()
+})
 
 test('Failing without phone number', async ({ client }) => {
   const testYoung = Object.assign({}, young)
