@@ -22,7 +22,7 @@ const user = {
   birthyear: 2007,
   password: 'foobar'
 }
-let resetCode = null;
+let resetCode = null
 
 before(async () => {
   await Database.beginGlobalTransaction()
@@ -134,7 +134,7 @@ test('Should fail because the code has been used already', async ({ client }) =>
 
 test('Should fail because the code is too old', async ({ client }) => {
   const moment = require('moment')
-  let pr = await PasswordReset.query().where('code', resetCode).first()
+  const pr = await PasswordReset.query().where('code', resetCode).first()
   pr.created_at = moment(pr.created_at).subtract(61, 'days').toDate()
   pr.is_used = false
   await pr.save()
@@ -146,4 +146,3 @@ test('Should fail because the code is too old', async ({ client }) => {
     errors: [{ message: 'E_RESET_CODE_NOT_VALID' }]
   })
 })
-
