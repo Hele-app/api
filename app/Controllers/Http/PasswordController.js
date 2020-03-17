@@ -8,7 +8,7 @@ const env = Env.get('NODE_ENV', 'development')
 const User = use('App/Models/User')
 
 // eslint-disable-next-line
-const { generatePassword, sendSMS } = use('App/Helpers/Authentication')
+const { generatePassword, sensTextMessage } = use('App/Helpers/Authentication')
 
 class PasswordController {
   async request({ request, response }) {
@@ -32,7 +32,7 @@ class PasswordController {
     /* istanbul ignore next */
     if (env === 'production') {
       // TODO: text should be generated from a package and not from an hardcoded unlocalised string
-      sendSMS(`${code}\nVoici ton code pour la génération de ton nouveau mot de passe.\nSi tu n'est pas à l'origine de cette demande, contacte un administrateur.`, user.phone)
+      sensTextMessage(`${code}\nVoici ton code pour la génération de ton nouveau mot de passe.\nSi tu n'est pas à l'origine de cette demande, contacte un administrateur.`, user.phone)
       return response.status(200).json({})
     }
     return response.status(200).json(currentRequest)
@@ -62,7 +62,7 @@ class PasswordController {
 
     if (env === 'production') {
       // TODO: text should be generated from a package and not from an hardcoded unlocalised string
-      sendSMS(`Salut ${user.username} !\nTon nouveau mot de passe pour te connecter est ${password}.`, user.phone)
+      sensTextMessage(`Salut ${user.username} !\nTon nouveau mot de passe pour te connecter est ${password}.`, user.phone)
       return response.status(200).json({})
     }
 

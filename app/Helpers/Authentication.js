@@ -14,7 +14,7 @@ const generatePassword = (length = 10) => {
 }
 
 /* istanbul ignore next */
-const sendSMS = async (body, to) => {
+const sensTextMessage = async (body, to) => {
   try {
     const client = twilio(accountSid, authToken)
     await client.messages
@@ -26,5 +26,5 @@ const sendSMS = async (body, to) => {
 
 module.exports = {
   generatePassword,
-  sendSMS
+  sensTextMessage
 }

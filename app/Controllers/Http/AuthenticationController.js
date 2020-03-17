@@ -11,7 +11,7 @@ const Establishment = use('App/Models/Establishment')
 const User = use('App/Models/User')
 
 // eslint-disable-next-line
-const { generatePassword, sendSMS } = use('App/Helpers/Authentication')
+const { generatePassword, sensTextMessage } = use('App/Helpers/Authentication')
 
 class AuthenticationController {
   async register({ request, response }) {
@@ -33,7 +33,7 @@ class AuthenticationController {
     /* istanbul ignore next */
     if (env === 'production') {
       // TODO: text should be generated from a package and not from an hardcoded unlocalised string
-      sendSMS(`Salut ${user.username} !\nBienvenu sur Hélé. Ton mot de passe pour te connecter est ${password}.\nA bientôt sur Hélé !`, user.phone)
+      sensTextMessage(`Salut ${user.username} !\nBienvenu sur Hélé. Ton mot de passe pour te connecter est ${password}.\nA bientôt sur Hélé !`, user.phone)
       return response.status(201).json({})
     }
     return response.status(201).json({ user, password })
