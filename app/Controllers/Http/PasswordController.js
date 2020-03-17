@@ -65,7 +65,7 @@ class PasswordController {
       sendSMS(`Salut ${user.username} !\nTon nouveau mot de passe pour te connecter est ${password}.`, user.phone)
       return response.status(200).json({})
     }
-    console.log(`In controller : ${currentRequest.created_at}`)
+
     return response.status(200).json({ user, password, currentRequest })
   }
 }

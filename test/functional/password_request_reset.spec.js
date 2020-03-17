@@ -138,7 +138,6 @@ test('Should fail because the code is too old', async ({ client }) => {
   pr.created_at = moment(pr.created_at).subtract(61, 'days').toDate()
   pr.is_used = false
   await pr.save()
-  console.log(`Before test : ${pr.created_at}`)
 
   const response = await client.post('auth/password/reset').send({ phone: user.phone, code: resetCode }).end()
   response.assertStatus(403)
