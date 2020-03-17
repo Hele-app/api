@@ -9,8 +9,7 @@ class Authentication {
       phone: 'required|regex:^0[6-7](\\d{2}){4}$|unique:users,phone',
       username: 'required|regex:^[a-z]+[a-z0-9]+$',
       age: 'required|integer|range:11,17',
-      establishment_code: 'required|regex:^[a-zA-Z0-9]{5}$' +
-        '|exists:establishments,code'
+      establishment_code: 'required|regex:^[a-zA-Z0-9]{5}$|exists:establishments,code'
     }
   }
 
@@ -18,7 +17,7 @@ class Authentication {
     return {
       'phone.required': 'E_PHONE_REQUIRED',
       'phone.regex': 'E_PHONE_WRONG_FORMAT',
-      'phone.unique': 'E_PHONE_NOT_UNIQUE',
+      'phone.unique': 'E_PHONE_NOT_UNIQUE', // TODO: should not be thrown, but handled in Controller to preserve database integrity
       'username.required': 'E_USERNAME_REQUIRED',
       'username.regex': 'E_USERNAME_WRONG_FORMAT',
       'age.required': 'E_AGE_REQUIRED',

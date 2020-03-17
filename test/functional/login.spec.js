@@ -12,7 +12,6 @@ const User = use('App/Models/User')
 trait('Test/ApiClient')
 
 const user = {
-  id: 2,
   phone: '0600000001',
   username: 'james007',
   email: 'james007@hele.fr',
