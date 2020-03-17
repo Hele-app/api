@@ -14,14 +14,14 @@ class PasswordReset extends Model {
    * @return {boolean}
    */
   isValid() {
-    return this.generatedAgo() < 60
+    return !this.is_used && this.generatedAgo() < 60
   }
 
   /**
    * @return {Integer}
    */
   generatedAgo(unit = 'minutes') {
-    return moment(this.created_at).diff(moment(), unit)
+    return moment().diff(this.created_at, unit)
   }
 
   /**
