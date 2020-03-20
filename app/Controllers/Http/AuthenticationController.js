@@ -58,6 +58,8 @@ class AuthenticationController {
 
     try {
       await auth.attempt(user.phone, request.input('password'))
+      // Is refreshToken needed as we did not set an expire time ?
+      // Should we set an expire time ? #security
       const accessToken = await auth.withRefreshToken().generate(user)
       return response.status(200).json({ user, accessToken })
     } catch (e) {
@@ -69,7 +71,7 @@ class AuthenticationController {
   }
 
   async check({ request, auth, response }) {
-    return auth.user
+    return auth.getUser()
   }
 }
 
