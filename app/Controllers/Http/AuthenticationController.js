@@ -67,6 +67,10 @@ class AuthenticationController {
       })
     }
   }
+
+  async check({ request, auth, response }) {
+    return auth.user
+  }
 }
 
 module.exports = AuthenticationController
