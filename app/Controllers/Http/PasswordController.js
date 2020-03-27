@@ -60,6 +60,7 @@ class PasswordController {
     currentRequest.is_used = true
     await currentRequest.save()
 
+    /* istanbul ignore next */
     if (env === 'production') {
       // TODO: text should be generated from a package and not from an hardcoded unlocalised string
       sendSMS(`Salut ${user.username} !\nTon nouveau mot de passe pour te connecter est ${password}.`, user.phone)
