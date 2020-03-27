@@ -19,6 +19,7 @@ const user = {
   birthyear: 2007,
   password: 'foobar'
 }
+let accessToken = null
 
 before(async () => {
   await Database.beginGlobalTransaction()
@@ -148,5 +149,26 @@ test('Succeed with existing email and password', async ({ client }) => {
 
   const response = await client.post('auth/login').send(testUser).end()
 
+  accessToken = response.body.accessToken.token
+
   response.assertStatus(200)
+})
+
+test('Failing with no accessToken', async ({ client }) => {
+  const response = await client.get('auth/me').end()
+
+  response.assertStatus(401)
+})
+
+test('Failing with an invalid accessToken', async ({ client }) => {
+  const response = await client.get('auth/me').header('Authorization', 'Bearer azerty').end()
+
+  response.assertStatus(401)
+})
+
+test('Succeed with a valid accessToken', async ({ assert, client }) => {
+  const response = await client.get('auth/me').header('Authorization', `Bearer ${accessToken}`).end()
+
+  response.assertStatus(200)
+  assert.equal(user.phone, response.body.phone)
 })

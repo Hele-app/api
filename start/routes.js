@@ -32,3 +32,7 @@ Route.group(() => {
   Route.post('/password/reset', 'PasswordController.reset')
     .validator('Password/Reset')
 }).prefix('/auth').middleware('guest')
+
+Route.group(() => {
+  Route.get('/me', 'AuthenticationController.check')
+}).prefix('/auth').middleware('auth')
