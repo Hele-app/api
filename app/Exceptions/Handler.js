@@ -6,6 +6,12 @@ const BaseExceptionHandler = use('BaseExceptionHandler')
 // eslint-disable-next-line
 const Logger = use('Logger')
 
+// eslint-disable-next-line
+const env = use('Env').get('NODE_ENV', 'development')
+
+// eslint-disable-next-line
+const sentry = use('Sentry')
+
 /**
  * This class handles all exceptions thrown during
  * the HTTP request lifecycle.
@@ -42,6 +48,13 @@ class ExceptionHandler extends BaseExceptionHandler {
    * @return {void}
    */
   async report(error, { request }) {
+    if (error.name !== 'ValidationException' || error.status >= 500) {
+      console.error(error)
+      if (env === 'production') {
+        sentry.captureException(error)
+      }
+    }
+
     Logger.error(JSON.stringify(error.message), {
       url: request.originalUrl(),
       method: request.method()
