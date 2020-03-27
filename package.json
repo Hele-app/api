@@ -27,6 +27,7 @@
     "@adonisjs/lucid": "e-gloo/adonis-lucid#v6.1.3",
     "@adonisjs/validator": "^5.0.6",
     "@adonisjs/vow": "^1.0.17",
+    "adonis-sentry": "^2.0.2",
     "argon2": "^0.26.0",
     "crypto": "^1.0.1",
     "moment": "^2.24.0",
