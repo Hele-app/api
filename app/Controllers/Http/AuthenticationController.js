@@ -14,6 +14,7 @@ const User = use('App/Models/User')
 const { generatePassword, sendSMS } = use('App/Helpers/Authentication')
 
 class AuthenticationController {
+  /* istanbul ignore next */
   async register({ request, response }) {
     const phone = request.input('phone')
 

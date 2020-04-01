@@ -1,8 +1,10 @@
 'use strict'
 
+/* istanbul ignore next */
 // eslint-disable-next-line
 const Establishment = use('App/Models/Establishment')
 
+/* istanbul ignore next */
 class EstablishmentController {
   async create({ request, response }) {
     const establishment = await Establishment.create({
@@ -51,4 +53,5 @@ class EstablishmentController {
   }
 }
 
+/* istanbul ignore next */
 module.exports = EstablishmentController
