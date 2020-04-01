@@ -39,7 +39,7 @@ Route.group(() => {
 
 Route.group(() => {
   Route.post('/', 'EstablishmentController.create')
-  .validator('Establishment/Create')
+    .validator('Establishment/Create')
   Route.get('/:id?', 'EstablishmentController.read')
   Route.put('/:id', 'EstablishmentController.update')
   Route.delete('/:id', 'EstablishmentController.delete')

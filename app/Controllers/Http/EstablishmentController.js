@@ -4,29 +4,29 @@
 const Establishment = use('App/Models/Establishment')
 
 class EstablishmentController {
-  async create({ request, response}) {
-
+  async create({ request, response }) {
     const establishment = await Establishment.create({
       name: request.input('name'),
       code: request.input('code'),
       region_id: request.input('region_id')
     })
 
-    return response.status(201).json({establishment})
+    return response.status(201).json({ establishment })
   }
 
-  async read({ params, response}) {
+  async read({ params, response }) {
     let results = null
+
     if (params.id !== undefined) {
       results = await Establishment.find(params.id)
     } else {
       // TODO: Debug, not returning anything
       results = await Establishment.all()
     }
-    return response.status(200).json({results})
+    return response.status(200).json({ results })
   }
 
-  async update({ request, params, response}) {
+  async update({ request, params, response }) {
     const establishment = await Establishment.find(params.id)
 
     if (request.input('name')) {
@@ -40,11 +40,12 @@ class EstablishmentController {
     }
 
     await establishment.save()
-    return response.status(200).json({establishment})
+    return response.status(200).json({ establishment })
   }
 
-  async delete({ params, response}) {
+  async delete({ params, response }) {
     const establishment = await Establishment.find(params.id)
+
     await establishment.delete()
     return response.status(204).json({})
   }

@@ -109,7 +109,7 @@ test('Failing without region_id', async ({ client }) => {
 
 test('Failing with wrong region_id format', async ({ client }) => {
   const testEstab = Object.assign({}, establishment)
-  testEstab.region_id = "A"
+  testEstab.region_id = 'A'
 
   const response = await client.post('establishment').send(testEstab).end()
 
