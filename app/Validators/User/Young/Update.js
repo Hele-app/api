@@ -4,12 +4,15 @@
 const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
 
 class Store {
+  // Should it use https://adonisjs.com/docs/4.1/validator#_authorization ??
   get rules() {
     return {
       phone: 'required|regex:^0[6-7](\\d{2}){4}$',
       username: 'required|regex:^[a-z]+[a-z0-9]+$',
       age: 'required|integer',
       establishment_code: 'required|exists:establishments,code',
+      active: 'boolean',
+      role: 'string'
     }
   }
 

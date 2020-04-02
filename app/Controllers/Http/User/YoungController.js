@@ -76,6 +76,8 @@ class YoungController {
     user.username = request.input('username')
     user.establishment().associate(await Establishment.findByOrFail('code', code))
     user.birthyear = new Date().getFullYear() - request.input('age')
+    user.active = request.input('active', true)
+    user.role = request.input('role', 'YOUNG')
     await user.save()
     return response.status(200).json(user)
   }
