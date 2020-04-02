@@ -146,6 +146,8 @@ test('Failing with wrong region_id', async ({ client }) => {
   })
 })
 
-test('Succeed with correct data', async ({ assert }) => {
-  assert.equal(2 + 2, 4)
+test('Succeed with correct data', async ({ assert, client }) => {
+  const response = await client.post('establishment').send(establishment).end()
+
+  response.assertStatus(201)
 })
