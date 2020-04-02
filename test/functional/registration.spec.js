@@ -192,7 +192,3 @@ test('Failing with wrong establishment code', async ({ client }) => {
     }]
   })
 })
-
-test('Succeed with correct data', async ({ assert }) => {
-  assert.equal(2 + 2, 4)
-})

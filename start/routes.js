@@ -37,10 +37,9 @@ Route.group(() => {
   Route.get('/me', 'AuthenticationController.check')
 }).prefix('/auth').middleware('auth')
 
-Route.group(() => {
-  Route.post('/', 'EstablishmentController.create')
-    .validator('Establishment/Create')
-  Route.get('/:id?', 'EstablishmentController.read')
-  Route.put('/:id', 'EstablishmentController.update')
-  Route.delete('/:id', 'EstablishmentController.delete')
-}).prefix('/establishment')
+Route.resource('establishment', 'EstablishmentController')
+  .validator(new Map([
+    [['establishment.store'], ['Establishment/Store']],
+    [['establishment.update'], ['Establishment/Update']]
+  ]))
+  .apiOnly()
