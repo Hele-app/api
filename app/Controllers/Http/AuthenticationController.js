@@ -1,8 +1,7 @@
 'use strict'
 
 // eslint-disable-next-line
-const Env = use('Env')
-const env = Env.get('NODE_ENV', 'development')
+const env = use('Env').get('NODE_ENV', 'development')
 
 // eslint-disable-next-line
 const Establishment = use('App/Models/Establishment')
