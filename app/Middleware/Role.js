@@ -26,8 +26,8 @@ class Role {
 
   async checkRole(auth, role) {
     const user = await auth.getUser()
-    if (user.role != role) {
-      throw `${user.role} != ${role}`
+    if (user.role !== role) {
+      throw new Error(`${user.role} != ${role}`)
     }
   }
 }

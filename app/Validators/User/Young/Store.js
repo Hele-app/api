@@ -9,7 +9,7 @@ class Store {
       phone: 'required|regex:^0[6-7](\\d{2}){4}$|unique:users,phone',
       username: 'required|regex:^[a-z]+[a-z0-9]+$',
       age: 'required|integer',
-      establishment_code: 'required|exists:establishments,code',
+      establishment_code: 'required|exists:establishments,code'
     }
   }
 

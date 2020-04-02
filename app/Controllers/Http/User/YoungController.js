@@ -8,6 +8,9 @@
 const User = use('App/Models/User')
 
 // eslint-disable-next-line
+const Establishment = use('App/Models/Establishment')
+
+// eslint-disable-next-line
 const AuthenticationController = use('App/Controllers/Http/AuthenticationController')
 
 /**
@@ -46,7 +49,7 @@ class YoungController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
-    return (new AuthenticationController).register({ request, response })
+    return (new AuthenticationController()).register({ request, response })
   }
 
   /**
@@ -73,9 +76,9 @@ class YoungController {
   async update ({ params, request, response }) {
     const user = await User.query().isYoung().where('id', params.id).firstOrFail()
 
-    user.phone = phone
+    user.phone = request.input('phone')
     user.username = request.input('username')
-    user.establishment().associate(await Establishment.findByOrFail('code', code))
+    user.establishment().associate(await Establishment.findByOrFail('code', request.input('establishment_code')))
     user.birthyear = new Date().getFullYear() - request.input('age')
     user.active = request.input('active', true)
     user.role = request.input('role', 'YOUNG')

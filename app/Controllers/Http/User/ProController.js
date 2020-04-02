@@ -5,6 +5,9 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 // eslint-disable-next-line
+const env = use('Env').get('NODE_ENV', 'development')
+
+// eslint-disable-next-line
 const User = use('App/Models/User')
 
 // eslint-disable-next-line
@@ -103,7 +106,6 @@ class ProController {
     user.phone = request.input('phone')
     user.username = request.input('username')
     user.birthyear = request.input('birthyear')
-    user.password = password
     user.email = request.input('email')
     user.role = request.input('role', 'PROFESSIONAL')
     user.profession = request.input('profession')
