@@ -22,6 +22,7 @@ class EstablishmentController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
+  /* istanbul ignore next */
   async index ({ request, response }) {
     // Init the query
     let query = Establishment.query()
@@ -66,6 +67,7 @@ class EstablishmentController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
+  /* istanbul ignore next */
   async show ({ params, request, response }) {
     const establishment = await Establishment.findOrFail(params.id)
 
@@ -80,6 +82,7 @@ class EstablishmentController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
+  /* istanbul ignore next */
   async update ({ params, request, response }) {
     const establishment = await Establishment.findOrFail(params.id)
 
@@ -99,6 +102,7 @@ class EstablishmentController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
+  /* istanbul ignore next */
   async destroy ({ params, request, response }) {
     const establishment = await Establishment.findOrFail('id', params.id)
     await establishment.delete()

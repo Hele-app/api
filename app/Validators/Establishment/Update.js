@@ -3,6 +3,7 @@
 // eslint-disable-next-line
 const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
 
+/* istanbul ignore next */
 class Update {
   get rules() {
     return {
