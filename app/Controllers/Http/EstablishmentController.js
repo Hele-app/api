@@ -24,7 +24,7 @@ class EstablishmentController {
    */
   async index ({ request, response }) {
     // Init the query
-    let query = Establishement.query()
+    let query = Establishment.query()
 
     // If a query is present, specify your where clauses in a non-arrow closure
     if (request.input('q')) {
