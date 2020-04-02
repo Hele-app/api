@@ -57,6 +57,8 @@ class AuthenticationController {
 
     try {
       await auth.attempt(user.phone, request.input('password'))
+      user.last_login = new Date()
+      await user.save()
       const accessToken = await auth.withRefreshToken().generate(user)
       return response.status(200).json({ user, accessToken })
     } catch (e) {
