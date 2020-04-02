@@ -3,13 +3,13 @@
 // eslint-disable-next-line
 const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
 
-class Authentication {
+class Store {
   get rules() {
     return {
-      phone: 'required|regex:^0[6-7](\\d{2}){4}$|unique:users,phone',
+      phone: 'required|regex:^0[6-7](\\d{2}){4}$',
       username: 'required|regex:^[a-z]+[a-z0-9]+$',
-      age: 'required|integer|range:11,17',
-      establishment_code: 'required|regex:^[a-zA-Z0-9]{5}$|exists:establishments,code'
+      age: 'required|integer',
+      establishment_code: 'required|exists:establishments,code',
     }
   }
 
@@ -17,12 +17,10 @@ class Authentication {
     return {
       'phone.required': 'E_PHONE_REQUIRED',
       'phone.regex': 'E_PHONE_WRONG_FORMAT',
-      'phone.unique': 'E_PHONE_NOT_UNIQUE', // TODO: should not be thrown, but handled in Controller to preserve database integrity
       'username.required': 'E_USERNAME_REQUIRED',
       'username.regex': 'E_USERNAME_WRONG_FORMAT',
       'age.required': 'E_AGE_REQUIRED',
       'age.integer': 'E_AGE_VALIDATION',
-      'age.range': 'E_AGE_VALIDATION',
       'establishment_code.required': 'E_ESTABLISHMENT_CODE_REQUIRED',
       'establishment_code.exists': 'E_ESTABLISHMENT_CODE_NOT_FOUND'
     }
@@ -37,4 +35,4 @@ class Authentication {
   }
 }
 
-module.exports = Authentication
+module.exports = Store
