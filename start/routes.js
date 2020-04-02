@@ -17,9 +17,7 @@
 // eslint-disable-next-line
 const Route = use('Route')
 
-Route.get('/', () => {
-  return { greeting: 'Hello from Hélé API' }
-})
+Route.get('/', ({ response }) => response.json({ greeting: 'Hello from Hélé API' }))
 
 Route.group(() => {
   Route.post('/register', 'AuthenticationController.register')
@@ -32,3 +30,18 @@ Route.group(() => {
   Route.post('/password/reset', 'PasswordController.reset')
     .validator('Password/Reset')
 }).prefix('/auth').middleware('guest')
+
+Route.group(() => {
+  Route.resource('young', 'YoungController')
+    .validator(new Map([
+      [['young.store'], ['User/Young/Store']],
+      [['young.update'], ['User/Young/Update']]
+    ]))
+    .apiOnly()
+  Route.resource('pro', 'ProController')
+    .validator(new Map([
+      [['pro.store'], ['User/Pro/Store']],
+      [['pro.update'], ['User/Pro/Update']]
+    ]))
+    .apiOnly()
+}).prefix('/user').middleware(['auth', 'role:admin']).namespace('User')
