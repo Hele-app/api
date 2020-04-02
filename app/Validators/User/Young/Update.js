@@ -4,7 +4,6 @@
 const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
 
 class Store {
-  // Should it use https://adonisjs.com/docs/4.1/validator#_authorization ??
   get rules() {
     return {
       phone: 'required|regex:^0[6-7](\\d{2}){4}$',

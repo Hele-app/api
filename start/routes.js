@@ -32,6 +32,10 @@ Route.group(() => {
 }).prefix('/auth').middleware('guest')
 
 Route.group(() => {
+  Route.get('/me', 'AuthenticationController.check')
+}).prefix('/auth').middleware('auth')
+
+Route.group(() => {
   Route.resource('young', 'YoungController')
     .validator(new Map([
       [['young.store'], ['User/Young/Store']],

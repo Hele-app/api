@@ -59,6 +59,8 @@ class AuthenticationController {
       await auth.attempt(user.phone, request.input('password'))
       user.last_login = new Date()
       await user.save()
+      // Is refreshToken needed as we did not set an expire time ?
+      // Should we set an expire time ? #security
       const accessToken = await auth.withRefreshToken().generate(user)
       return response.status(200).json({ user, accessToken })
     } catch (e) {
@@ -67,6 +69,10 @@ class AuthenticationController {
         errors: [{ message: 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT' }]
       })
     }
+  }
+
+  async check({ request, auth, response }) {
+    return auth.getUser()
   }
 }
 
