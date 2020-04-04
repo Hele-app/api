@@ -52,7 +52,7 @@ jobs:
         character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
         collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
         mysql version: '5.7' # Optional, default value is "latest". The version of the MySQL
-        mysql database: 'hele' # Optional, default value is "test". The specified database which will be create
+        mysql database: 'hele_test' # Optional, default value is "test". The specified database which will be create
         # mysql root password: 'root' # Required if "mysql user" is empty, default is empty. The root superuser password
         mysql user: 'developer' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
         mysql password: 'test' # Required if "mysql user" exists. The password for the "mysql user"
@@ -68,18 +68,6 @@ jobs:
 
     - name: Generate adonis APP KEY
       run: adonis key:generate
-
-    - name: Migrate Database
-      run: node ace migration:run
-
-    - name: Fill Database with Region Seed
-      run: node ace seed --files database/seeds/RegionSeeder.js
-
-    - name: Fill Database with Establishment Seed
-      run: node ace seed --files database/seeds/EstablishmentSeeder.js
-
-    - name: Fill Database with User Seed
-      run: node ace seed --files database/seeds/UserSeeder.js
 
     - name: Test
       run: npm test
