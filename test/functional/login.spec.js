@@ -28,7 +28,7 @@ before(async () => {
 })
 
 after(async () => {
-  Database.rollbackGlobalTransaction()
+  await Database.rollbackGlobalTransaction()
 })
 
 test('Failing without phone, username and email', async ({ client }) => {

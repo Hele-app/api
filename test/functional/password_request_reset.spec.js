@@ -31,7 +31,7 @@ before(async () => {
 })
 
 after(async () => {
-  Database.rollbackGlobalTransaction()
+  await Database.rollbackGlobalTransaction()
 })
 
 test('should fail because the phone is required', async ({ client }) => {
