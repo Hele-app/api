@@ -8,16 +8,16 @@ const env = Env.get('NODE_ENV', 'development')
 const User = use('App/Models/User')
 
 // eslint-disable-next-line
-const { generatePassword, sendSMS } = use('App/Helpers/Authentication')
+const { generatePassword, generateResetCode } = use('App/Helpers/Random')
+
+// eslint-disable-next-line
+const { sendSMS } = use('App/Helpers/Authentication')
 
 class PasswordController {
   async request({ request, response }) {
     const user = await User.findBy('phone', request.input('phone'))
-    if (!user) {
-      // We should not throw an error to preserve database integrity on phone numbers.
-      return response.status(200).json({})
-    }
-    const previousRequest = await user.passwordResets().orderBy('created_at', 'DESC').first()
+    const previousRequest = await user.passwordResets()
+      .orderBy('created_at', 'DESC').first()
 
     if (previousRequest && previousRequest.generatedAgo('hours') < 24) {
       return response.status(403).json({
@@ -26,7 +26,7 @@ class PasswordController {
       })
     }
 
-    const code = generatePassword(6)
+    const code = generateResetCode()
     const currentRequest = await user.passwordResets().create({ code })
 
     /* istanbul ignore next */
@@ -40,11 +40,9 @@ class PasswordController {
 
   async reset({ request, response }) {
     const user = await User.findBy('phone', request.input('phone'))
-    if (!user) {
-      // We should not throw an error to preserve database integrity on phone numbers.
-      return response.status(200).json({})
-    }
-    const currentRequest = await user.passwordResets().where('code', request.input('code')).firstOrFail()
+    const currentRequest = await user.passwordResets()
+      .where('code', request.input('code')).firstOrFail()
+
     if (!currentRequest.isValid()) {
       return response.status(403).json({
         status: 403,
