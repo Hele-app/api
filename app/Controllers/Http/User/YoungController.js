@@ -5,13 +5,19 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 // eslint-disable-next-line
+const env = use('Env').get('NODE_ENV', 'development')
+
+// eslint-disable-next-line
 const User = use('App/Models/User')
 
 // eslint-disable-next-line
 const Establishment = use('App/Models/Establishment')
 
 // eslint-disable-next-line
-const AuthenticationController = use('App/Controllers/Http/AuthenticationController')
+const { sendSMS } = use('App/Helpers/Authentication')
+
+// eslint-disable-next-line
+const { generatePassword } = use('App/Helpers/Random')
 
 /**
  * Resourceful controller for interacting with youngs
@@ -25,7 +31,7 @@ class YoungController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async index ({ request, response }) {
+  async index({ request, response }) {
     let query = User.query()
 
     if (request.input('q')) {
@@ -37,7 +43,8 @@ class YoungController {
       })
     }
 
-    return response.status(200).json(await query.isYoung().paginate(request.input('p', 1)))
+    const users = await query.isYoung().paginate(request.input('p', 1))
+    return response.status(200).json(users)
   }
 
   /**
@@ -48,8 +55,26 @@ class YoungController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
-    return (new AuthenticationController()).register({ request, response })
+  async store({ request, response }) {
+    const password = generatePassword()
+    const data = request.only(['phone', 'username', 'birthyear'])
+    data.password = password
+
+    const code = request.input('establishment_code')
+    const establishment = Establishment.findByOrFail('code', code)
+
+    const user = await User.make(data)
+    user.establishment().associate(establishment)
+
+    await user.save()
+
+    /* istanbul ignore next */
+    if (env === 'production') {
+      // TODO: text should be generated from a package and not from an hardcoded unlocalised string
+      sendSMS(`Salut ${user.username} !\nBienvenu sur Hélé. Ton mot de passe pour te connecter est ${password}.\nA bientôt sur Hélé !`, user.phone)
+      return response.status(201).json({})
+    }
+    return response.status(201).json({ user, password })
   }
 
   /**
@@ -60,8 +85,9 @@ class YoungController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async show ({ params, request, response }) {
-    const user = await User.query().isYoung().where('id', params.id).firstOrFail()
+  async show({ params, request, response }) {
+    const user = await User.query().isYoung().where('id', params.id)
+      .firstOrFail()
     return response.status(200).json(user)
   }
 
@@ -73,15 +99,19 @@ class YoungController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
-    const user = await User.query().isYoung().where('id', params.id).firstOrFail()
+  async update({ params, request, response }) {
+    const user = await User.query().isYoung().where('id', params.id)
+      .firstOrFail()
 
-    user.phone = request.input('phone')
-    user.username = request.input('username')
-    user.establishment().associate(await Establishment.findByOrFail('code', request.input('establishment_code')))
-    user.birthyear = new Date().getFullYear() - request.input('age')
-    user.active = request.input('active', true)
-    user.role = request.input('role', 'YOUNG')
+    const data = request.only(['phone', 'username', 'active', 'role',
+      'birthyear'])
+    user.merge(data)
+
+    if (request.input('establishment_code')) {
+      const code = request.input('establishment_code')
+      const establishment = await Establishment.findByOrFail('code', code)
+      user.establishment().associate(establishment)
+    }
     await user.save()
 
     return response.status(200).json(user)
@@ -95,8 +125,9 @@ class YoungController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
-    const user = await User.query().isYoung().where('id', params.id).firstOrFail()
+  async destroy({ params, request, response }) {
+    const user = await User.query().isYoung().where('id', params.id)
+      .firstOrFail()
     await user.delete()
     return response.status(204).send()
   }

@@ -11,7 +11,10 @@ const env = use('Env').get('NODE_ENV', 'development')
 const User = use('App/Models/User')
 
 // eslint-disable-next-line
-const { generatePassword, sendSMS } = use('App/Helpers/Authentication')
+const { sendSMS } = use('App/Helpers/Authentication')
+
+// eslint-disable-next-line
+const { generatePassword } = use('App/Helpers/Random')
 
 /**
  * Resourceful controller for interacting with pros
@@ -25,7 +28,7 @@ class ProController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async index ({ request, response }) {
+  async index({ request, response }) {
     // Init the query
     let query = User.query()
 
@@ -43,7 +46,8 @@ class ProController {
     }
 
     // Finalize the query and paginate with default size (20)
-    return response.status(200).json(await query.isPro().paginate(request.input('p', 1)))
+    const users = await query.isPro().paginate(request.input('p', 1))
+    return response.status(200).json(users)
   }
 
   /**
@@ -54,21 +58,13 @@ class ProController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store({ request, response }) {
     const password = generatePassword()
+    const data = request.only(['phone', 'username', 'birthyear', 'email',
+      'profession', 'city', 'phone_pro'])
+    data.role = request.input('role', 'PROFESSIONAL')
 
-    const user = await User.create({
-      phone: request.input('phone'),
-      username: request.input('username'),
-      establishment_id: null,
-      birthyear: request.input('birthyear'),
-      password: password,
-      email: request.input('email'),
-      role: request.input('role', 'PROFESSIONAL'),
-      profession: request.input('profession'),
-      city: request.input('city'),
-      phone_pro: request.input('phone_pro')
-    })
+    const user = await User.create(data)
 
     /* istanbul ignore next */
     if (env === 'production') {
@@ -87,7 +83,7 @@ class ProController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async show ({ params, request, response }) {
+  async show({ params, request, response }) {
     const user = await User.query().isPro().where('id', params.id).firstOrFail()
     return response.status(200).json(user)
   }
@@ -100,18 +96,12 @@ class ProController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update({ params, request, response }) {
     const user = await User.query().isPro().where('id', params.id).firstOrFail()
+    const data = request.only(['phone', 'username', 'birthyear', 'email',
+      'role', 'profession', 'city', 'phone_pro', 'active'])
 
-    user.phone = request.input('phone')
-    user.username = request.input('username')
-    user.birthyear = request.input('birthyear')
-    user.email = request.input('email')
-    user.role = request.input('role', 'PROFESSIONAL')
-    user.profession = request.input('profession')
-    user.city = request.input('city')
-    user.phone_pro = request.input('phone_pro')
-    user.active = request.input('active', true)
+    user.merge(data)
     await user.save()
 
     return response.status(200).json(user)
@@ -125,7 +115,7 @@ class ProController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy({ params, request, response }) {
     const user = await User.query().isPro().where('id', params.id).firstOrFail()
     await user.delete()
     return response.status(204).send()

@@ -8,11 +8,9 @@ class Store {
     return {
       phone: 'required|regex:^0[6-7](\\d{2}){4}$|unique:users,phone',
       username: 'required|regex:^[a-z]+[a-z0-9]+$',
-      birthyear: 'integer|above:1800',
+      birthyear: 'required|integer|above:1800',
       email: 'required|email',
       role: 'in:MODERATOR,PROFESSIONAL,ADMIN',
-      profession: '',
-      city: '',
       phone_pro: 'regex:^0[6-7](\\d{2}){4}$'
     }
   }
@@ -24,6 +22,7 @@ class Store {
       'phone.unique': 'E_PHONE_NOT_UNIQUE',
       'username.required': 'E_USERNAME_REQUIRED',
       'username.regex': 'E_USERNAME_WRONG_FORMAT',
+      'birthyear.required': 'E_BIRTHYEAR_REQUIRED',
       'birthyear.integer': 'E_BIRTHYEAR_WRONG_FORMAT',
       'birthyear.above': 'E_BIRTHYEAR_WRONG_FORMAT',
       'email.required': 'E_EMAIL_REQUIRED',
