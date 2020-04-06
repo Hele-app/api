@@ -50,6 +50,8 @@ class ExceptionHandler extends BaseExceptionHandler {
   async report(error, { request }) {
     if (error.name !== 'ValidationException' || error.status >= 500) {
       console.error(error)
+
+      /* istanbul ignore next */
       if (env === 'production') {
         sentry.captureException(error)
       }

@@ -4,6 +4,9 @@
 const Database = use('Database')
 
 // eslint-disable-next-line
+const Factory = use('Factory')
+
+// eslint-disable-next-line
 const { test, trait, before, after } = use('Test/Suite')('Login')
 
 // eslint-disable-next-line
@@ -15,29 +18,35 @@ const user = {
   phone: '0600000001',
   username: 'james007',
   email: 'james007@hele.fr',
-  establishment_id: 1,
-  birthyear: 2007,
   password: 'foobar'
 }
-let accessToken = null
+
+const loginRoute = 'auth/login'
+const meRoute = 'auth/me'
 
 before(async () => {
   await Database.beginGlobalTransaction()
 
-  await User.create(user)
+  await Factory.model('App/Models/User').create({
+    phone: user.phone,
+    username: user.username,
+    email: user.email,
+    role: 'PROFESSIONAL',
+    password: user.password
+  })
 })
 
 after(async () => {
   await Database.rollbackGlobalTransaction()
 })
 
-test('Failing without phone, username and email', async ({ client }) => {
+test('Should fail without phone, username and email', async ({ client }) => {
   const testUser = Object.assign({}, user)
   delete testUser.phone
   delete testUser.username
   delete testUser.email
 
-  const response = await client.post('auth/login').send(testUser).end()
+  const response = await client.post(loginRoute).send(testUser).end()
   response.assertStatus(400)
   response.assertError({
     status: 400,
@@ -49,11 +58,11 @@ test('Failing without phone, username and email', async ({ client }) => {
   })
 })
 
-test('Failing without password', async ({ client }) => {
+test('Should fail without password', async ({ client }) => {
   const testUser = Object.assign({}, user)
   delete testUser.password
 
-  const response = await client.post('auth/login').send(testUser).end()
+  const response = await client.post(loginRoute).send(testUser).end()
 
   response.assertStatus(400)
   response.assertError({
@@ -62,13 +71,13 @@ test('Failing without password', async ({ client }) => {
   })
 })
 
-test('Failing with not existing phone', async ({ client }) => {
+test('Should fail with not existing phone', async ({ client }) => {
   const testUser = Object.assign({}, user)
   testUser.phone = '0600000002'
   delete testUser.username
   delete testUser.email
 
-  const response = await client.post('auth/login').send(testUser).end()
+  const response = await client.post(loginRoute).send(testUser).end()
 
   response.assertStatus(400)
   response.assertError({
@@ -77,13 +86,13 @@ test('Failing with not existing phone', async ({ client }) => {
   })
 })
 
-test('Failing with not existing username', async ({ client }) => {
+test('Should fail with not existing username', async ({ client }) => {
   const testUser = Object.assign({}, user)
   testUser.username = 'Bob'
   delete testUser.phone
   delete testUser.email
 
-  const response = await client.post('auth/login').send(testUser).end()
+  const response = await client.post(loginRoute).send(testUser).end()
 
   response.assertStatus(400)
   response.assertError({
@@ -92,13 +101,13 @@ test('Failing with not existing username', async ({ client }) => {
   })
 })
 
-test('Failing with not existing email', async ({ client }) => {
+test('Should fail with not existing email', async ({ client }) => {
   const testUser = Object.assign({}, user)
   testUser.email = 'bob@hele.fr'
   delete testUser.phone
   delete testUser.username
 
-  const response = await client.post('auth/login').send(testUser).end()
+  const response = await client.post(loginRoute).send(testUser).end()
 
   response.assertStatus(400)
   response.assertError({
@@ -107,13 +116,13 @@ test('Failing with not existing email', async ({ client }) => {
   })
 })
 
-test('Failing with wrong password', async ({ client }) => {
+test('Should fail with wrong password', async ({ client }) => {
   const testUser = Object.assign({}, user)
   testUser.password = 'bond007'
   delete testUser.username
   delete testUser.email
 
-  const response = await client.post('auth/login').send(testUser).end()
+  const response = await client.post(loginRoute).send(testUser).end()
 
   // response.assertStatus(400)
   response.assertError({
@@ -122,52 +131,59 @@ test('Failing with wrong password', async ({ client }) => {
   })
 })
 
-test('Succeed with existing phone and password', async ({ client }) => {
-  const testUser = Object.assign({}, user)
-  delete testUser.username
-  delete testUser.email
-
-  const response = await client.post('auth/login').send(testUser).end()
-
-  response.assertStatus(200)
-})
-
-test('Succeed with existing username and password', async ({ client }) => {
-  const testUser = Object.assign({}, user)
-  delete testUser.phone
-  delete testUser.email
-
-  const response = await client.post('auth/login').send(testUser).end()
-
-  response.assertStatus(200)
-})
-
-test('Succeed with existing email and password', async ({ client }) => {
-  const testUser = Object.assign({}, user)
-  delete testUser.username
-  delete testUser.phone
-
-  const response = await client.post('auth/login').send(testUser).end()
-
-  accessToken = response.body.accessToken.token
-
-  response.assertStatus(200)
-})
-
-test('Failing with no accessToken', async ({ client }) => {
-  const response = await client.get('auth/me').end()
+test('Should fail with no accessToken', async ({ client }) => {
+  const response = await client.get(meRoute).end()
 
   response.assertStatus(401)
 })
 
-test('Failing with an invalid accessToken', async ({ client }) => {
-  const response = await client.get('auth/me').header('Authorization', 'Bearer azerty').end()
+test('Should fail with an invalid accessToken', async ({ client }) => {
+  const token = 'Bearer fmwkejfn'
+  const response = await client.get(meRoute).header('Authorization',
+    token).end()
 
   response.assertStatus(401)
 })
 
-test('Succeed with a valid accessToken', async ({ assert, client }) => {
-  const response = await client.get('auth/me').header('Authorization', `Bearer ${accessToken}`).end()
+test('Should succeed with existing phone and password', async ({ client }) => {
+  const testUser = Object.assign({}, user)
+  delete testUser.username
+  delete testUser.email
+
+  const response = await client.post(loginRoute).send(testUser).end()
+
+  response.assertStatus(200)
+})
+
+test('Should succeed with correct username and password', async ({ client }) => {
+  const testUser = Object.assign({}, user)
+  delete testUser.phone
+  delete testUser.email
+
+  const response = await client.post(loginRoute).send(testUser).end()
+
+  response.assertStatus(200)
+})
+
+test('Should succeed with existing email and password', async ({ client }) => {
+  const testUser = Object.assign({}, user)
+  delete testUser.username
+  delete testUser.phone
+
+  const response = await client.post(loginRoute).send(testUser).end()
+
+  response.assertStatus(200)
+})
+
+test('Should succeed with a valid accessToken', async ({ assert, client }) => {
+  const testUser = Object.assign({}, user)
+  delete testUser.username
+  delete testUser.phone
+
+  let response = await client.post(loginRoute).send(testUser).end()
+  const token = response.body.accessToken.token
+
+  response = await client.get(meRoute).header('Authorization', `Bearer ${token}`).end()
 
   response.assertStatus(200)
   assert.equal(user.phone, response.body.phone)

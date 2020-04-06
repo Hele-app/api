@@ -13,7 +13,7 @@ class UserSchema extends Schema {
       table.string('password', 255).notNullable()
       table.string('email').index()
       table.integer('birthyear').notNullable()
-      table.integer('establishment_id').notNullable()
+      table.integer('establishment_id')
         .unsigned().references('id').inTable('establishments')
       table.enu('role', ['YOUNG', 'MODERATOR', 'PROFESSIONAL', 'ADMIN'])
         .defaultTo('YOUNG').index()

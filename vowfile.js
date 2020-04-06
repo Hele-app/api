@@ -37,8 +37,6 @@ module.exports = (cli, runner) => {
     */
     await ace.call('migration:run', {}, { silent: true })
     await ace.call('seed', {}, { files: 'database/seeds/RegionSeeder.js' })
-    await ace.call('seed', {}, { files: 'database/seeds/EstablishmentSeeder.js' })
-    await ace.call('seed', {}, { files: 'database/seeds/UserSeeder.js' })
   })
 
   runner.after(async () => {
@@ -62,6 +60,6 @@ module.exports = (cli, runner) => {
     | original state
     |
     */
-    await ace.call('migration:reset', {}, { silent: true })
+    await ace.call('migration:rollback', {}, { silent: true })
   })
 }
