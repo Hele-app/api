@@ -10,6 +10,9 @@ const Establishment = use('App/Models/Establishment')
 // eslint-disable-next-line
 const Region = use('App/Models/Region')
 
+// eslint-disable-next-line
+const { generateEstablishmentCode } = use('App/Helpers/Random')
+
 /**
  * Resourceful controller for interacting with establishments
  */
@@ -22,8 +25,7 @@ class EstablishmentController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  /* istanbul ignore next */
-  async index ({ request, response }) {
+  async index({ request, response }) {
     // Init the query
     let query = Establishment.query()
 
@@ -38,7 +40,8 @@ class EstablishmentController {
     }
 
     // Finalize the query and paginate with default size (20)
-    return response.status(200).json(await query.paginate(request.input('p', 1)))
+    const establishments = await query.paginate(request.input('p', 1))
+    return response.status(200).json(establishments)
   }
 
   /**
@@ -49,12 +52,17 @@ class EstablishmentController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
-    const establishment = await Establishment.create({
-      name: request.input('name'),
-      code: request.input('code'),
-      region_id: request.input('region_id')
-    })
+  async store({ request, response }) {
+    let code = generateEstablishmentCode()
+
+    while (Establishment.findBy('code', code) === null) {
+      code = generateEstablishmentCode()
+    }
+
+    const data = request.only(['name', 'region_id'])
+    data.code = code
+
+    const establishment = await Establishment.create(data)
 
     return response.status(201).json(establishment)
   }
@@ -67,8 +75,7 @@ class EstablishmentController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  /* istanbul ignore next */
-  async show ({ params, request, response }) {
+  async show({ params, request, response }) {
     const establishment = await Establishment.findOrFail(params.id)
 
     return response.status(200).json(establishment)
@@ -82,13 +89,11 @@ class EstablishmentController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  /* istanbul ignore next */
-  async update ({ params, request, response }) {
-    const establishment = await Establishment.findOrFail(params.id)
+  async update({ params, request, response }) {
+    const newData = request.only(['name', 'region_id'])
 
-    establishment.name = request.input('name', establishment.name)
-    establishment.code = request.input('code', establishment.code)
-    establishment.region().associate(await Region.findOrFail(request.input('region_id')))
+    const establishment = await Establishment.findOrFail(params.id)
+    establishment.merge(newData)
     await establishment.save()
 
     return response.status(200).json(establishment)
@@ -102,8 +107,7 @@ class EstablishmentController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  /* istanbul ignore next */
-  async destroy ({ params, request, response }) {
+  async destroy({ params, request, response }) {
     const establishment = await Establishment.findOrFail('id', params.id)
     await establishment.delete()
 

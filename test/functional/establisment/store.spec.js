@@ -10,7 +10,6 @@ trait('Test/ApiClient')
 
 const establishment = {
   name: 'LLB',
-  code: 'AABBC',
   region_id: 1
 }
 
@@ -19,10 +18,10 @@ before(async () => {
 })
 
 after(async () => {
-  Database.rollbackGlobalTransaction()
+  await Database.rollbackGlobalTransaction()
 })
 
-test('Failing without name', async ({ client }) => {
+test('Should fail without name', async ({ client }) => {
   const testEstab = Object.assign({}, establishment)
   delete testEstab.name
 
@@ -39,58 +38,7 @@ test('Failing without name', async ({ client }) => {
   })
 })
 
-test('Failing with existing name', async ({ client }) => {
-  const testEstab = Object.assign({}, establishment)
-  testEstab.name = 'Louis Le Grand'
-
-  const response = await client.post('establishment').send(testEstab).end()
-
-  response.assertStatus(400)
-  response.assertError({
-    status: 400,
-    errors: [{
-      message: 'E_NAME_NOT_UNIQUE',
-      field: 'name',
-      validation: 'unique'
-    }]
-  })
-})
-
-test('Failing without code', async ({ client }) => {
-  const testEstab = Object.assign({}, establishment)
-  delete testEstab.code
-
-  const response = await client.post('establishment').send(testEstab).end()
-
-  response.assertStatus(400)
-  response.assertError({
-    status: 400,
-    errors: [{
-      message: 'E_CODE_REQUIRED',
-      field: 'code',
-      validation: 'required'
-    }]
-  })
-})
-
-test('Failing with wrong code format', async ({ client }) => {
-  const testEstab = Object.assign({}, establishment)
-  testEstab.code = 'AABB5'
-
-  const response = await client.post('establishment').send(testEstab).end()
-
-  response.assertStatus(400)
-  response.assertError({
-    status: 400,
-    errors: [{
-      message: 'E_CODE_WRONG_FORMAT',
-      field: 'code',
-      validation: 'regex'
-    }]
-  })
-})
-
-test('Failing without region_id', async ({ client }) => {
+test('Should fail without region_id', async ({ client }) => {
   const testEstab = Object.assign({}, establishment)
   delete testEstab.region_id
 
@@ -107,7 +55,7 @@ test('Failing without region_id', async ({ client }) => {
   })
 })
 
-test('Failing with wrong region_id format', async ({ client }) => {
+test('Should fail with wrong region_id format', async ({ client }) => {
   const testEstab = Object.assign({}, establishment)
   testEstab.region_id = 'A'
 
@@ -129,7 +77,7 @@ test('Failing with wrong region_id format', async ({ client }) => {
   })
 })
 
-test('Failing with wrong region_id', async ({ client }) => {
+test('Should fail with wrong region_id', async ({ client }) => {
   const testEstab = Object.assign({}, establishment)
   testEstab.region_id = 999
 
@@ -146,7 +94,7 @@ test('Failing with wrong region_id', async ({ client }) => {
   })
 })
 
-test('Succeed with correct data', async ({ assert, client }) => {
+test('Should succeed with correct data', async ({ assert, client }) => {
   const response = await client.post('establishment').send(establishment).end()
 
   response.assertStatus(201)

@@ -24,7 +24,20 @@ const generateResetCode = () => {
   })
 }
 
+const generateEstablishmentCode = () => {
+  return generator.generate({
+    length: 5,
+    excludeSimilarCharacters: false,
+    numbers: false,
+    lowercase: false,
+    uppercase: true,
+    symbols: false,
+    strict: false
+  })
+}
+
 module.exports = {
   generatePassword,
-  generateResetCode
+  generateResetCode,
+  generateEstablishmentCode
 }
