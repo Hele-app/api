@@ -3,7 +3,7 @@
 // eslint-disable-next-line
 const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
 
-class Authentication {
+class Register {
   get rules() {
     return {
       phone: 'required|regex:^0[6-7](\\d{2}){4}$|unique:users,phone',
@@ -36,4 +36,4 @@ class Authentication {
   }
 }
 
-module.exports = Authentication
+module.exports = Register

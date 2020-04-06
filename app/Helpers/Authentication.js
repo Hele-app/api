@@ -8,11 +8,6 @@ const authToken = Env.get('TWILIO_TOKEN')
 const helePhone = Env.get('TWILIO_PHONE')
 const twilio = require('twilio')
 
-const generatePassword = (length = 10) => {
-  return (Math.random().toString(36).substr(2, 1 + length / 2) +
-    Math.random().toString(36).substr(2, 1 + length / 2)).slice(-length)
-}
-
 /* istanbul ignore next */
 const sendSMS = async (body, to) => {
   try {
@@ -25,6 +20,5 @@ const sendSMS = async (body, to) => {
 }
 
 module.exports = {
-  generatePassword,
   sendSMS
 }

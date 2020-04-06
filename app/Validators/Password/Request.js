@@ -6,13 +6,14 @@ const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
 class PasswordRequest {
   get rules() {
     return {
-      phone: 'required'
+      phone: 'required|exists:users,phone'
     }
   }
 
   get messages() {
     return {
-      'phone.required': 'E_PHONE_REQUIRED'
+      'phone.required': 'E_PHONE_REQUIRED',
+      'phone.exists': 'E_PHONE_NOT_FOUND'
     }
   }
 
