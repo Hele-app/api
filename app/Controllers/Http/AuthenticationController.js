@@ -10,7 +10,10 @@ const Establishment = use('App/Models/Establishment')
 const User = use('App/Models/User')
 
 // eslint-disable-next-line
-const { generatePassword, sendSMS } = use('App/Helpers/Authentication')
+const { sendSMS } = use('App/Helpers/Authentication')
+
+// eslint-disable-next-line
+const { generatePassword } = use('App/Helpers/Random')
 
 class AuthenticationController {
   async register({ request, response }) {

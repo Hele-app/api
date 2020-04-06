@@ -4,6 +4,12 @@
 const Database = use('Database')
 
 // eslint-disable-next-line
+const Factory = use('Factory')
+
+// eslint-disable-next-line
+const Region = use('App/Models/Region')
+
+// eslint-disable-next-line
 const { test, trait, before, after } = use('Test/Suite')('Registration')
 
 trait('Test/ApiClient')
@@ -15,19 +21,33 @@ const young = {
   establishment_code: 'AAAAA'
 }
 
+const registerRoute = 'auth/register'
+
 before(async () => {
   await Database.beginGlobalTransaction()
+
+  const r = await Region.first()
+  const e = await Factory.model('App/Models/Establishment').create({
+    code: young.establishment_code,
+    region_id: r.id
+  })
+
+  await Factory.model('App/Models/User').create({
+    phone: '0600000000',
+    role: 'YOUNG',
+    establishment_id: e.id
+  })
 })
 
 after(async () => {
-  Database.rollbackGlobalTransaction()
+  await Database.rollbackGlobalTransaction()
 })
 
-test('Failing without phone number', async ({ client }) => {
+test('Should fail without phone number', async ({ client }) => {
   const testYoung = Object.assign({}, young)
   delete testYoung.phone
 
-  const response = await client.post('auth/register').send(testYoung).end()
+  const response = await client.post(registerRoute).send(testYoung).end()
 
   response.assertStatus(400)
   response.assertError({
@@ -40,11 +60,11 @@ test('Failing without phone number', async ({ client }) => {
   })
 })
 
-test('Failing with wrong phone format', async ({ client }) => {
+test('Should fail with wrong phone format', async ({ client }) => {
   const testYoung = Object.assign({}, young)
   testYoung.phone = '0200000000'
 
-  const response = await client.post('auth/register').send(testYoung).end()
+  const response = await client.post(registerRoute).send(testYoung).end()
 
   response.assertStatus(400)
   response.assertError({
@@ -57,11 +77,11 @@ test('Failing with wrong phone format', async ({ client }) => {
   })
 })
 
-test('Failing with existing phone number', async ({ client }) => {
+test('Should fail with existing phone number', async ({ client }) => {
   const testYoung = Object.assign({}, young)
   testYoung.phone = '0600000000'
 
-  const response = await client.post('auth/register').send(testYoung).end()
+  const response = await client.post(registerRoute).send(testYoung).end()
 
   response.assertStatus(400)
   response.assertError({
@@ -74,11 +94,11 @@ test('Failing with existing phone number', async ({ client }) => {
   })
 })
 
-test('Failing without username', async ({ client }) => {
+test('Should fail without username', async ({ client }) => {
   const testYoung = Object.assign({}, young)
   delete testYoung.username
 
-  const response = await client.post('auth/register').send(testYoung).end()
+  const response = await client.post(registerRoute).send(testYoung).end()
 
   response.assertStatus(400)
   response.assertError({
@@ -91,11 +111,11 @@ test('Failing without username', async ({ client }) => {
   })
 })
 
-test('Failing with wrong username format', async ({ client }) => {
+test('Should fail with wrong username format', async ({ client }) => {
   const testYoung = Object.assign({}, young)
   testYoung.username = '007James'
 
-  const response = await client.post('auth/register').send(testYoung).end()
+  const response = await client.post(registerRoute).send(testYoung).end()
 
   response.assertStatus(400)
   response.assertError({
@@ -108,11 +128,11 @@ test('Failing with wrong username format', async ({ client }) => {
   })
 })
 
-test('Failing without age', async ({ client }) => {
+test('Should fail without age', async ({ client }) => {
   const testYoung = Object.assign({}, young)
   delete testYoung.age
 
-  const response = await client.post('auth/register').send(testYoung).end()
+  const response = await client.post(registerRoute).send(testYoung).end()
 
   response.assertStatus(400)
   response.assertError({
@@ -125,11 +145,11 @@ test('Failing without age', async ({ client }) => {
   })
 })
 
-test('Failing with age under 11yrs old', async ({ client }) => {
+test('Should fail with age under 11yrs old', async ({ client }) => {
   const testYoung = Object.assign({}, young)
   testYoung.age = 10
 
-  const response = await client.post('auth/register').send(testYoung).end()
+  const response = await client.post(registerRoute).send(testYoung).end()
 
   response.assertStatus(400)
   response.assertError({
@@ -142,11 +162,11 @@ test('Failing with age under 11yrs old', async ({ client }) => {
   })
 })
 
-test('Failing with age above 17yrs old', async ({ client }) => {
+test('Should fail with age above 17yrs old', async ({ client }) => {
   const testYoung = Object.assign({}, young)
   testYoung.age = 18
 
-  const response = await client.post('auth/register').send(testYoung).end()
+  const response = await client.post(registerRoute).send(testYoung).end()
 
   response.assertStatus(400)
   response.assertError({
@@ -159,11 +179,11 @@ test('Failing with age above 17yrs old', async ({ client }) => {
   })
 })
 
-test('Failing without establishment code', async ({ client }) => {
+test('Should fail without establishment code', async ({ client }) => {
   const testYoung = Object.assign({}, young)
   delete testYoung.establishment_code
 
-  const response = await client.post('auth/register').send(testYoung).end()
+  const response = await client.post(registerRoute).send(testYoung).end()
 
   response.assertStatus(400)
   response.assertError({
@@ -176,11 +196,11 @@ test('Failing without establishment code', async ({ client }) => {
   })
 })
 
-test('Failing with wrong establishment code', async ({ client }) => {
+test('Should fail with wrong establishment code', async ({ client }) => {
   const testYoung = Object.assign({}, young)
   testYoung.establishment_code = 'AAAAB'
 
-  const response = await client.post('auth/register').send(testYoung).end()
+  const response = await client.post(registerRoute).send(testYoung).end()
 
   response.assertStatus(400)
   response.assertError({
@@ -193,8 +213,8 @@ test('Failing with wrong establishment code', async ({ client }) => {
   })
 })
 
-test('Succeed with correct data', async ({ assert, client }) => {
-  const response = await client.post('auth/register').send(young).end()
+test('Should succeed with correct data', async ({ assert, client }) => {
+  const response = await client.post(registerRoute).send(young).end()
 
   response.assertStatus(201)
 })
