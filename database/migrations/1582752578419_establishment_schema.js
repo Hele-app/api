@@ -9,7 +9,7 @@ class EstablishmentSchema extends Schema {
     this.create('establishments', (table) => {
       table.increments()
       table.string('name', 255).notNullable()
-      table.string('code', 10).notNullable()
+      table.string('code', 10).notNullable().unique()
       table.integer('region_id').notNullable()
         .unsigned().references('id').inTable('regions')
       table.timestamps()

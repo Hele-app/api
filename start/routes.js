@@ -36,3 +36,10 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/me', 'AuthenticationController.check')
 }).prefix('/auth').middleware('auth')
+
+Route.resource('establishment', 'EstablishmentController')
+  .validator(new Map([
+    [['establishment.store'], ['Establishment/Store']],
+    [['establishment.update'], ['Establishment/Update']]
+  ]))
+  .apiOnly()

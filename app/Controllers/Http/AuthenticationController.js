@@ -17,6 +17,7 @@ const { sendSMS } = use('App/Helpers/Authentication')
 const { generatePassword } = use('App/Helpers/Random')
 
 class AuthenticationController {
+  /* istanbul ignore next */
   async register({ request, response }) {
     const phone = request.input('phone')
 
