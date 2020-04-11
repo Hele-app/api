@@ -63,6 +63,7 @@ class ProController {
     const data = request.only(['phone', 'username', 'birthyear', 'email',
       'profession', 'city', 'phone_pro'])
     data.role = request.input('role', 'PROFESSIONAL')
+    data.password = password
 
     const user = await User.create(data)
 
