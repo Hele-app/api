@@ -6,6 +6,7 @@ const Database = use('Database')
 // eslint-disable-next-line
 const Factory = use('Factory')
 
+// eslint-disable-next-line
 const { test, trait, before, after } = use('Test/Suite')('Pro/store')
 
 trait('Test/ApiClient')
@@ -38,7 +39,6 @@ before(async () => {
     email: 'bob@hele.fr',
     role: 'PROFESSIONAL'
   })
-
 })
 
 after(async () => {
@@ -65,7 +65,7 @@ test('Should fail if creation not from admin', async ({ client }) => {
   // response.assertStatus(401)
   response.assertError({
     status: 401,
-    errors: [{message: 'E_ADMIN_ONLY'}]
+    errors: [{ message: 'E_ADMIN_ONLY' }]
   })
 })
 
