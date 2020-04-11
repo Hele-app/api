@@ -224,7 +224,7 @@ test('Should fail without birthyear', async ({ client }) => {
 
 test('Should fail with wrong birthyear format', async ({ client }) => {
   const testYoung = Object.assign({}, young)
-  testYoung.birthyear = "toto"
+  testYoung.birthyear = 'toto'
 
   const response = await client
     .post(storeRoute)
@@ -266,7 +266,7 @@ test('Should fail without establishment code', async ({ client }) => {
 
 test('Should fail with unknown establishment code', async ({ client }) => {
   const testYoung = Object.assign({}, young)
-  testYoung.establishment_code = "JAMES"
+  testYoung.establishment_code = 'JAMES'
 
   const response = await client
     .post(storeRoute)

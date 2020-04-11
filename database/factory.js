@@ -38,7 +38,7 @@ Factory.blueprint('App/Models/User', async (faker, i, data) => {
     user.phone_pro = data.phone_pro || faker.phone({
       country: 'fr',
       mobile: false
-    }).replace(/\s/g,'')
+    }).replace(/\s/g, '')
   }
   return user
 })
