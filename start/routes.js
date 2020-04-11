@@ -48,4 +48,4 @@ Route.group(() => {
       [['pro.update'], ['User/Pro/Update']]
     ]))
     .apiOnly()
-}).prefix('/user').middleware(['auth', 'role:admin']).namespace('User')
+}).prefix('/user').middleware(['auth:jwt', 'role:admin']).namespace('User')
