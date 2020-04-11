@@ -7,24 +7,26 @@ const Database = use('Database')
 const Factory = use('Factory')
 
 // eslint-disable-next-line
-const { test, trait, before, after } = use('Test/Suite')('Pro/store')
+const Region = use('App/Models/Region')
+
+// eslint-disable-next-line
+const { test, trait, before, after } = use('Test/Suite')('Young/store')
 
 trait('Test/ApiClient')
 trait('Auth/Client')
 
-const pro = {
+const young = {
   phone: '0600000001',
   username: 'james007',
-  birthyear: 1985,
-  email: 'james@hele.fr',
-  role: 'PROFESSIONAL',
-  phone_pro: '0600000002'
+  birthyear: 2012,
+  establishment_code: 'AAAAA'
 }
 
-let existingPro = null
+let existingYoung = null
+let establishment = null
 let admin = null
 
-const storeRoute = '/user/pro'
+const storeRoute = '/user/young'
 
 before(async () => {
   await Database.beginGlobalTransaction()
@@ -33,11 +35,15 @@ before(async () => {
     role: 'ADMIN'
   })
 
-  existingPro = await Factory.model('App/Models/User').create({
-    phone: '0600000000',
-    username: 'bob001',
-    email: 'bob@hele.fr',
-    role: 'PROFESSIONAL'
+  const r = await Region.first()
+  establishment = await Factory.model('App/Models/Establishment').create({
+    code: young.establishment_code,
+    region_id: r.id
+  })
+
+  existingYoung = await Factory.model('App/Models/User').create({
+    role: 'YOUNG',
+    establishment_id: establishment.id
   })
 })
 
@@ -59,7 +65,7 @@ test('Should fail if creation not from admin', async ({ client }) => {
   const response = await client
     .post(storeRoute)
     .send({})
-    .loginVia(existingPro, 'jwt')
+    .loginVia(existingYoung, 'jwt')
     .end()
 
   // response.assertStatus(401)
@@ -70,12 +76,12 @@ test('Should fail if creation not from admin', async ({ client }) => {
 })
 
 test('Should fail without phone number', async ({ client }) => {
-  const testPro = Object.assign({}, pro)
-  delete testPro.phone
+  const testYoung = Object.assign({}, young)
+  delete testYoung.phone
 
   const response = await client
     .post(storeRoute)
-    .send(testPro)
+    .send(testYoung)
     .loginVia(admin, 'jwt')
     .end()
 
@@ -91,12 +97,12 @@ test('Should fail without phone number', async ({ client }) => {
 })
 
 test('Should fail with wrong phone format', async ({ client }) => {
-  const testPro = Object.assign({}, pro)
-  testPro.phone = '0200000000'
+  const testYoung = Object.assign({}, young)
+  testYoung.phone = '0200000000'
 
   const response = await client
     .post(storeRoute)
-    .send(testPro)
+    .send(testYoung)
     .loginVia(admin, 'jwt')
     .end()
 
@@ -112,12 +118,12 @@ test('Should fail with wrong phone format', async ({ client }) => {
 })
 
 test('Should fail with existing phone number', async ({ client }) => {
-  const testPro = Object.assign({}, pro)
-  testPro.phone = existingPro.phone
+  const testYoung = Object.assign({}, young)
+  testYoung.phone = existingYoung.phone
 
   const response = await client
     .post(storeRoute)
-    .send(testPro)
+    .send(testYoung)
     .loginVia(admin, 'jwt')
     .end()
 
@@ -133,12 +139,12 @@ test('Should fail with existing phone number', async ({ client }) => {
 })
 
 test('Should fail without username', async ({ client }) => {
-  const testPro = Object.assign({}, pro)
-  delete testPro.username
+  const testYoung = Object.assign({}, young)
+  delete testYoung.username
 
   const response = await client
     .post(storeRoute)
-    .send(testPro)
+    .send(testYoung)
     .loginVia(admin, 'jwt')
     .end()
 
@@ -154,12 +160,12 @@ test('Should fail without username', async ({ client }) => {
 })
 
 test('Should fail with wrong username format', async ({ client }) => {
-  const testPro = Object.assign({}, pro)
-  testPro.username = '007James'
+  const testYoung = Object.assign({}, young)
+  testYoung.username = '007James'
 
   const response = await client
     .post(storeRoute)
-    .send(testPro)
+    .send(testYoung)
     .loginVia(admin, 'jwt')
     .end()
 
@@ -175,12 +181,12 @@ test('Should fail with wrong username format', async ({ client }) => {
 })
 
 test('Should fail with username not unique', async ({ client }) => {
-  const testPro = Object.assign({}, pro)
-  testPro.username = existingPro.username
+  const testYoung = Object.assign({}, young)
+  testYoung.username = existingYoung.username
 
   const response = await client
     .post(storeRoute)
-    .send(testPro)
+    .send(testYoung)
     .loginVia(admin, 'jwt')
     .end()
 
@@ -196,12 +202,12 @@ test('Should fail with username not unique', async ({ client }) => {
 })
 
 test('Should fail without birthyear', async ({ client }) => {
-  const testPro = Object.assign({}, pro)
-  delete testPro.birthyear
+  const testYoung = Object.assign({}, young)
+  delete testYoung.birthyear
 
   const response = await client
     .post(storeRoute)
-    .send(testPro)
+    .send(testYoung)
     .loginVia(admin, 'jwt')
     .end()
 
@@ -216,13 +222,13 @@ test('Should fail without birthyear', async ({ client }) => {
   })
 })
 
-test('Should fail with birthyear under 1800', async ({ client }) => {
-  const testPro = Object.assign({}, pro)
-  testPro.birthyear = 1799
+test('Should fail with wrong birthyear format', async ({ client }) => {
+  const testYoung = Object.assign({}, young)
+  testYoung.birthyear = "toto"
 
   const response = await client
     .post(storeRoute)
-    .send(testPro)
+    .send(testYoung)
     .loginVia(admin, 'jwt')
     .end()
 
@@ -232,18 +238,18 @@ test('Should fail with birthyear under 1800', async ({ client }) => {
     errors: [{
       message: 'E_BIRTHYEAR_WRONG_FORMAT',
       field: 'birthyear',
-      validation: 'above'
+      validation: 'integer'
     }]
   })
 })
 
-test('Should fail without email', async ({ client }) => {
-  const testPro = Object.assign({}, pro)
-  delete testPro.email
+test('Should fail without establishment code', async ({ client }) => {
+  const testYoung = Object.assign({}, young)
+  delete testYoung.establishment_code
 
   const response = await client
     .post(storeRoute)
-    .send(testPro)
+    .send(testYoung)
     .loginVia(admin, 'jwt')
     .end()
 
@@ -251,20 +257,20 @@ test('Should fail without email', async ({ client }) => {
   response.assertError({
     status: 400,
     errors: [{
-      message: 'E_EMAIL_REQUIRED',
-      field: 'email',
+      message: 'E_ESTABLISHMENT_CODE_REQUIRED',
+      field: 'establishment_code',
       validation: 'required'
     }]
   })
 })
 
-test('Should fail with wrong email', async ({ client }) => {
-  const testPro = Object.assign({}, pro)
-  testPro.email = 'toto.com'
+test('Should fail with unknown establishment code', async ({ client }) => {
+  const testYoung = Object.assign({}, young)
+  testYoung.establishment_code = "JAMES"
 
   const response = await client
     .post(storeRoute)
-    .send(testPro)
+    .send(testYoung)
     .loginVia(admin, 'jwt')
     .end()
 
@@ -272,72 +278,9 @@ test('Should fail with wrong email', async ({ client }) => {
   response.assertError({
     status: 400,
     errors: [{
-      message: 'E_EMAIL_WRONG_FORMAT',
-      field: 'email',
-      validation: 'email'
-    }]
-  })
-})
-
-test('Should fail with email not unique', async ({ client }) => {
-  const testPro = Object.assign({}, pro)
-  testPro.email = existingPro.email
-
-  const response = await client
-    .post(storeRoute)
-    .send(testPro)
-    .loginVia(admin, 'jwt')
-    .end()
-
-  response.assertStatus(400)
-  response.assertError({
-    status: 400,
-    errors: [{
-      message: 'E_EMAIL_NOT_UNIQUE',
-      field: 'email',
-      validation: 'unique'
-    }]
-  })
-})
-
-test('Should fail with role not in pro role list', async ({ client }) => {
-  const testPro = Object.assign({}, pro)
-  testPro.role = 'YOUNG'
-
-  const response = await client
-    .post(storeRoute)
-    .send(testPro)
-    .loginVia(admin, 'jwt')
-    .end()
-
-  response.assertStatus(400)
-  response.assertError({
-    status: 400,
-    errors: [{
-      message: 'E_ROLE_NOT_PRO',
-      field: 'role',
-      validation: 'in'
-    }]
-  })
-})
-
-test('Should fail with wrong phone pro format', async ({ client }) => {
-  const testPro = Object.assign({}, pro)
-  testPro.phone_pro = '060987654'
-
-  const response = await client
-    .post(storeRoute)
-    .send(testPro)
-    .loginVia(admin, 'jwt')
-    .end()
-
-  response.assertStatus(400)
-  response.assertError({
-    status: 400,
-    errors: [{
-      message: 'E_PHONE_PRO_WRONG_FORMAT',
-      field: 'phone_pro',
-      validation: 'regex'
+      message: 'E_ESTABLISHMENT_CODE_NOT_FOUND',
+      field: 'establishment_code',
+      validation: 'exists'
     }]
   })
 })
@@ -345,7 +288,7 @@ test('Should fail with wrong phone pro format', async ({ client }) => {
 test('Should succeed with correct data', async ({ client }) => {
   const response = await client
     .post(storeRoute)
-    .send(pro)
+    .send(young)
     .loginVia(admin, 'jwt')
     .end()
 

@@ -28,6 +28,7 @@ class ProController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
+  /* istanbul ignore next */
   async index({ request, response }) {
     // Init the query
     let query = User.query()
@@ -84,6 +85,7 @@ class ProController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
+  /* istanbul ignore next */
   async show({ params, request, response }) {
     const user = await User.query().isPro().where('id', params.id).firstOrFail()
     return response.status(200).json(user)
@@ -116,6 +118,7 @@ class ProController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
+  /* istanbul ignore next */
   async destroy({ params, request, response }) {
     const user = await User.query().isPro().where('id', params.id).firstOrFail()
     await user.delete()

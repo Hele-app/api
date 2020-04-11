@@ -49,3 +49,10 @@ Route.group(() => {
     ]))
     .apiOnly()
 }).prefix('/user').middleware(['auth:jwt', 'role:admin']).namespace('User')
+
+Route.resource('establishment', 'EstablishmentController')
+  .validator(new Map([
+    [['establishment.store'], ['Establishment/Store']],
+    [['establishment.update'], ['Establishment/Update']]
+  ]))
+  .apiOnly()

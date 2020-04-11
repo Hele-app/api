@@ -293,3 +293,13 @@ test('Should succeed with same data', async ({ assert, client }) => {
 
   response.assertStatus(200)
 })
+
+test('Should succeed with new correct data', async ({ assert, client }) => {
+  const response = await client
+    .patch(storeRoute + proId)
+    .send({ phone: '0698765432', username: 'baba' })
+    .loginVia(admin, 'jwt')
+    .end()
+
+  response.assertStatus(200)
+})

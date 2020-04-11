@@ -31,6 +31,7 @@ class YoungController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
+  /* istanbul ignore next */
   async index({ request, response }) {
     let query = User.query()
 
@@ -63,10 +64,9 @@ class YoungController {
     const code = request.input('establishment_code')
     const establishment = Establishment.findByOrFail('code', code)
 
-    const user = await User.make(data)
-    user.establishment().associate(establishment)
-
-    await user.save()
+    const user = new User()
+    user.fill(data)
+    await user.establishment().associate(establishment)
 
     /* istanbul ignore next */
     if (env === 'production') {
@@ -85,6 +85,7 @@ class YoungController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
+  /* istanbul ignore next */
   async show({ params, request, response }) {
     const user = await User.query().isYoung().where('id', params.id)
       .firstOrFail()
@@ -125,6 +126,7 @@ class YoungController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
+  /* istanbul ignore next */
   async destroy({ params, request, response }) {
     const user = await User.query().isYoung().where('id', params.id)
       .firstOrFail()

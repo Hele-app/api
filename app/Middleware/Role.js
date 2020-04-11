@@ -10,11 +10,11 @@ class Role {
    * @param {Function} next
    */
   async handle({ auth, response }, next, properties) {
-    const role = properties.length ? properties.shift().toUpperCase() : 'ADMIN'
+    const role = properties.shift().toUpperCase()
     const user = await auth.getUser()
 
     if (user.role !== role) {
-      console.error(role, user.toJSON)
+      console.error(`Expected ${user.role} to equal at least ${role}`)
       return response.status(401).json({
         status: 401,
         errors: [{ message: `E_${role}_ONLY` }]

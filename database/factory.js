@@ -20,7 +20,8 @@ const { generatePassword } = use('App/Helpers/Random')
 
 Factory.blueprint('App/Models/User', async (faker, i, data) => {
   const user = {
-    phone: data.phone || faker.phone({ country: 'fr', mobile: true }),
+    phone: data.phone || faker.phone({ country: 'fr', mobile: true })
+      .replace(/\s/g, ''),
     username: data.username || faker.username(),
     password: data.password || generatePassword()
   }
@@ -37,7 +38,7 @@ Factory.blueprint('App/Models/User', async (faker, i, data) => {
     user.phone_pro = data.phone_pro || faker.phone({
       country: 'fr',
       mobile: false
-    })
+    }).replace(/\s/g,'')
   }
   return user
 })
