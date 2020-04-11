@@ -11,24 +11,22 @@ class Role {
    */
   async handle({ auth, response }, next, properties) {
     const role = properties.length ? properties.shift().toUpperCase() : 'ADMIN'
-    try {
-      await this.checkRole(auth, role)
-    } catch (e) {
-      console.error(e, role, await auth.getUser().toJson())
+    const user = await auth.getUser()
+
+    if (user.role !== role) {
+      console.error(role, user.toJSON)
       return response.status(401).json({
         status: 401,
         errors: [{ message: `E_${role}_ONLY` }]
       })
     }
+
     // call next to advance the request
     await next()
   }
 
-  async checkRole(auth, role) {
-    const user = await auth.getUser()
-    if (user.role !== role) {
-      throw new Error(`${user.role} != ${role}`)
-    }
+  checkRole(user, role) {
+
   }
 }
 
