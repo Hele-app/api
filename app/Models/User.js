@@ -27,6 +27,14 @@ class User extends Model {
     return ['password']
   }
 
+  static scopeIsYoung (query) {
+    return query.where('role', 'YOUNG')
+  }
+
+  static scopeIsPro (query) {
+    return query.where('role', '!=', 'YOUNG')
+  }
+
   /**
    * A relationship on establishment is required for
    * a young registration to work.

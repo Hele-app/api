@@ -11,7 +11,7 @@ class UserSchema extends Schema {
       table.string('phone', 255).notNullable()
       table.string('username', 100).notNullable().unique().index()
       table.string('password', 255).notNullable()
-      table.string('email').index()
+      table.string('email').index().unique()
       table.integer('birthyear').notNullable()
       table.integer('establishment_id')
         .unsigned().references('id').inTable('establishments')
