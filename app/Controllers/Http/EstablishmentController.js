@@ -8,15 +8,23 @@
 const Establishment = use('App/Models/Establishment')
 
 // eslint-disable-next-line
-const Region = use('App/Models/Region')
-
-// eslint-disable-next-line
 const { generateEstablishmentCode } = use('App/Helpers/Random')
 
 /**
  * Resourceful controller for interacting with establishments
  */
 class EstablishmentController {
+  /**
+   * Returns all establishments with no search nor pagination
+   * GET establishments/all
+   *
+   * @param {object} ctx
+   * @param {Response} ctx.response
+   */
+  async all({ response }) {
+    return response.status(200).json(await Establishment.query().with('region').fetch())
+  }
+
   /**
    * Show a list of all establishments.
    * GET establishments
@@ -40,7 +48,7 @@ class EstablishmentController {
     }
 
     // Finalize the query and paginate with default size (20)
-    const establishments = await query.paginate(request.input('p', 1))
+    const establishments = await query.with('region').paginate(request.input('p', 1))
     return response.status(200).json(establishments)
   }
 
@@ -77,6 +85,7 @@ class EstablishmentController {
    */
   async show({ params, request, response }) {
     const establishment = await Establishment.findOrFail(params.id)
+    await establishment.load('region')
 
     return response.status(200).json(establishment)
   }
@@ -108,7 +117,7 @@ class EstablishmentController {
    * @param {Response} ctx.response
    */
   async destroy({ params, request, response }) {
-    const establishment = await Establishment.findOrFail('id', params.id)
+    const establishment = await Establishment.findOrFail(params.id)
     await establishment.delete()
 
     return response.status(204).send()

@@ -37,9 +37,28 @@ Route.group(() => {
   Route.get('/me', 'AuthenticationController.check')
 }).prefix('/auth').middleware('auth')
 
-Route.resource('establishment', 'EstablishmentController')
-  .validator(new Map([
-    [['establishment.store'], ['Establishment/Store']],
-    [['establishment.update'], ['Establishment/Update']]
-  ]))
-  .apiOnly()
+Route.group(() => {
+  Route.resource('young', 'YoungController')
+    .validator(new Map([
+      [['young.store'], ['User/Young/Store']],
+      [['young.update'], ['User/Young/Update']]
+    ]))
+    .apiOnly()
+  Route.resource('pro', 'ProController')
+    .validator(new Map([
+      [['pro.store'], ['User/Pro/Store']],
+      [['pro.update'], ['User/Pro/Update']]
+    ]))
+    .apiOnly()
+}).prefix('/user').middleware(['auth:jwt', 'role:admin']).namespace('User')
+
+Route.group(() => {
+  Route.get('region/all', 'RegionController.all')
+  Route.get('establishment/all', 'EstablishmentController.all')
+  Route.resource('establishment', 'EstablishmentController')
+    .validator(new Map([
+      [['establishment.store'], ['Establishment/Store']],
+      [['establishment.update'], ['Establishment/Update']]
+    ]))
+    .apiOnly()
+}).middleware(['auth:jwt', 'role:admin'])
