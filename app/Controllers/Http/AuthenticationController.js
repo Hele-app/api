@@ -1,8 +1,7 @@
 'use strict'
 
 // eslint-disable-next-line
-const Env = use('Env')
-const env = Env.get('NODE_ENV', 'development')
+const env = use('Env').get('NODE_ENV', 'development')
 
 // eslint-disable-next-line
 const Establishment = use('App/Models/Establishment')
@@ -62,6 +61,8 @@ class AuthenticationController {
 
     try {
       await auth.attempt(user.phone, request.input('password'))
+      user.last_login = new Date()
+      await user.save()
       // Is refreshToken needed as we did not set an expire time ?
       // Should we set an expire time ? #security
       const accessToken = await auth.withRefreshToken().generate(user)

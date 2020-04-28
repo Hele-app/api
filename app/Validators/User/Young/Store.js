@@ -3,13 +3,13 @@
 // eslint-disable-next-line
 const { ValidationException } = use('@adonisjs/validator/src/Exceptions')
 
-class Register {
+class Store {
   get rules() {
     return {
       phone: 'required|regex:^0[6-7](\\d{2}){4}$|unique:users,phone',
-      username: 'required|regex:^[a-z]+[a-z0-9]+$',
-      age: 'required|integer|range:11,17',
-      establishment_code: 'required|regex:^[a-zA-Z0-9]{5}$|exists:establishments,code'
+      username: 'required|regex:^[a-z]+[a-z0-9]+$|unique:users,username',
+      birthyear: 'required|integer',
+      establishment_code: 'required|exists:establishments,code'
     }
   }
 
@@ -20,9 +20,9 @@ class Register {
       'phone.unique': 'E_PHONE_NOT_UNIQUE',
       'username.required': 'E_USERNAME_REQUIRED',
       'username.regex': 'E_USERNAME_WRONG_FORMAT',
-      'age.required': 'E_AGE_REQUIRED',
-      'age.integer': 'E_AGE_VALIDATION',
-      'age.range': 'E_AGE_VALIDATION',
+      'username.unique': 'E_USERNAME_NOT_UNIQUE',
+      'birthyear.required': 'E_BIRTHYEAR_REQUIRED',
+      'birthyear.integer': 'E_BIRTHYEAR_WRONG_FORMAT',
       'establishment_code.required': 'E_ESTABLISHMENT_CODE_REQUIRED',
       'establishment_code.exists': 'E_ESTABLISHMENT_CODE_NOT_FOUND'
     }
@@ -37,4 +37,4 @@ class Register {
   }
 }
 
-module.exports = Register
+module.exports = Store

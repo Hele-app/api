@@ -17,9 +17,7 @@
 // eslint-disable-next-line
 const Route = use('Route')
 
-Route.get('/', () => {
-  return { greeting: 'Hello from Hélé API' }
-})
+Route.get('/', ({ response }) => response.json({ greeting: 'Hello from Hélé API' }))
 
 Route.group(() => {
   Route.post('/register', 'AuthenticationController.register')
