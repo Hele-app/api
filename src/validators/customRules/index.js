@@ -17,3 +17,10 @@ export const exists = async (table, column, value) => {
   }
   return false
 }
+
+export const requiredWithoutAll = (body, fields) => {
+  for (const field of fields) {
+    if (body[field]) return false
+  }
+  return true
+}

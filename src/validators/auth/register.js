@@ -26,7 +26,7 @@ export const schema = {
     },
     bail: true,
     matches: {
-      options: '^[a-z][a-z0-9]{3,}$',
+      options: '^[a-z][a-z0-9]{3,20}$',
       errorMessage: 'E_USERNAME_WRONG_FORMAT'
     }
   },

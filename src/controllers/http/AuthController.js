@@ -1,6 +1,7 @@
 'use strict'
 
 import argon from 'argon2'
+import jwt from 'jsonwebtoken'
 import db from '../../../config/database'
 import logger from '../../../config/logger'
 import { generatePassword } from '../../helpers/random'
@@ -37,6 +38,44 @@ export default class AuthController {
       return res.status(201).json({ user, password })
     } catch (e) {
       logger.error('Register Error', { error: e })
+      return res.status(500).send('INTERNAL SERVER ERROR')
+    }
+  }
+
+  static async login(req, res) {
+    const body = req.body
+    let field = null
+    let value = null
+
+    if (body.phone) {
+      field = 'phone'
+      value = body.phone
+    } else if (body.username) {
+      field = 'username'
+      value = body.username
+    } else {
+      field = 'email'
+      value = body.email
+    }
+
+    const user = await db('users').select(['id', 'username', 'password'])
+      .where({ [field]: value }).first()
+
+    try {
+      if (await argon.verify(user.password, body.password)) {
+        await db('users').update('last_login', new Date())
+          .where({ id: user.id })
+        const accessToken = jwt.sign({ user: user.id }, process.env.APP_KEY,
+          { algorithm: 'HS256', expiresIn: '1h' })
+        return res.status(200).json({ user, accessToken })
+      } else {
+        return res.status(400).json({
+          status: 400,
+          errors: [{ message: 'E_USER_IDENTIFIER_OR_PASSWORD_INCORRECT' }]
+        })
+      }
+    } catch (e) {
+      logger.error('Loging Error', { error: e })
       return res.status(500).send('INTERNAL SERVER ERROR')
     }
   }
