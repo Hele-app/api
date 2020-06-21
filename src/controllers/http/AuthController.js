@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 import db from '../../../config/database'
 import logger from '../../../config/logger'
 import { generatePassword } from '../../helpers/random'
-import { sendSMS } from '../../helpers/auth'
+import { sendSMS } from '../../helpers/sms'
 
 export default class AuthController {
   static async register(req, res) {
@@ -79,5 +79,9 @@ export default class AuthController {
       logger.error('Loging Error', { error: e })
       return res.status(500).send('INTERNAL SERVER ERROR')
     }
+  }
+
+  static check(req, res) {
+    return res.json(req.user)
   }
 }
