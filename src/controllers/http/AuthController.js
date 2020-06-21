@@ -2,6 +2,7 @@
 
 import argon from 'argon2'
 import db from '../../../config/database'
+import logger from '../../../config/logger'
 import { generatePassword } from '../../helpers/random'
 import { sendSMS } from '../../helpers/auth'
 
@@ -35,12 +36,8 @@ export default class AuthController {
 
       return res.status(201).json({ user, password })
     } catch (e) {
-      if (e.code === 'ER_DUP_ENTRY') {
-        return res.status(400).json({ error: 'user already exists' })
-      } else {
-        console.error(e)
-        return res.status(500).end()
-      }
+      logger.error('Register Error', { error: e })
+      return res.status(500).send('INTERNAL SERVER ERROR')
     }
   }
 }
