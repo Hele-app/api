@@ -7,6 +7,7 @@ import logger from 'morgan'
 
 import homeRouter from './routes/home'
 import authRouter from './routes/auth'
+import regionRouter from './routes/region'
 
 const app = express()
 
@@ -17,5 +18,6 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use('/', homeRouter)
 app.use('/auth', authRouter)
+app.use('/region', regionRouter)
 
 module.exports = app
