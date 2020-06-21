@@ -33,7 +33,7 @@ class YoungController {
    */
   /* istanbul ignore next */
   async index({ request, response }) {
-    let query = User.query()
+    let query = User.query().innerJoin('establishments as e', 'e.id', 'users.establishment_id')
 
     if (request.input('q')) {
       const q = request.input('q')
@@ -41,10 +41,11 @@ class YoungController {
         this
           .where('phone', q)
           .orWhere('username', 'like', `%${q}%`)
+          .orWhere('e.name', 'like' , `%${q}%`)
       })
     }
 
-    const users = await query.isYoung().paginate(request.input('p', 1))
+    const users = await query.isYoung().with('establishment.region').paginate(request.input('p', 1))
     return response.status(200).json(users)
   }
 
