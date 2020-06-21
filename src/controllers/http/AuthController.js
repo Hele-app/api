@@ -58,7 +58,7 @@ export default class AuthController {
       value = body.email
     }
 
-    const user = await db('users').select(['id', 'username', 'password'])
+    const user = await db('users').select(['id', 'phone', 'email', 'username', 'password'])
       .where({ [field]: value }).first()
 
     try {
