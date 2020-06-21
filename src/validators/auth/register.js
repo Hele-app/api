@@ -8,8 +8,8 @@ export const schema = {
       errorMessage: 'E_PHONE_REQUIRED'
     },
     bail: true,
-    matches: {
-      options: '^0[6-7](\\d{2}){4}$',
+    isMobilePhone: {
+      options: 'fr-FR',
       errorMessage: 'E_PHONE_WRONG_FORMAT'
     },
     custom: {
