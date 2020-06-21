@@ -67,6 +67,7 @@ export default class AuthController {
           .where({ id: user.id })
         const accessToken = jwt.sign({ user: user.id }, process.env.APP_KEY,
           { algorithm: 'HS256', expiresIn: '1h' })
+        delete user.password
         return res.status(200).json({ user, accessToken })
       } else {
         return res.status(400).json({
