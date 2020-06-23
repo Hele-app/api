@@ -1,6 +1,6 @@
 'use strict'
 
-import db from '../../../config/database'
+import { db } from '../../config'
 
 export default class RegionController {
   static async all(req, res) {

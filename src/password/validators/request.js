@@ -1,8 +1,8 @@
 'use strict'
 
-import { exists } from '../customRules'
+import { exists } from '../../commons/helpers'
 
-export const schema = {
+export default {
   phone: {
     exists: {
       errorMessage: 'E_PHONE_REQUIRED'

@@ -1,8 +1,8 @@
 'use strict'
 
-import { exists, requiredWithoutAll } from '../customRules'
+import { exists, requiredWithoutAll } from '../../commons/helpers/validators'
 
-export const schema = {
+export default {
   phone: {
     custom: {
       options: async (value, { req }) => {

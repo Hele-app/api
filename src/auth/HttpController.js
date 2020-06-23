@@ -2,10 +2,8 @@
 
 import argon from 'argon2'
 import jwt from 'jsonwebtoken'
-import db from '../../../config/database'
-import logger from '../../../config/logger'
-import { generatePassword } from '../../helpers/random'
-import { sendSMS } from '../../helpers/sms'
+import { db, logger } from '../../config'
+import { generatePassword, sendSMS } from '../commons/helpers'
 
 export default class AuthController {
   static async register(req, res) {
@@ -58,7 +56,8 @@ export default class AuthController {
       value = body.email
     }
 
-    const user = await db('users').select(['id', 'phone', 'email', 'username', 'password'])
+    const user = await db('users').select(['id', 'phone', 'email', 'username',
+      'password'])
       .where({ [field]: value }).first()
 
     try {
@@ -66,7 +65,7 @@ export default class AuthController {
         await db('users').update('last_login', new Date())
           .where({ id: user.id })
         const accessToken = jwt.sign({ user: user.id }, process.env.APP_KEY,
-          { algorithm: 'HS256', expiresIn: '1h' })
+          { algorithm: 'HS256', expiresIn: '1d' })
         delete user.password
         return res.status(200).json({ user, accessToken })
       } else {

@@ -1,8 +1,7 @@
 'use strict'
 
 import jwt from 'jsonwebtoken'
-import db from '../../config/database'
-import roles from '../../config/roles'
+import { db, roles } from '../../../config'
 
 export const loggedIn = async (req, res, next) => {
   if (!req.headers.authorization) return res.status(401).end()
