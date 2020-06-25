@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "DEBUG=api:server nodemon --exec babel-node ./bin/www",
+    "build": "mkdir -p build && babel src --out-dir build/src && babel config --out-dir build/config && babel ./bin/www --out-file build/bin/www.js && cp .env build/.env",
     "lint": "eslint .",
     "migrations": "knex --knexfile config/database/knexfile.js migrate:latest",
     "seed": "knex --knexfile config/database/knexfile.js seed:run"
@@ -25,8 +26,10 @@
     "winston": "^3.3.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.10.3",
     "@babel/core": "^7.10.3",
     "@babel/node": "^7.10.3",
+    "@babel/plugin-transform-runtime": "^7.10.3",
     "@babel/preset-env": "^7.10.3",
     "eslint": "^7.3.0",
     "eslint-config-standard": "^14.1.1",
