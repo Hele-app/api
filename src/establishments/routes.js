@@ -6,7 +6,7 @@ import { loggedIn, IsRole } from '../commons/middlewares'
 
 const router = Router()
 
-router.use(loggedIn, new IsRole('YOUNG'))
+router.use(loggedIn, new IsRole('ADMIN'))
 router.get('/all', HttpController.all)
 router.get('/', HttpController.index)
 // router.get('/:id', EstablishmentController.show)
