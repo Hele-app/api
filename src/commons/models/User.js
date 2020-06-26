@@ -22,10 +22,10 @@ const User = orm.model('User', {
   }
 }, {
   isYoung() {
-    return new this().where({ role: 'YOUNG' })
+    return new this().where('role', 'YOUNG')
   },
   isPro() {
-    return new this().where('role', 'in', ['MODERATOR', 'PROFESSIONAL'])
+    return new this().where('role', '<>', 'YOUNG')
   }
 })
 

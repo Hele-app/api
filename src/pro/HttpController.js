@@ -1,15 +1,18 @@
 'use strict'
 
 import argon from 'argon2'
-import { User, Establishment } from '../commons/models'
+import { User } from '../commons/models'
 import { generatePassword, sendSMS } from '../commons/helpers'
 
-export default class YoungController {
+export default class ProController {
   static async index(req, res) {
-    const users = await User.isYoung().where(function () {
+    const users = await User.isPro().where(function () {
       if (req.query.q) {
         this.where('phone', req.query.q)
           .orWhere('username', 'like', `%${req.query.q}%`)
+          .orWhere('email', 'like', `%${req.query.q}%`)
+          .orWhere('profession', 'like', `%${req.query.q}%`)
+          .orWhere('role', req.query.q.toUpperCase())
       }
     }).fetchPage({
       page: req.query.p || 1
@@ -21,21 +24,21 @@ export default class YoungController {
   static async store(req, res) {
     const password = generatePassword()
 
-    const establishment = await Establishment.where({
-      code: req.body.establishment_code
-    }).fetch()
-
     const user = await User.forge({
       phone: req.body.phone,
       username: req.body.username,
       birthyear: req.body.birthyear,
       password: await argon.hash(password),
-      establishment_id: establishment.get('id')
+      email: req.body.email,
+      profession: req.body.profession,
+      city: req.body.city,
+      phone_pro: req.body.phone_pro,
+      role: req.body.role || 'PROFESSIONAL'
     }).save()
 
     if (process.env.NODE_ENV === 'production') {
       // TODO: text should be generated from a package and not from an hardcoded unlocalised string
-      sendSMS(`Salut ${user.get('username')} !\nBienvenu sur Hélé. Ton mot de passe pour te connecter est ${password}.\nA bientôt sur Hélé !`, user.get('phone'))
+      sendSMS(`Salut ${user.get('username')} !\nBienvenu sur Hélé. Votre mot de passe pour vous connecter est ${password}.`, user.get('phone'))
       return res.status(201).json({})
     }
 
@@ -43,25 +46,23 @@ export default class YoungController {
   }
 
   static async show(req, res) {
-    const user = await new User({ id: req.params.id })
-      .fetch({ withRelated: ['establishment'] })
+    const user = await new User({ id: req.params.id }).fetch()
 
     return res.status(200).json(user)
   }
 
   static async update(req, res) {
-    const user = await new User({ id: req.params.id }).fetch({ withRelated: ['establishment'] })
-    let establishment = null
-    if (req.body.establishment_code) {
-      establishment = await new Establishment({
-        code: req.body.establishment_code
-      }).fetch()
-    }
+    const user = await new User({ id: req.params.id }).fetch()
+
     await user.save({
-      username: req.body.username,
       phone: req.body.phone,
-      establishment_id: establishment ? establishment.get('id') : user.get('establishment_id'),
-      birthyear: req.body.birthyear
+      username: req.body.username,
+      birthyear: req.body.birthyear,
+      email: req.body.email,
+      profession: req.body.profession,
+      city: req.body.city,
+      phone_pro: req.body.phone_pro,
+      role: req.body.role || 'PROFESSIONAL'
     })
 
     return res.status(200).json(user)
