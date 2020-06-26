@@ -12,7 +12,8 @@ export default class YoungController {
           .orWhere('username', 'like', `%${req.query.q}%`)
       }
     }).fetchPage({
-      page: req.query.p || 1
+      page: req.query.p || 1,
+      withRelated: ['establishment']
     })
 
     return res.status(200).json({ data: users.models, ...users.pagination })
@@ -43,8 +44,7 @@ export default class YoungController {
   }
 
   static async show(req, res) {
-    const user = await new User({ id: req.params.id })
-      .fetch({ withRelated: ['establishment'] })
+    const user = await new User({ id: req.params.id }).fetch({ withRelated: ['establishment'] })
 
     return res.status(200).json(user)
   }
