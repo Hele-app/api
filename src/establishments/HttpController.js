@@ -1,58 +1,56 @@
 'use strict'
 
-import { getPagination } from '../commons/helpers'
-import EstablishmentDAO from './DAO'
+import { Establishment } from '../commons/models'
+import { generateEstablishmentCode } from '../commons/helpers'
 
 export default class EstablishmentController {
   static async all(req, res) {
-    return res.status(200).json({ results: await EstablishmentDAO.all() })
+    const establishments = await Establishment.fetchAll()
+    return res.status(200).json(establishments)
   }
 
   static async index(req, res) {
-    const { offset, limit } = getPagination(req.query)
-    const total = EstablishmentDAO.count(req.query.query)
-    const totalPages = Math.ceil(total / limit)
-    const results = await EstablishmentDAO.index(req.query.query, offset, limit)
-    return res.status(200).json({ results, total, totalPages })
-  }
-  /*
-    static async store({ request, response }) {
-      let code = generateEstablishmentCode()
-
-      while (Establishment.findBy('code', code) === null) {
-        code = generateEstablishmentCode()
+    const establishments = await Establishment.query(qb => {
+      if (req.query.q) {
+        qb.where('establishments.code', req.query.q).orWhere('establishments.name', 'like', `%${req.query.q}%`)
       }
+    }).fetchPage({
+      page: req.query.p || 1
+    })
 
-      const data = request.only(['name', 'region_id'])
-      data.code = code
+    return res.status(200).json({ data: establishments.models, ...establishments.pagination })
+  }
 
-      const establishment = await Establishment.create(data)
+  static async store(req, res) {
+    let code
+    do {
+      code = generateEstablishmentCode()
+    } while (await Establishment.where({ code }).count() > 0)
 
-      return response.status(201).json(establishment)
-    }
+    const establishment = await Establishment.forge({
+      name: req.body.name,
+      region_id: req.body.region_id,
+      code
+    }).save()
 
-    static async show({ params, request, response }) {
-      const establishment = await Establishment.findOrFail(params.id)
-      await establishment.load('region')
+    return res.status(201).json(establishment)
+  }
 
-      return response.status(200).json(establishment)
-    }
+  static async show(req, res) {
+    const establishment = await new Establishment({ id: req.params.id }).fetch({ withRelated: ['region'] })
 
-    static asyn update({ params, request, response }) {
-      const newData = request.only(['name', 'region_id'])
+    return res.status(200).json(establishment)
+  }
 
-      const establishment = await Establishment.findOrFail(params.id)
-      establishment.merge(newData)
-      await establishment.save()
+  static async update(req, res) {
+    const establishment = await new Establishment({ id: req.params.id }).save({ name: req.body.name, region_id: req.body.region_id })
 
-      return response.status(200).json(establishment)
-    }
+    return res.status(200).json(establishment)
+  }
 
-    static asyn destroy({ params, request, response }) {
-      const establishment = await Establishment.findOrFail(params.id)
-      await establishment.delete()
+  static async destroy(req, res) {
+    await Establishment.where({ id: req.params.id }).destroy()
 
-      return response.status(204).send()
-    }
-    */
+    return res.status(204).send()
+  }
 }

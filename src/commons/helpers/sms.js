@@ -11,6 +11,6 @@ export const sendSMS = async (body, to) => {
     await client.messages
       .create({ body: body, from: helePhone, to: to })
   } catch (e) {
-    console.log(e)
+    console.error(e)
   }
 }

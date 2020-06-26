@@ -11,6 +11,7 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME
   },
+  debug: process.env.NODE_ENV !== 'production',
   useNullAsDefault: true,
   pool: {
     min: 2,

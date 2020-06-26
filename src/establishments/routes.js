@@ -6,12 +6,12 @@ import { loggedIn, IsRole } from '../commons/middlewares'
 
 const router = Router()
 
-router.use(loggedIn, new IsRole('YOUNG'))
+router.use(loggedIn, new IsRole('ADMIN'))
 router.get('/all', HttpController.all)
 router.get('/', HttpController.index)
-// router.get('/:id', EstablishmentController.show)
-// router.post('/', EstablishmentController.store)
-// router.put('/:id', EstablishmentController.update)
-// router.delete('/:id', EstablishmentController.destroy)
+router.get('/:id', HttpController.show)
+router.post('/', HttpController.store)
+router.put('/:id', HttpController.update)
+router.delete('/:id', HttpController.destroy)
 
 export default router

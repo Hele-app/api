@@ -1,10 +1,10 @@
 'use strict'
 
-import { db } from '../../config'
+import { Region } from '../commons/models'
 
 export default class RegionController {
   static async all(req, res) {
-    const regions = await db('regions').select('*')
-    return res.json(regions)
+    const regions = await Region.fetchAll()
+    return res.json({ results: regions })
   }
 }

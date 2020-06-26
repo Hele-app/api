@@ -1,7 +1,7 @@
 'use strict'
 
 import argon from 'argon2'
-import { db } from '../../config'
+import { User, PasswordReset } from '../commons/models'
 import {
   sendSMS, generatedAgo,
   generateResetCode, generatePassword
@@ -9,13 +9,11 @@ import {
 
 export default class PasswordController {
   static async request(req, res) {
-    const user = await db('users').select(['id', 'username', 'phone'])
-      .where('phone', req.body.phone).first()
-    const previousRequest = await db('password_resets')
-      .where('user_id', user.id).orderBy('created_at', 'DESC').first()
+    const user = await new User({ phone: req.body.phone }).fetch({ withRelated: ['passwordResets'] })
+    const previousRequest = await user.related('passwordResets').first()
 
     if (previousRequest &&
-      generatedAgo(previousRequest.created_at, 'hours') < 24) {
+      generatedAgo(previousRequest.get('created_at'), 'hours') < 24) {
       return res.status(403).json({
         status: 403,
         errors: [{ message: 'E_RESET_CODE_ALREADY_REQUESTED' }]
@@ -23,29 +21,25 @@ export default class PasswordController {
     }
 
     const code = generateResetCode()
-    const currentRequestId = await db('password_resets').insert({
-      user_id: user.id,
+    const currentRequest = await PasswordReset.forge({
+      user_id: user.get('id'),
       code
-    })
-    const currentRequest = await db('password_resets')
-      .where({ id: currentRequestId }).first()
+    }).save()
 
     /* istanbul ignore next */
     if (process.env.NODE_ENV === 'production') {
       // TODO: text should be generated from a package and not from an hardcoded unlocalised string
-      sendSMS(`${code}\nVoici ton code pour la génération de ton nouveau mot de passe.\nSi tu n'est pas à l'origine de cette demande, contacte un administrateur.`, user.phone)
+      sendSMS(`${code}\nVoici ton code pour la génération de ton nouveau mot de passe.\nSi tu n'est pas à l'origine de cette demande, contacte un administrateur.`, user.get('phone'))
       return res.status(200).json({})
     }
     return res.status(200).json(currentRequest)
   }
 
   static async reset(req, res) {
-    const user = await db('users').select(['id', 'username', 'phone'])
-      .where('phone', req.body.phone).first()
-    const currentRequest = await db('password_resets')
-      .where('user_id', user.id).where('code', req.body.code).first()
+    const user = await new User({ phone: req.body.phone }).fetch({ withRelated: ['passwordResets'] })
+    const currentRequest = await user.related('passwordResets').where('code', req.body.code).first()
 
-    if (currentRequest.is_used || generatedAgo(currentRequest.created_at) < 60) {
+    if (currentRequest.get('is_used') || generatedAgo(currentRequest.get('created_at')) > 60) {
       return res.status(403).json({
         status: 403,
         errors: [{ message: 'E_RESET_CODE_NOT_VALID' }]
@@ -53,15 +47,13 @@ export default class PasswordController {
     }
 
     const password = generatePassword()
-    await db('users').update('password', await argon.hash(password))
-      .where({ id: user.id })
-    await db('password_resets').update('is_used', true)
-      .where({ id: currentRequest.id })
+    await user.save({ password: await argon.hash(password) })
+    await currentRequest.save({ is_used: true })
 
     /* istanbul ignore next */
     if (process.env.NODE_ENV === 'production') {
       // TODO: text should be generated from a package and not from an hardcoded unlocalised string
-      sendSMS(`Salut ${user.username} !\nTon nouveau mot de passe pour te connecter est ${password}.`, user.phone)
+      sendSMS(`Salut ${user.get('username')} !\nTon nouveau mot de passe pour te connecter est ${password}.`, user.get('phone'))
       return res.status(200).json({})
     }
 
