@@ -10,7 +10,7 @@ const User = orm.model('User', {
   hidden: ['password', 'passwordResets'],
   constructor() {
     orm.Model.apply(this, arguments)
-    this.on('saving', function(model, attrs, options) {
+    this.on('saving', function (model, attrs, options) {
       console.log(model, attrs, options)
       // TODO: maybe encode the password here if dirty using argon ?
     })
@@ -20,6 +20,13 @@ const User = orm.model('User', {
   },
   passwordResets() {
     return this.hasMany(PasswordReset).query({ orderBy: ['created_at', 'DESC'] })
+  }
+}, {
+  isYoung() {
+    return new this().where('role', 'YOUNG')
+  },
+  isPro() {
+    return new this().where('role', '<>', 'YOUNG')
   }
 })
 
