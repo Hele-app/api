@@ -10,6 +10,7 @@ import authRouter from './auth/routes'
 import passwordRouter from './password/routes'
 import regionRouter from './regions/routes'
 import establishmentRouter from './establishments/routes'
+import mapRouter from './map/routes'
 
 const app = express()
 
@@ -23,5 +24,6 @@ app.use('/auth', authRouter)
 app.use('/auth/password', passwordRouter)
 app.use('/region', regionRouter)
 app.use('/establishment', establishmentRouter)
+app.use('/map', mapRouter)
 
 module.exports = app
