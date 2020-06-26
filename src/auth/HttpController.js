@@ -51,13 +51,14 @@ export default class AuthController {
     } else if (body.username) {
       field = 'username'
       value = body.username
-    } else {
+    } else if (body.email) {
       field = 'email'
       value = body.email
+    } else {
+      return res.status(400).end()
     }
 
-    const user = await db('users').select(['id', 'phone', 'email', 'username',
-      'password'])
+    const user = await db('users').select(['password', 'id', 'phone', 'email', 'username', 'active', 'last_login', 'role'])
       .where({ [field]: value }).first()
 
     try {

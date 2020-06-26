@@ -11,10 +11,11 @@ export const loggedIn = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(authorization[1], process.env.APP_KEY)
-    const user = await db('users').select(['id', 'username', 'role'])
+    const user = await db('users').select(['id', 'phone', 'email', 'username', 'active', 'last_login', 'role'])
       .where({ id: decoded.user }).first()
 
     if (!user) return res.status(401).end()
+    if (!user.active) return res.status(401).end()
 
     req.user = user
     return next()
