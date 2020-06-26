@@ -26,18 +26,17 @@ export default class YoungController {
       code: body.establishment_code
     }).fetch()
 
-    const user = new User({
+    const user = await User.forge({
       phone: body.phone,
       username: body.username,
       birthyear: body.birthyear,
       password: await argon.hash(password),
-      establishment_id: establishment.id
-    })
-    await user.save()
+      establishment_id: establishment.get('id')
+    }).save()
 
     if (process.env.NODE_ENV === 'production') {
       // TODO: text should be generated from a package and not from an hardcoded unlocalised string
-      sendSMS(`Salut ${user.username} !\nBienvenu sur Hélé. Ton mot de passe pour te connecter est ${password}.\nA bientôt sur Hélé !`, user.phone)
+      sendSMS(`Salut ${user.get('username')} !\nBienvenu sur Hélé. Ton mot de passe pour te connecter est ${password}.\nA bientôt sur Hélé !`, user.get('phone'))
       return res.status(201).json({})
     }
 
@@ -52,17 +51,17 @@ export default class YoungController {
   }
 
   static async update(req, res) {
-    const user = await new User({ id: req.params.id })
+    const user = await new User({ id: req.params.id }).fetch({ withRelated: ['establishment'] })
     let establishment = null
     if (req.body.establishment_code) {
       establishment = await new Establishment({
         code: req.body.establishment_code
       }).fetch()
     }
-    user.save({
+    await user.save({
       username: req.body.username,
       phone: req.body.phone,
-      establishment_id: establishment.id || user.establishment_id,
+      establishment_id: establishment ? establishment.get('id') : user.get('establishment_id'),
       birthyear: req.body.birthyear
     })
 

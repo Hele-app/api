@@ -20,16 +20,28 @@ export const unique = async (table, column, value) => {
   const result = await db(table).where({ [column]: value }).first()
   if (!result) {
     return true
+  } else {
+    return false
   }
-  return false
+}
+
+export const uniqueOrSame = async (table, column, value, previousId) => {
+  const potential = await db(table).where({ [column]: value }).first()
+  console.log(column, value, previousId, potential.id)
+  if (!potential) {
+    return true
+  } else {
+    return potential.id === parseInt(previousId)
+  }
 }
 
 export const exists = async (table, column, value) => {
   const result = await db(table).where({ [column]: value }).first()
   if (result) {
     return true
+  } else {
+    return false
   }
-  return false
 }
 
 export const requiredWithoutAll = (body, fields) => {
