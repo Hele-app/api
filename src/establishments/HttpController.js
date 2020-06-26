@@ -6,7 +6,7 @@ import { generateEstablishmentCode } from '../commons/helpers'
 export default class EstablishmentController {
   static async all(req, res) {
     const establishments = await Establishment.fetchAll()
-    return res.status(200).json(establishments)
+    return res.status(200).json({ data: establishments })
   }
 
   static async index(req, res) {
