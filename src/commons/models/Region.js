@@ -3,6 +3,7 @@
 import { orm } from '../../../config'
 import Establishment from './Establishment'
 import User from './User'
+import MapPOI from './MapPOI'
 
 const Region = orm.model('Region', {
   hasTimestamps: true,
@@ -12,6 +13,9 @@ const Region = orm.model('Region', {
   },
   users() {
     return this.hasMany(User).through(Establishment)
+  },
+  pois() {
+    return this.hasMany(MapPOI)
   }
 })
 

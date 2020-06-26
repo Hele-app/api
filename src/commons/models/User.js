@@ -12,6 +12,7 @@ const User = orm.model('User', {
     orm.Model.apply(this, arguments)
     this.on('saving', function(model, attrs, options) {
       console.log(model, attrs, options)
+      // TODO: maybe encode the password here if dirty using argon ?
     })
   },
   establishment() {

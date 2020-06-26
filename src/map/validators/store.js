@@ -29,7 +29,6 @@ export default {
   hour: {
     custom: {
       options: async (value) => {
-        console.log(value)
         // TODO: check if value is correctly formatted HH:MM - HH:MM
       }
     }
@@ -42,8 +41,9 @@ export default {
   site: {
     custom: {
       options: async (value) => {
-        console.log(value)
-        // TODO: check if value is correctly formatted http(s)://...
+        if (value && !String(value).startsWith('http')) {
+          throw new Error('E_SITE_FORMAT')
+        }
       }
     }
   },
@@ -64,11 +64,9 @@ export default {
     bail: true,
     custom: {
       options: async (value) => {
-        console.log(value)
-        // TODO: check that region_id exists in db('regions')
-        // if (!await exists('regions', 'id', value || req.body.region_id)) {
-        //   throw new Error('E_REGION_ID_NOT_FOUND')
-        // }
+        if (!await exists('regions', 'id', value)) {
+          throw new Error('E_REGION_ID_NOT_FOUND')
+        }
       }
     }
   }

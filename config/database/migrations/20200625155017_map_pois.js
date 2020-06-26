@@ -4,7 +4,7 @@ exports.up = function(knex) {
     .createTable('map_pois', function (table) {
       table.increments()
       table.string('name').notNullable()
-      table.string('description')
+      table.text('description')
       table.string('address').notNullable()
       table.integer('zipcode').notNullable()
       table.string('city').notNullable()

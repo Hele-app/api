@@ -12,7 +12,7 @@ const storeSchema = checkSchema(store, ['body'])
 const router = Router()
 
 router.use(loggedIn)
-router.get('/region/:region', HttpController.getRegion)
+router.get('/region/:id', HttpController.getRegion)
 router.get('/', new IsRole('ADMIN'), HttpController.index)
 router.post('/', new IsRole('ADMIN'), validate(storeSchema), HttpController.store)
 router.put('/:id', new IsRole('ADMIN'), validate(storeSchema), HttpController.update)
