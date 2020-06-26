@@ -57,11 +57,6 @@ export default {
   phone_pro: {
     exists: {
       errorMessage: 'E_PHONE_PRO_REQUIRED'
-    },
-    bail: true,
-    isPhone: {
-      options: 'fr-FR',
-      errorMessage: 'E_PHONE_PRO_WRONG_FORMAT'
     }
   },
   role: {
