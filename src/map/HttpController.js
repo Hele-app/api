@@ -15,7 +15,8 @@ export default class MapController {
         qb.where('name', 'like', `%${req.query.q}%`)
       }
     }).fetchPage({
-      page: req.query.p || 1
+      page: req.query.p || 1,
+      withRelated: ['region']
     })
 
     return res.status(200).json({ data: pois.models, ...pois.pagination })

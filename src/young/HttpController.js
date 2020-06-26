@@ -12,7 +12,8 @@ export default class YoungController {
           .orWhere('username', 'like', `%${req.query.q}%`)
       }
     }).fetchPage({
-      page: req.query.p || 1
+      page: req.query.p || 1,
+      withRelated: ['establishment']
     })
 
     return res.status(200).json({ data: users.models, ...users.pagination })

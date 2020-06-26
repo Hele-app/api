@@ -5,7 +5,7 @@ import { generateEstablishmentCode } from '../commons/helpers'
 
 export default class EstablishmentController {
   static async all(req, res) {
-    const establishments = await Establishment.fetchAll()
+    const establishments = await Establishment.fetchAll({ withRelated: ['region'] })
     return res.status(200).json({ data: establishments })
   }
 
@@ -15,7 +15,8 @@ export default class EstablishmentController {
         qb.where('code', req.query.q).orWhere('name', 'like', `%${req.query.q}%`)
       }
     }).fetchPage({
-      page: req.query.p || 1
+      page: req.query.p || 1,
+      withRelated: ['region']
     })
 
     return res.status(200).json({ data: establishments.models, ...establishments.pagination })
