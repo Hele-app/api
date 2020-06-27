@@ -25,19 +25,19 @@ export default class MapController {
   static async store(req, res) {
     const poi = await MapPOI.forge(req.body).save()
 
-    return res.status(201).json(poi)
+    return res.status(201).json({ data: poi })
   }
 
   static async show(req, res) {
     const poi = await new MapPOI({ id: req.params.id }).fetch({ withRelated: ['region'] })
 
-    return res.status(200).json(poi)
+    return res.status(200).json({ data: poi })
   }
 
   static async update(req, res) {
     const poi = await new MapPOI({ id: req.params.id }).save(req.body)
 
-    return res.status(200).json(poi)
+    return res.status(200).json({ data: poi })
   }
 
   static async destroy(req, res) {
