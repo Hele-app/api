@@ -10,6 +10,7 @@ import authRouter from './auth/routes'
 import passwordRouter from './password/routes'
 import regionRouter from './regions/routes'
 import establishmentRouter from './establishments/routes'
+import mapRouter from './map/routes'
 import youngRouter from './young/routes'
 import proRouter from './pro/routes'
 
@@ -25,6 +26,7 @@ app.use('/auth', authRouter)
 app.use('/auth/password', passwordRouter)
 app.use('/region', regionRouter)
 app.use('/establishment', establishmentRouter)
+app.use('/map', mapRouter)
 app.use('/user/young', youngRouter)
 app.use('/user/pro', proRouter)
 
