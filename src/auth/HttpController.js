@@ -31,7 +31,7 @@ export default class AuthController {
         return res.status(201).json({})
       }
 
-      return res.status(201).json({ user, password })
+      return res.status(201).json({ data: { user, password } })
     } catch (e) {
       logger.error('Register Error', { error: e })
       return res.status(500).send('INTERNAL SERVER ERROR')
@@ -63,7 +63,7 @@ export default class AuthController {
         await user.save({ last_login: new Date() })
         const accessToken = jwt.sign({ user: user.id }, process.env.APP_KEY,
           { algorithm: 'HS256', expiresIn: '1d' })
-        return res.status(200).json({ user, accessToken })
+        return res.status(200).json({ data: { user, accessToken } })
       } else {
         return res.status(400).json({
           status: 400,
@@ -72,11 +72,11 @@ export default class AuthController {
       }
     } catch (e) {
       logger.error('Loging Error', { error: e })
-      return res.status(500).send('INTERNAL SERVER ERROR')
+      return res.status(500).send({ e: 'INTERNAL SERVER ERROR' })
     }
   }
 
   static check(req, res) {
-    return res.json(req.user)
+    return res.json({ data: req.user })
   }
 }

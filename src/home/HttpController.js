@@ -2,6 +2,6 @@
 
 export default class HomeController {
   static index(req, res, next) {
-    return res.json({ title: 'Home' })
+    return res.json({ data: 'Home' })
   }
 }

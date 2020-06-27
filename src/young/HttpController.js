@@ -40,13 +40,13 @@ export default class YoungController {
       return res.status(201).json({})
     }
 
-    return res.status(201).json({ user, password })
+    return res.status(201).json({ data: { user, password } })
   }
 
   static async show(req, res) {
     const user = await new User({ id: req.params.id }).fetch({ withRelated: ['establishment'] })
 
-    return res.status(200).json(user)
+    return res.status(200).json({ data: user })
   }
 
   static async update(req, res) {
@@ -64,7 +64,7 @@ export default class YoungController {
       birthyear: req.body.birthyear
     })
 
-    return res.status(200).json(user)
+    return res.status(200).json({ data: user })
   }
 
   static async destroy(req, res) {

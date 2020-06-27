@@ -33,19 +33,19 @@ export default class EstablishmentController {
       code
     }).save()
 
-    return res.status(201).json(establishment)
+    return res.status(201).json({ data: establishment })
   }
 
   static async show(req, res) {
     const establishment = await new Establishment({ id: req.params.id }).fetch({ withRelated: ['region'] })
 
-    return res.status(200).json(establishment)
+    return res.status(200).json({ data: establishment })
   }
 
   static async update(req, res) {
     const establishment = await new Establishment({ id: req.params.id }).save({ name: req.body.name, region_id: req.body.region_id })
 
-    return res.status(200).json(establishment)
+    return res.status(200).json({ data: establishment })
   }
 
   static async destroy(req, res) {

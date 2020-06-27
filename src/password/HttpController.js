@@ -9,14 +9,20 @@ import {
 
 export default class PasswordController {
   static async request(req, res) {
-    const user = await new User({ phone: req.body.phone }).fetch({ withRelated: ['passwordResets'] })
+    const user = await new User({ phone: req.body.phone }).fetch({
+      withRelated:
+        ['passwordResets']
+    })
     const previousRequest = await user.related('passwordResets').first()
 
     if (previousRequest &&
       generatedAgo(previousRequest.get('created_at'), 'hours') < 24) {
       return res.status(403).json({
         status: 403,
-        errors: [{ message: 'E_RESET_CODE_ALREADY_REQUESTED' }]
+        errors: [{
+          msg: 'E_RESET_CODE_ALREADY_REQUESTED',
+          param: 'phone'
+        }]
       })
     }
 
@@ -32,17 +38,24 @@ export default class PasswordController {
       sendSMS(`${code}\nVoici ton code pour la génération de ton nouveau mot de passe.\nSi tu n'est pas à l'origine de cette demande, contacte un administrateur.`, user.get('phone'))
       return res.status(200).json({})
     }
-    return res.status(200).json(currentRequest)
+    return res.status(200).json({ data: currentRequest })
   }
 
   static async reset(req, res) {
-    const user = await new User({ phone: req.body.phone }).fetch({ withRelated: ['passwordResets'] })
-    const currentRequest = await user.related('passwordResets').where('code', req.body.code).first()
+    const user = await new User({ phone: req.body.phone }).fetch({
+      withRelated:
+        ['passwordResets']
+    })
+    const currentRequest = await user.related('passwordResets')
+      .where('code', req.body.code).first()
 
     if (currentRequest.get('is_used') || generatedAgo(currentRequest.get('created_at')) > 60) {
       return res.status(403).json({
         status: 403,
-        errors: [{ message: 'E_RESET_CODE_NOT_VALID' }]
+        errors: [{
+          message: 'E_RESET_CODE_NOT_VALID',
+          param: 'code'
+        }]
       })
     }
 
@@ -57,6 +70,6 @@ export default class PasswordController {
       return res.status(200).json({})
     }
 
-    return res.status(200).json({ user, password, currentRequest })
+    return res.status(200).json({ data: { user, password, currentRequest } })
   }
 }
