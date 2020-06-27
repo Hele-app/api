@@ -7,8 +7,8 @@ exports.up = function (knex) {
       table.string('name', 255).notNullable()
       table.float('latitude', 14, 10).notNullable()
       table.float('longitude', 14, 10).notNullable()
-      table.float('latitudeDelta', 14, 10).notNullable()
-      table.float('longitudeDelta', 14, 10).notNullable()
+      table.float('latitude_delta', 14, 10).notNullable()
+      table.float('longitude_delta', 14, 10).notNullable()
       table.timestamps()
     })
 }
