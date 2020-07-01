@@ -13,6 +13,7 @@ import establishmentRouter from './establishments/routes'
 import mapRouter from './map/routes'
 import youngRouter from './young/routes'
 import proRouter from './pro/routes'
+import privateChatRouter from './privateChat/routes'
 
 const app = express()
 
@@ -29,5 +30,6 @@ app.use('/establishment', establishmentRouter)
 app.use('/map', mapRouter)
 app.use('/user/young', youngRouter)
 app.use('/user/pro', proRouter)
+app.use('/chat/private', privateChatRouter)
 
 module.exports = app

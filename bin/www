@@ -7,6 +7,7 @@
 var app = require('../src')
 var debug = require('debug')('api:server')
 var http = require('http')
+var config = require('../config')
 
 /**
  * Get port from environment and store in Express.
@@ -20,6 +21,7 @@ app.set('port', port)
  */
 
 var server = http.createServer(app)
+config.io.attach(server)
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -84,5 +86,5 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port
-    debug(`Listening on ${bind}`)
+  debug(`Listening on ${bind}`)
 }

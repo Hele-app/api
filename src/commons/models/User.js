@@ -3,23 +3,44 @@
 import { orm } from '../../../config'
 import Establishment from './Establishment'
 import PasswordReset from './PasswordReset'
+import UserSetting from './UserSetting'
+import Chat from './Chat'
+import Message from './Message'
 
 const User = orm.model('User', {
   hasTimestamps: true,
   tableName: 'users',
   hidden: ['password', 'passwordResets'],
-  constructor() {
-    orm.Model.apply(this, arguments)
-    this.on('saving', function (model, attrs, options) {
-      console.log(model, attrs, options)
-      // TODO: maybe encode the password here if dirty using argon ?
-    })
-  },
   establishment() {
     return this.belongsTo(Establishment)
   },
   passwordResets() {
     return this.hasMany(PasswordReset).query({ orderBy: ['created_at', 'DESC'] })
+  },
+  settings() {
+    return this.hasOne(UserSetting)
+  },
+  chats() {
+    return this.belongsToMany(Chat)
+  },
+  privateChat() {
+    return this.belongsToMany(Chat).query({
+      where: {
+        type: 'PRIVATE',
+        active: true
+      }
+    })
+  },
+  groupChat() {
+    return this.belongsToMany(Chat).query({
+      where: {
+        type: 'GROUP',
+        active: true
+      }
+    })
+  },
+  messages() {
+    return this.hasMany(Message)
   }
 }, {
   isYoung() {

@@ -1,7 +1,7 @@
 'use strict'
 
 import argon from 'argon2'
-import { User } from '../commons/models'
+import { User, UserSetting } from '../commons/models'
 import { generatePassword, sendSMS } from '../commons/helpers'
 
 export default class ProController {
@@ -34,6 +34,10 @@ export default class ProController {
       city: req.body.city,
       phone_pro: req.body.phone_pro,
       role: req.body.role || 'PROFESSIONAL'
+    }).save()
+
+    await UserSetting.forge({
+      pro_max_young: req.body.max_young || 5
     }).save()
 
     if (process.env.NODE_ENV === 'production') {
