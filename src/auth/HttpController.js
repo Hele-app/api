@@ -76,7 +76,8 @@ export default class AuthController {
     }
   }
 
-  static check(req, res) {
+  static async check(req, res) {
+    await req.user.load(['chats'])
     return res.json({ data: req.user })
   }
 }
