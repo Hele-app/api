@@ -43,7 +43,8 @@ exports.seed = function (knex) {
           username: 'young',
           birthyear: 2007,
           password: await argon.hash('young'),
-          role: 'YOUNG'
+          role: 'YOUNG',
+          establishment_id: 1
         }
       ])
     })
