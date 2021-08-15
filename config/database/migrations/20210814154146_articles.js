@@ -8,8 +8,8 @@ exports.up = function(knex) {
       table.string('filepath').notNullable()
       table.timestamps()
     })
-};
+}
 
 exports.down = function(knex) {
   return knex.schema.dropTable('articles')
-};
+}

@@ -1,13 +1,13 @@
 'use strict'
 
-import multer from 'multer';
+import multer from 'multer'
 
 const uploadsFolder = 'public/uploads'
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadsFolder);
-  },
-});
+    cb(null, uploadsFolder)
+  }
+})
 
-export default storage;
+export default storage

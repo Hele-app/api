@@ -4,7 +4,7 @@ import { orm } from '../../../config'
 
 const Article = orm.model('Article', {
   hasTimestamps: true,
-  tableName: 'articles',
+  tableName: 'articles'
 })
 
 export default Article

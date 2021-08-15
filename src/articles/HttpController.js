@@ -1,9 +1,7 @@
 'use strict'
 
 import { Article } from '../commons/models'
-import { fstat, rename } from 'fs'
 import fs from 'fs'
-import { deleteFile } from '../commons/helpers/pdfupload'
 
 export default class ArticleController {
   static async all(req, res) {
@@ -25,36 +23,45 @@ export default class ArticleController {
 
   static async store(req, res) {
     if (!req.file) {
-      return res.status(422).json({ errors: [
-        {
-          msg: "E_ARTICLE_FILE_REQUIRED",
-          param: "file",
-          location: "body"
-        }
-      ]})
+      return res.status(422).json({
+        errors:
+          [
+            {
+              msg: 'E_ARTICLE_FILE_REQUIRED',
+              param: 'file',
+              location: 'body'
+            }
+          ]
+      })
     }
     if (!req || !req.body) {
       fs.unlinkSync(req.file.path)
-      return res.status(422).json({ errors: [
-        {
-          msg: "E_ARTICLE_ARGUMENTS_WRONG",
-          param: "body",
-          location: "body"
-        }
-      ]})
+      return res.status(422).json({
+        errors:
+          [
+            {
+              msg: 'E_ARTICLE_ARGUMENTS_WRONG',
+              param: 'body',
+              location: 'body'
+            }
+          ]
+      })
     }
     if (!req.body.title) {
       fs.unlinkSync(req.file.path)
-      return res.status(422).json({ errors: [
-        {
-          msg: "E_ARTICLE_TITLE_REQUIRED",
-          param: "title",
-          location: "body"
-        }
-      ]})
+      return res.status(422).json({
+        errors:
+          [
+            {
+              msg: 'E_ARTICLE_TITLE_REQUIRED',
+              param: 'title',
+              location: 'body'
+            }
+          ]
+      })
     }
     const filepath = req.file.path + '.pdf'
-    rename(req.file.path, filepath, function(err) {
+    fs.rename(req.file.path, filepath, function(err) {
       if (err) console.log(err)
     })
     const article = await Article.forge({
@@ -72,7 +79,7 @@ export default class ArticleController {
   }
 
   static async update(req, res) {
-    const article = await new Article({ id: req.params.id }).save({ title: req.body.title})
+    const article = await new Article({ id: req.params.id }).save({ title: req.body.title })
 
     return res.status(200).json({ data: article })
   }
@@ -82,7 +89,7 @@ export default class ArticleController {
     console.log(article)
     if (article) {
       const filepath = article.get('filepath')
-      if (filepath && filepath != "") {
+      if (filepath && filepath !== '') {
         console.log('toto')
         if (fs.existsSync(filepath)) {
           console.log('titi')
@@ -93,6 +100,6 @@ export default class ArticleController {
 
       return res.status(204).send()
     }
-    return res.status(404).json({"error":"no article found"});
+    return res.status(404).json({ error: 'no article found' })
   }
 }
