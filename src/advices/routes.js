@@ -11,10 +11,12 @@ import HttpController from './HttpController'
 const storeSchema = checkSchema(store, ['body'])
 const router = Router()
 
+router.use(loggedIn)
+router.get('/random', HttpController.random)
 router.get('/all', HttpController.all)
 router.get('/', HttpController.index)
 router.get('/:id', HttpController.show)
-router.use(loggedIn, new IsRole('ADMIN'))
+router.use(new IsRole('ADMIN'))
 router.post('/', validate(storeSchema), HttpController.store)
 router.put('/:id', validate(storeSchema), HttpController.update)
 router.delete('/:id', HttpController.destroy)

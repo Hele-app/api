@@ -22,7 +22,7 @@ export default class AdviceController {
 
   static async store(req, res) {
     const advice = await Advice.forge({
-      quote: req.body.quote,
+      quote: req.body.quote
     }).save()
 
     return res.status(201).json({ data: advice })
@@ -44,5 +44,27 @@ export default class AdviceController {
     await Advice.where({ id: req.params.id }).destroy()
 
     return res.status(204).send()
+  }
+
+  static async random(req, res) {
+    const advice = await Advice.query(function(qb) {
+      qb.limit(1)
+      qb.orderByRaw('RAND()')
+    }).fetchAll()
+
+    const data = advice.toJSON()
+
+    if (!data || !data[0]) {
+      return res.status(404).json({
+        errors:
+          [
+            {
+              msg: 'E_ADVICE_NOT_FOUND'
+            }
+          ]
+      })
+    }
+
+    return res.status(200).json({ data: data[0] })
   }
 }
