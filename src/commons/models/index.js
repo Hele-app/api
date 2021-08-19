@@ -6,6 +6,7 @@ import Establishment from './Establishment'
 import Region from './Region'
 import MapPOI from './MapPOI'
 import Article from './Articles'
+import Advice from './Advice'
 
 module.exports = {
   User,
@@ -13,5 +14,6 @@ module.exports = {
   Establishment,
   Region,
   MapPOI,
-  Article
+  Article,
+  Advice
 }
